@@ -1,0 +1,284 @@
+<!-- header -->
+<header
+  [ngClass]="{ 'bg-white shadow-lg': isScrolled }"
+  class="fixed top-0 right-0 left-0 transition-all duration-300 z-50"
+>
+  <nav class="max-w-7xl mx-auto p-5">
+    <div class="flex items-center justify-between">
+      <a
+        href="/"
+        class="text-black font-bold text-lg flex flex-row items-center gap-1"
+      >
+        <img
+          src="../../../../assets/images/logo/LOGOTIPO.ico"
+          alt="logo"
+          class="h-11"
+        />
+        <p class="md:text-2xl ml-4 text-primary-titulo">VitalMindAI</p>
+      </a>
+
+      <div class="hidden md:flex space-x-10 font-poppins">
+        <a
+          class="hover:text-primary-500 cursor-pointer py-2 px-4"
+          (click)="scrollToElement('home')"
+          >Home</a
+        >
+
+        <a
+          (click)="scrollToElement('about')"
+          class="text-black hover:text-primary-500 cursor-pointer py-2 px-4"
+          >Sobre Nosotros</a
+        >
+        <a
+          class="text-black hover:text-primary-500 cursor-pointer py-2 px-4"
+          (click)="scrollToElement('exercise')"
+          >Ejercicios</a
+        >
+        <a
+          routerLink="/Auth/login"
+          class="border-primary-400 border-2 text-warning-600 hover:bg-primary-400 hover:text-black hover:border-white font-semibold py-2 px-4 rounded-full"
+          >Iniciar Sesión</a
+        >
+      </div>
+
+      <div class="md:hidden">
+        <button (click)="toggleMenu()" class="text-black text-2xl">
+          <i class="bx bx-menu"></i>
+        </button>
+      </div>
+    </div>
+
+    <div
+      [ngClass]="{ hidden: !isMenuOpen }"
+      class="flex flex-col text-end bg-white md:hidden"
+    >
+      <a class="block py-2" (click)="scrollToElement('home')">Home</a>
+      <a
+        class="text-black block hover:text-primary-500 py-2"
+        (click)="scrollToElement('about')"
+        >Sobre Nosotros</a
+      >
+      <a
+        class="text-black block py-2 hover:text-primary-500"
+        (click)="scrollToElement('exercise')"
+        >Ejercicios</a
+      >
+
+      <a
+        routerLink="/Auth/login"
+        class="text-black block py-2 hover:text-primary-500"
+        >Iniciar Sesion</a
+      >
+    </div>
+  </nav>
+</header>
+
+<!-- banner section -->
+
+<section id="home" class="max-w-7xl mx-auto px-5 md:px-10 mt-10 md:mt-36">
+  <div
+    class="py-10 text-black grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+  >
+    <div class="mt-5 pl-10 md:pl-16 border-l-4 border-primary-400">
+      <h1
+        class="text-2xl md:text-5xl font-bold font-monstserrat mb-5 tracking-wide"
+      >
+        Bienvenidos a
+      </h1>
+      <h1
+        class="text-4xl md:text-5xl font-bold font-monstserrat text-primary-400 mb-5 tracking-wide"
+      >
+        VitalMindAI
+      </h1>
+
+      <p class="text-xl text-warning-700 font-semibold mb-5">
+        <em
+          >“Tu aliado para potenciar la estimulación cognitiva de forma
+          innovadora.”</em
+        >
+      </p>
+
+      <p
+        class="text-base md:text-lg text-justify leading-relaxed mb-8 font-inter"
+      >
+        En <span class="text-primary-titulo font-bold">VitalMindAI</span>,
+        combinamos tecnología avanzada y técnicas innovadoras para proporcionar
+        ejercicios personalizados que fortalecen las capacidades cognitivas de
+        los pacientes adulto mayor .
+      </p>
+
+      <a
+        routerLink="/Auth/register"
+        class="inline-block py-4 px-10 rounded-md bg-primary-400 text-black font-medium hover:bg-primary-500 transition-all duration-200"
+      >
+        Regístrate
+      </a>
+    </div>
+
+    <!-- Right Side -->
+    <div class="hidden md:flex justify-center md:justify-end">
+      <img
+        src="../../../../assets/images/home/home.png"
+        alt="logo"
+        class="max-w-full h-auto"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- services section -->
+
+<section id="about" class="max-w-7xl mx-auto px-5 md:px-10 mt-10 md:mt-36">
+  <div
+    class="py-10 text-black grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+  >
+    <!-- left Side -->
+    <div class="flex justify-center md:justify-end">
+      <img
+        src="../../../../assets/images/home/sobre_nosotros_figma.png"
+        alt="logo"
+        class="max-w-full h-auto"
+      />
+    </div>
+    <!-- right side-->
+    <div class="mt-5 pl-10 md:pl-16 border-l-4 border-primary-400">
+      <h2
+        class="text-2xl md:text-5xl font-bold font-monstserrat mb-5 tracking-wide"
+      >
+        Sobre
+      </h2>
+      <h2
+        class="text-4xl md:text-5xl font-bold font-monstserrat text-primary-400 mb-5 tracking-wide"
+      >
+        VitalMindAI
+      </h2>
+
+      <p
+        class="text-base md:text-lg text-justify leading-relaxed mb-8 font-inter"
+      >
+        En <span class="text-primary-titulo font-bold">VitalMindAI</span>,
+        nuestra misión es transformar el cuidado cognitivo a través de la
+        innovación tecnológica. Inspirados por la importancia de mantener una
+        mente activa, desarrollamos herramientas y ejercicios personalizados que
+        apoyan el desarrollo y fortalecimiento de las capacidades cognitivas.
+        Nuestro compromiso es ayudar a los pacientes adulto mayor a superar
+        desafíos cognitivos y mejorar su calidad de vida.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="exercise" class="max-w-7xl mx-auto px-5 md:px-10 mt-10 md:mt-36">
+  <div class="text-center">
+    <h2
+      class="font-monstserrat text-2xl md:text-5xl font-bold mb-5 tracking-wide"
+    >
+      Nuestros
+
+      <span class="text-primary-titulo"> Ejercicios </span>
+    </h2>
+  </div>
+
+  <!-- service cards -->
+  <div
+    class="my-16 flex flex-col md:flex-row justify-around items-center gap-12"
+  >
+    <div
+      class="w-[354px] px-5 py-8 rounded-lg border border-primary shadow-lg cursor-pointer flex flex-col items-center border-l-4 border-primary-400"
+    >
+      <img
+        src="../../../../assets/images/home/icons/ejercicios_IA.png"
+        alt=""
+        class="w-[196px] mb-12 mx-auto"
+      />
+      <h5 class="text-center my-5 text-x1 font-poppins font-semibold">
+        Ejercicios Personalizados con IA
+      </h5>
+      <p class="text-justify">
+        Diseñamos actividades específicas mediante inteligencia artificial,
+        adaptadas a las necesidades únicas de cada usuario.
+      </p>
+    </div>
+    <div
+      class="w-[354px] px-5 py-8 rounded-lg border border-primary shadow-lg cursor-pointer border-l-4 border-primary-400"
+    >
+      <img
+        src="https://static.vecteezy.com/system/resources/previews/021/059/825/original/chatgpt-logo-chat-gpt-icon-on-green-background-free-vector.jpg"
+        alt=""
+        class="w-[196px] mb-12 mx-auto"
+      />
+      <h5 class="text- font-poppins font-semibold text-center my-5 text-x1">
+        Recomendaciones Inteligentes
+      </h5>
+      <p class="text-justify">
+        Ofrecemos sugerencias dinámicas basadas en tu progreso y desempeño, para
+        optimizar continuamente tus resultados.
+      </p>
+    </div>
+    <div
+      class="w-[354px] px-5 py-8 rounded-lg border border-primary shadow-lg cursor-pointer border-l-4 border-primary-400"
+    >
+      <img
+        src="../../../../assets/images/home/icons/signos_vitales.png"
+        alt=""
+        class="w-[196px] mb-12 mx-auto"
+      />
+      <h5 class="text-center font-poppins font-semibold my-5 text-x1">
+        Adaptación Basada en Signos Vitales
+      </h5>
+      <p class="text-justify">
+        Integramos tecnología que ajusta los ejercicios en tiempo real,
+        utilizando datos fisiológicos para una experiencia más precisa y
+        efectiva.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- projects section -->
+
+<!-- footer -->
+
+<footer class="bg-white rounded-lg shadow m-4">
+  <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+    <div class="sm:flex sm:items-center sm:justify-between">
+      <a
+        href="https://flowbite.com/"
+        class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
+      >
+        <img
+          src="../../../../assets/images/logo/LOGOTIPO.ico"
+          alt="logo"
+          class="h-14"
+        />
+        <span
+          class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
+          >Flowbite</span
+        >
+      </a>
+      <ul
+        class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400"
+      >
+        <li>
+          <a href="#" class="hover:underline me-4 md:me-6">Acerca de</a>
+        </li>
+        <li>
+          <a href="#" class="hover:underline me-4 md:me-6"
+            >Política de Privacidad</a
+          >
+        </li>
+        <li>
+          <a href="#" class="hover:underline me-4 md:me-6">Licencias</a>
+        </li>
+        <li>
+          <a href="#" class="hover:underline">Contactos</a>
+        </li>
+      </ul>
+    </div>
+    <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+    <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400"
+      >© 2025 <a class="hover:underline">VitalMindAI</a>. Derechos
+      Reservados.</span
+    >
+  </div>
+</footer>

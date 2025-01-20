@@ -1,0 +1,171 @@
+<div class="w-full flex flex-wrap">
+  <div class="w-full md:w-1/2 flex flex-col">
+    <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-11">
+      <a
+        href="/"
+        class="text-black font-bold text-lg flex flex-row items-center gap-1"
+      >
+        <img
+          src="../../../../assets/images/logo/LOGOTIPO.ico"
+          alt="logo"
+          class="h-12 mr-1"
+        />
+        <p class="md:text-2xl text-primary-titulo">VitalMindAI</p>
+      </a>
+    </div>
+
+    <div
+      class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32"
+    >
+      <h1 class="font-poppins font-semibold text-center text-2xl md:text-3xl">
+        ¡Únete a nosotros hoy!
+      </h1>
+      <h5 class="font-poppins mt-4 text-center">
+        Regístrate completando la siguiente información.
+      </h5>
+      <form
+        class="flex flex-col pt-3"
+        (ngSubmit)="onSubmit()"
+        [formGroup]="registerForm"
+      >
+        <div class="flex flex-col pt-4">
+          <label for="name" class="text-lg">Nombre</label>
+          <input
+            type="text"
+            id="name"
+            formControlName="names"
+            placeholder="John"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          <div
+            class="text-red-500"
+            *ngIf="
+              registerForm.get('names')?.hasError('required') &&
+              registerForm.get('names')?.touched
+            "
+          >
+            El nombre del usuario es obligatorio.
+          </div>
+        </div>
+        <div class="flex flex-col pt-4">
+          <label for="lastNames" class="text-lg">Apellido</label>
+          <input
+            type="text"
+            id="lastNames"
+            formControlName="lastNames"
+            placeholder="Smith"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          <div
+            class="text-red-500"
+            *ngIf="
+              registerForm.get('lastNames')?.hasError('required') &&
+              registerForm.get('lastNames')?.touched
+            "
+          >
+            El apellido del usuario es obligatorio.
+          </div>
+        </div>
+        <div class="flex flex-col pt-4">
+          <label for="experience" class="text-lg">Experiencia en Años</label>
+          <input
+            type="number"
+            id="experience"
+            formControlName="experience"
+            placeholder="0"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          <div
+            class="text-red-500"
+            *ngIf="
+              registerForm.get('experience')?.hasError('required') &&
+              registerForm.get('experience')?.touched
+            "
+          >
+            La experiencia del usuario es obligatorio.
+          </div>
+        </div>
+
+        <div class="flex flex-col pt-4">
+          <label for="email" class="text-lg">Email</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="your@email.com"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          <div
+            class="text-red-500"
+            *ngIf="
+              registerForm.get('email')?.hasError('required') &&
+              registerForm.get('email')?.touched
+            "
+          >
+            El email del usuario es obligatorio.
+          </div>
+          <div
+            class="text-red-500"
+            *ngIf="
+              registerForm.get('email')?.hasError('email') &&
+              registerForm.get('email')?.touched
+            "
+          >
+            El formato del email es incorrecto.
+          </div>
+        </div>
+
+        <div class="flex flex-col pt-4">
+          <label for="password" class="text-lg">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="Contraseña"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+          />
+          <div
+            class="text-red-500"
+            *ngIf="
+              registerForm.get('password')?.hasError('required') &&
+              registerForm.get('password')?.touched
+            "
+          >
+            La contraseña del usuario es obligatorio.
+          </div>
+        </div>
+
+        <input
+          type="submit"
+          [disabled]="registerForm.invalid"
+          value="Regístrese"
+          class="bg-primary-400 cursor-pointer text-black font-semibold text-lg rounded-full py-2 px-4 hover:bg-primary-500 mt-8"
+        />
+      </form>
+      <div class="text-center pt-12 pb-12">
+        <p>
+          ¿Ya tienes una cuenta?
+
+          <a
+            routerLink="/Auth/login"
+            class="text-warning-700 underline font-semibold"
+            >Inicia sesión aquí.</a
+          >
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-1/2 shadow-2xl">
+    <img
+      class="w-full hidden md:block"
+      src="../../../../assets/images/sign-up/register_.png"
+    />
+  </div>
+</div>
+<app-notifications
+  [statusnotification]="statusnotification"
+  [title]="notificationTitle"
+  [message]="notificationMessage"
+  [type]="notificationType"
+></app-notifications>
