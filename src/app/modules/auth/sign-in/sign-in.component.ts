@@ -58,7 +58,6 @@ export class SignInComponent implements OnInit {
           console.log('Inicio de sesión exitoso:', response);
           localStorage.setItem('token', response.token);
           this.sesionActive();
-          this.loadingService.showForSeconds(3);
           this.router.navigate(['/loading']);
         },
         (error: HttpErrorResponse) => {
