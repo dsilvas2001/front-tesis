@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-loading',
   templateUrl: './loading.component.html',
-  styles: './loading.component.css',
+  styles: '',
 })
 export class LoadingComponent implements OnInit {
   isLoading = true;
