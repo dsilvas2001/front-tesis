@@ -7,6 +7,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4200:80" # Mapea el puerto 3001 del contenedor al puerto 3005 de la máquina local
+    environment:
+      - DOCKER_USERNAME=${DOCKER_USERNAME}
+      - DOCKER_PASSWORD=${DOCKER_PASSWORD}
+
     volumes:
       - .:/usr/src/app # Monta el directorio actual en el contenedor
 
