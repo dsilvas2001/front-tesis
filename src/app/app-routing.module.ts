@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeModule } from './modules/home/home.module';
+import { DashboardComponent } from './modules/cuidador/pages/dashboard/dashboard.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,13 @@ const routes: Routes = [
     path: 'Auth',
     loadChildren: () =>
       import('./modules/auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: 'Cuidador',
+    loadChildren: () =>
+      import('./modules/cuidador/cuidador.module').then(
+        (m) => m.CuidadorModule
+      ),
   },
   {
     path: '**',

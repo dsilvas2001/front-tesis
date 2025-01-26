@@ -16,8 +16,6 @@ export class SignUpComponent implements OnInit {
   notificationMessage: string = '';
   notificationType: string = '';
 
-  courses: any[] = [];
-
   constructor(
     private formbuilder: FormBuilder,
     private router: Router,

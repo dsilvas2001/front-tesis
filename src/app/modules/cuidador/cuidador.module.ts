@@ -3,15 +3,26 @@ import { CommonModule } from '@angular/common';
 
 import { CuidadorRoutingModule } from './cuidador-routing.module';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
+
+import { WelcomeComponent } from './pages/welcome/welcome.component';
+import { SharedModule } from '../shared/shared.module';
+import { CardsComponent } from './components/cards/cards.component';
+import { GestionPacientesComponent } from './pages/pacientes/gestion-pacientes/gestion-pacientes.component';
+import { GestionSignosVitalesComponent } from './pages/pacientes/gestion-signos-vitales/gestion-signos-vitales.component';
+import { ComponentsModule } from './components/components.module';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    SidebarComponent,
-    NavbarComponent
+    WelcomeComponent,
+    GestionPacientesComponent,
+    GestionSignosVitalesComponent,
   ],
-  imports: [CommonModule, CuidadorRoutingModule],
+  imports: [
+    CommonModule,
+    CuidadorRoutingModule,
+    SharedModule,
+    ComponentsModule,
+  ],
 })
 export class CuidadorModule {}
