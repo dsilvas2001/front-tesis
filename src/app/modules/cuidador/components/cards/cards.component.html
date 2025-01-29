@@ -1,0 +1,26 @@
+<div class="m-6 flex flex-col gap-9">
+  <div class="flex flex-wrap md:-mx-6 gap-10">
+    <div class="" *ngFor="let card of cards">
+      <!-- Contenido de la tarjeta -->
+      <div
+        class="flex justify-center items-center w-full px-5 py-5 shadow-lg rounded-md bg-accent-200 border-l-4 border-l-warning-600"
+      >
+        <div
+          class="py-3 px-4 text-2xl rounded-full bg-indigo-600 bg-opacity-75"
+        >
+          <!-- Icono dinámico -->
+          <i class="{{ card.icon }} text-white"></i>
+        </div>
+
+        <div class="mx-5">
+          <h4 class="text-2xl font-semibold text-gray-700">
+            {{ card.count }}
+          </h4>
+          <div class="text-gray-500 font-inter font-semibold text-xs">
+            {{ card.title }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

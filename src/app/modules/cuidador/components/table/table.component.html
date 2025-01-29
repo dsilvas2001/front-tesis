@@ -1,0 +1,209 @@
+<div class="w-full flex flex-wrap justify-between items-center mb-3 mt-1 pl-3">
+  <!-- Título y descripción -->
+  <div class="mb-3 lg:mb-0">
+    <h3 class="text-lg font-bold text-slate-800">
+      Pacientes del Centro Gerontologico
+    </h3>
+    <p class="text-slate-500">Resumen de los pacientes.</p>
+  </div>
+</div>
+
+<!-- Campo de búsqueda y botones -->
+<div class="w-full flex flex-wrap items-center justify-between mb-4">
+  <!-- Campo de búsqueda -->
+  <div class="relative w-full lg:w-auto flex-grow max-w-sm min-w-[200px] mb-4">
+    <input
+      class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+      placeholder="Buscar por el nombre del paciente..."
+    />
+    <button
+      class="absolute h-8 w-8 right-1 top-1 px-2 flex items-center bg-white rounded"
+      type="button"
+    >
+      <i class="fa-solid fa-magnifying-glass" style="color: #939495"></i>
+    </button>
+  </div>
+
+  <!-- Botones -->
+  <div class="flex flex-wrap gap-4 pl-4">
+    <!-- Botón "Añadir Paciente" -->
+    <div class="p-0">
+      <label
+        for="fileSubmit"
+        class="px-5 py-2.5 flex justify-between gap-3 text-sm font-medium text-warning-600 border-warning-700 border items-center hover:bg-primary-400 hover:text-black hover:border-white focus:ring-4 focus:outline-none rounded-lg text-center cursor-pointer"
+      >
+        <i class="fa-solid fa-user-plus"></i>
+        Añadir Paciente
+      </label>
+      <input
+        id="fileSubmit"
+        type="submit"
+        (click)="openModal()"
+        class="hidden"
+      />
+    </div>
+
+    <!-- Botón "Mostrar Estudiantes" -->
+    <div class="p-0">
+      <label
+        for="mostrarUser"
+        class="px-5 py-2.5 flex justify-between gap-3 text-sm font-medium text-warning-600 border-warning-700 border items-center hover:bg-primary-400 hover:text-black hover:border-white focus:ring-4 focus:outline-none rounded-lg text-center cursor-pointer"
+      >
+        <i class="fa-solid fa-spinner fa-lg"></i>
+        Mostrar Estudiantes
+      </label>
+      <input id="mostrarUser" type="submit" class="hidden" />
+    </div>
+  </div>
+</div>
+
+<div
+  class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border"
+>
+  <table class="w-full text-left table-auto min-w-max">
+    <thead>
+      <tr>
+        <th
+          class="hidden p-4 border-b font-poppinswa border-slate-300 bg-slate-50"
+        >
+          <p class="text-sm font-normal leading-none text-slate-500">_id</p>
+        </th>
+        <th
+          class="p-4 border-b flex justify-start border-slate-300 bg-slate-50"
+        >
+          <p class="block text-sm font-p leading-none text-slate-500">Nombre</p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-p leading-none text-slate-500">
+            Apellido
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-p leading-none text-slate-500">Edad</p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-p leading-none text-slate-500">Genero</p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-p leading-none text-slate-500">
+            Signos Vitales
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50">
+          <p class="block text-sm font-p leading-none text-slate-500">
+            Signos Vitales
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-slate-50"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let paciente of pacientes"
+        class="hover:bg-slate-50 border-b border-slate-200"
+      >
+        <td class="p-4 py-5 hidden">{{ paciente.id }}</td>
+        <td class="p-5 py-5 flex">
+          {{ paciente.nombre }}
+        </td>
+        <td class="p-4 py-2">{{ paciente.apellido }}</td>
+        <td class="p-6 py-2">{{ paciente.edad }}</td>
+        <td class="p-5 py-2">{{ paciente.genero }}</td>
+        <td class="">
+          <div
+            class="w-48 flex flex-wrap items-center justify-center py-2 pl-4 pr-4 rounded-lg text-sm font-medium border-solid border border-red-600 text-red-500 group bg-red-100"
+          >
+            <p class="flex flex-row items-center mr-auto gap-x-2">
+              <svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                height="28"
+                width="28"
+                class="h-7 w-7"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+                ></path>
+                <path d="M12 9v4"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+              {{ paciente.signos_vitales }}
+            </p>
+          </div>
+        </td>
+        <td class="">
+          <div
+            class="w-48 flex flex-wrap items-center justify-center py-2 pl-4 pr-4 rounded-lg text-sm font-medium border-solid border border-red-600 text-red-500 group bg-red-100"
+          >
+            <p class="flex flex-row items-center mr-auto gap-x-2">
+              <svg
+                stroke="currentColor"
+                fill="none"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                height="28"
+                width="28"
+                class="h-7 w-7"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
+                ></path>
+                <path d="M12 9v4"></path>
+                <path d="M12 17h.01"></path>
+              </svg>
+              {{ paciente.signos_vitales }}
+            </p>
+          </div>
+        </td>
+
+        <td class="p-4 py-5">
+          <!-- Botón Editar Paciente -->
+          <button class="text-slate-600 hover:text-slate-800">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                d="M16.862 3.487a2.5 2.5 0 0 1 3.54 3.535L7.782 19.643l-4.495 1.12a1 1 0 0 1-1.21-1.212l1.12-4.493 12.665-12.57Z"
+              />
+              <path
+                d="M19.4 2.6a2.5 2.5 0 0 0-3.535 0L2.9 15.564l-.942 3.769a1 1 0 0 0 1.21 1.21l3.769-.942L19.4 6.135a2.5 2.5 0 0 0 0-3.535Z"
+              />
+            </svg>
+          </button>
+
+          <!-- Botón Eliminar Paciente -->
+          <button class="text-slate-600 hover:text-slate-800">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                d="M9 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1h5a1 1 0 1 1 0 2h-1.23l-1.16 12.154A3 3 0 0 1 14.63 21H9.37a3 3 0 0 1-2.98-2.846L5.23 6H4a1 1 0 1 1 0-2h5V3Zm5 2V4h-4v1h4Zm-6 2 .76 11.027a1 1 0 0 0 .993.973h5.26a1 1 0 0 0 .994-.973L16 7H8Z"
+              />
+            </svg>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-modal-paciente
+  [statusModal]="statusModal"
+  (closeModalEvent)="closeModal()"
+  (userIdEvent)="onUserIdReceived($event)"
+>
+</app-modal-paciente>
