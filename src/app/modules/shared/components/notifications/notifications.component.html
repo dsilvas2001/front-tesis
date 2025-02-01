@@ -1,13 +1,15 @@
+<!-- Notificación estándar -->
 <div
+  *ngIf="statusnotification && type !== 'delete'"
   role="alert"
   class="fixed top-4 right-4 sm:right-6 lg:right-8 flex w-full max-w-xs sm:max-w-sm lg:max-w-md px-4 py-4 text-base shadow-lg border rounded-lg text-black"
-  *ngIf="statusnotification"
   [ngClass]="{
-    ' bg-green-100 ': type === 'success',
-    'bg-red-100': type !== 'success'
+    'bg-green-100': type === 'success',
+    'bg-red-100': type === 'error' || type === 'logout'
   }"
 >
   <div class="shrink-0">
+    <!-- Ícono para éxito -->
     <svg
       *ngIf="type === 'success'"
       xmlns="http://www.w3.org/2000/svg"
@@ -22,6 +24,7 @@
       ></path>
     </svg>
 
+    <!-- Ícono para logout -->
     <svg
       *ngIf="type === 'logout'"
       class="h-7 w-7 text-red-500"
@@ -37,6 +40,7 @@
       />
     </svg>
 
+    <!-- Ícono para error -->
     <svg
       *ngIf="type === 'error'"
       class="h-7 w-7 text-red-500"
@@ -57,7 +61,7 @@
       class="block text-sm md:text-lg font-semibold"
       [ngClass]="{
         'text-green-700': type === 'success',
-        'text-red-900': type !== 'success'
+        'text-red-900': type === 'error' || type === 'logout'
       }"
     >
       {{ title }}
@@ -65,5 +69,48 @@
     <p class="block mt-2 text-xs md:text-sm font-normal leading-relaxed">
       {{ message }}
     </p>
+  </div>
+</div>
+
+<!-- Alerta de advertencia (Warning Alert) -->
+<div
+  *ngIf="statusnotification && type === 'delete'"
+  class="w-full md:w-1/3 mx-auto fixed top-4 right-4 sm:right-6 lg:right-8"
+>
+  <div class="flex flex-col p-5 rounded-lg shadow bg-white">
+    <div class="flex flex-col items-center text-center">
+      <div class="inline-block p-4 bg-yellow-50 rounded-full">
+        <svg
+          class="w-12 h-12 fill-current text-yellow-500"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <path d="M0 0h24v24H0V0z" fill="none" />
+          <path
+            d="M12 5.99L19.53 19H4.47L12 5.99M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"
+          />
+        </svg>
+      </div>
+      <h2 class="mt-2 font-semibold text-gray-800">{{ title }}</h2>
+      <p class="mt-2 text-sm text-gray-600 leading-relaxed">
+        {{ message }}
+      </p>
+    </div>
+
+    <div class="flex items-center mt-3">
+      <button
+        class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-md"
+        (click)="closeNotificationDelete()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        class="flex-1 px-4 py-2 ml-2 bg-primary-400 hover:bg-primary-500 text-black text-sm font-medium rounded-md"
+        (click)="confirmDelete()"
+      >
+        Aceptar
+      </button>
+    </div>
   </div>
 </div>

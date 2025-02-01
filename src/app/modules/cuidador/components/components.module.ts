@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { TableComponent } from './table/table.component';
 import { ModalPacienteComponent } from './modal-paciente/modal-paciente.component';
 import { SharedModule } from '../../shared/shared.module';
+import { PaginationComponent } from './pagination/pagination.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { SharedModule } from '../../shared/shared.module';
     CardsComponent,
     TableComponent,
     ModalPacienteComponent,
+    PaginationComponent,
   ],
   imports: [CommonModule, RouterModule, SharedModule],
   exports: [SidebarComponent, NavbarComponent, CardsComponent, TableComponent],

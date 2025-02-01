@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-notifications',
@@ -10,6 +10,7 @@ export class NotificationsComponent implements OnInit {
   @Input() title: string = 'Notificación';
   @Input() message: string = 'Este es un mensaje de notificación.';
   @Input() type: string = 'success';
+  @Output() deleteAction = new EventEmitter<boolean>();
 
   ngOnInit(): void {
     if (this.statusnotification) {
@@ -17,5 +18,13 @@ export class NotificationsComponent implements OnInit {
         this.statusnotification = false;
       }, 3000);
     }
+  }
+  closeNotificationDelete() {
+    this.statusnotification = false;
+    this.deleteAction.emit(false);
+  }
+  confirmDelete(): void {
+    this.statusnotification = false;
+    this.deleteAction.emit(true);
   }
 }

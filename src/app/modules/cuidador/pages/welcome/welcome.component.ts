@@ -13,6 +13,7 @@ export class WelcomeComponent implements OnInit {
   notificationMessage: string = '';
   notificationType: string = '';
   userEmail: unknown = 'email';
+
   cards = [
     { title: 'Pacientes Agregados', count: 120, icon: 'fa-solid fa-user' },
     {
@@ -33,7 +34,7 @@ export class WelcomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const data = this.route.snapshot.data['data'];
+    this.showCard();
     if (localStorage.getItem('prueba') === 'true') {
       // this.userEmail = this.authServices.getUserEmail();
 
@@ -56,5 +57,17 @@ export class WelcomeComponent implements OnInit {
     setTimeout(() => {
       this.statusnotification = false;
     }, 3000);
+  }
+
+  showCard() {
+    const resolvedData = this.route.snapshot.data['data'];
+
+    console.log('resolvedData:', resolvedData);
+
+    if (resolvedData) {
+      const countData = resolvedData.count_pacientes;
+
+      this.cards[0].count = countData.count_pacientes;
+    }
   }
 }

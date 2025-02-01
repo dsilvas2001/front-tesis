@@ -38,21 +38,9 @@
       <input
         id="fileSubmit"
         type="submit"
-        (click)="openModal()"
+        (click)="abrirModalAgregar()"
         class="hidden"
       />
-    </div>
-
-    <!-- Botón "Mostrar Estudiantes" -->
-    <div class="p-0">
-      <label
-        for="mostrarUser"
-        class="px-5 py-2.5 flex justify-between gap-3 text-sm font-medium text-warning-600 border-warning-700 border items-center hover:bg-primary-400 hover:text-black hover:border-white focus:ring-4 focus:outline-none rounded-lg text-center cursor-pointer"
-      >
-        <i class="fa-solid fa-spinner fa-lg"></i>
-        Mostrar Estudiantes
-      </label>
-      <input id="mostrarUser" type="submit" class="hidden" />
     </div>
   </div>
 </div>
@@ -99,7 +87,7 @@
     </thead>
     <tbody>
       <tr
-        *ngFor="let paciente of pacientes"
+        *ngFor="let paciente of displayedPacientes"
         class="hover:bg-slate-50 border-b border-slate-200"
       >
         <td class="p-4 py-5 hidden">{{ paciente.id }}</td>
@@ -164,9 +152,12 @@
           </div>
         </td>
 
-        <td class="p-4 py-5">
+        <td class="p-4 py-5 flex gap-3">
           <!-- Botón Editar Paciente -->
-          <button class="text-slate-600 hover:text-slate-800">
+          <button
+            class="text-slate-600 hover:text-slate-800"
+            (click)="abrirModalEditar(paciente)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -183,12 +174,15 @@
           </button>
 
           <!-- Botón Eliminar Paciente -->
-          <button class="text-slate-600 hover:text-slate-800">
+          <button
+            class="text-slate-600 hover:text-slate-800"
+            (click)="showDeleteNotification(paciente)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="w-5 h-5"
+              class="w-5 h-5 text-red-600"
             >
               <path
                 d="M9 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1h5a1 1 0 1 1 0 2h-1.23l-1.16 12.154A3 3 0 0 1 14.63 21H9.37a3 3 0 0 1-2.98-2.846L5.23 6H4a1 1 0 1 1 0-2h5V3Zm5 2V4h-4v1h4Zm-6 2 .76 11.027a1 1 0 0 0 .993.973h5.26a1 1 0 0 0 .994-.973L16 7H8Z"
@@ -201,9 +195,26 @@
   </table>
 </div>
 
+<app-pagination
+  [currentPage]="currentPage"
+  [itemsPerPage]="itemsPerPage"
+  [totalItems]="pacientes.length"
+  (pageChanged)="onPageChange($event)"
+></app-pagination>
+
 <app-modal-paciente
   [statusModal]="statusModal"
+  [actionModal]="actionModal"
+  [pacienteData]="pacienteData"
   (closeModalEvent)="closeModal()"
   (userIdEvent)="onUserIdReceived($event)"
 >
 </app-modal-paciente>
+
+<app-notifications
+  [statusnotification]="statusnotification"
+  [title]="notificationTitle"
+  [message]="notificationMessage"
+  [type]="notificationType"
+  (deleteAction)="handleDeleteAction($event)"
+></app-notifications>
