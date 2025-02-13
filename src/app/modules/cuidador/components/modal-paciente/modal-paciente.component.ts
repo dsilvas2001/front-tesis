@@ -1,5 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PacienteService } from '../../../../core/cuidador/paciente/paciente.service';
@@ -8,7 +16,7 @@ import { PacienteService } from '../../../../core/cuidador/paciente/paciente.ser
   selector: 'app-modal-paciente',
   templateUrl: './modal-paciente.component.html',
 })
-export class ModalPacienteComponent implements OnInit {
+export class ModalPacienteComponent implements OnInit, OnChanges {
   registerForm: FormGroup;
   //notification
   statusnotification: boolean = false;
@@ -68,10 +76,6 @@ export class ModalPacienteComponent implements OnInit {
   }
 
   cargarDatosPaciente(): void {
-    console.log(
-      'Ingreso a cargar los datos del paciente:',
-      this._pacienteData.id
-    );
     this._idPaciente = this._pacienteData.id;
     this.registerForm.patchValue({
       name: this._pacienteData.nombre,
@@ -135,6 +139,13 @@ export class ModalPacienteComponent implements OnInit {
       }
     } else {
       console.log('Formulario inválido:', this.registerForm);
+    }
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['statusModal'] && this.statusModal) {
+      // Solo ejecuta si el modal se abre
+      this.updateModalTitleAndButton();
+      this.cargarDatosPaciente();
     }
   }
 

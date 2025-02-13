@@ -35,20 +35,18 @@ export class GestionPacientesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const resolvedData = this.route.snapshot.data['data'];
+    this.route.data.subscribe(({ data }) => {
+      if (data && data.count_pacientes) {
+        const countData = data.count_pacientes;
 
-    console.log('resolvedData:', resolvedData);
-
-    if (resolvedData) {
-      const countData = resolvedData.count_pacientes;
-
-      this.cards[0].count = countData.count_pacientes;
-      this.cards[1].count = countData.count_paciente_hoy;
-      this.cards[2].count = countData.count_masculino;
-      this.cards[3].count = countData.count_femenino;
-    } else {
-      console.error('No se encontraron datos de pacientes.');
-    }
+        this.cards[0].count = countData.count_pacientes;
+        this.cards[1].count = countData.count_paciente_hoy;
+        this.cards[2].count = countData.count_masculino;
+        this.cards[3].count = countData.count_femenino;
+      } else {
+        console.error('No se encontraron datos de referentes.');
+      }
+    });
   }
 
   mostrarCountPaciente() {

@@ -1,33 +1,33 @@
-import { Component } from '@angular/core';
-import { ReferenciaSignosVService } from '../../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
+import { Component, OnInit } from '@angular/core';
+import { PacienteService } from '../../../../../core/cuidador/paciente/paciente.service';
 import { ActivatedRoute } from '@angular/router';
+import { ReferenciaSignosVService } from '../../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 
 @Component({
-  selector: 'app-gestion-signos-vitales',
-  templateUrl: './gestion-signos-vitales.component.html',
+  selector: 'app-limites-signos-vitales',
+  templateUrl: './limites-signos-vitales.component.html',
   styles: ``,
 })
-export class GestionSignosVitalesComponent {
+export class LimitesSignosVitalesComponent implements OnInit {
   cards = [
-    { title: 'Pacientes Agregados', count: 120, icon: 'fa-solid fa-user' },
     {
-      title: 'Signos Vitales (Hoy)',
-      count: 5,
-      icon: 'fa-solid fa-heart-circle-check',
+      title: 'Valor Referencial SV',
+      count: 0,
+      icon: 'fa-solid fa-gears',
     },
     {
-      title: 'Emergencia (Hoy)',
-      count: 5,
-      icon: 'fa-solid fa-heart-circle-exclamation',
+      title: 'SV del Dia',
+      count: 0,
+      icon: 'fa-solid fa-user-gear',
     },
 
     {
-      title: 'SV sin registrar',
-      count: 10,
-      icon: 'fa-solid fa-heart-circle-xmark',
+      title: 'Pacientes sin Rangos',
+      count: 0,
+      icon: 'fa-solid fa-user-xmark',
     },
   ];
-  mostrarCalendario: any;
+  count_pacientes: any[] = [];
 
   constructor(
     private referenciaSignosVService: ReferenciaSignosVService,
@@ -65,6 +65,4 @@ export class GestionSignosVitalesComponent {
   countPacienteReceived() {
     this.mostrarCountPaciente();
   }
-
-  //
 }

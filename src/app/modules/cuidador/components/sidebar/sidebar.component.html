@@ -4,7 +4,7 @@
   aria-controls="default-sidebar"
   type="button"
   (click)="toggleMenu()"
-  class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+  class="inline-flex items-center p-2 mt-2 ms-3 text-sm rounded-lg sm:hidden text-gray-400 hover:text-black dark:hover:bg-accent-300"
 >
   <span class="sr-only">Open sidebar</span>
   <svg
@@ -38,7 +38,6 @@
               class="h-12 mr-4"
               alt="Logotipo"
             />
-
             <p
               class="md:text-2xl pt-2 font-poppins font-semibold text-primary-titulo"
             >
@@ -74,23 +73,47 @@
           *ngIf="!item.action"
           [routerLink]="item.link"
           class="flex items-center p-2 rounded-lg text-gray-500 hover:border-primary-500 border border-white hover:text-warning-700 cursor-pointer group"
-          (click)="setActiveLink(item.name)"
+          (click)="toggleSubMenu(item)"
           [ngClass]="{
             'bg-accent-200 text-warning-700': activeLink === item.name
           }"
         >
-          <i class="{{ item.icon }} "></i>
-
+          <i class="{{ item.icon }}"></i>
           <span class="flex-1 ms-3 whitespace-nowrap">{{ item.name }}</span>
+          <i
+            *ngIf="item.subItems"
+            class="fa-solid fa-chevron-down transition-transform duration-200"
+            [ngClass]="{ 'rotate-180': item.isOpen }"
+          ></i>
         </a>
+
+        <!-- Submenú -->
+        <ul *ngIf="item.subItems && item.isOpen" class="pl-4 mt-2 space-y-2">
+          <li *ngFor="let subItem of item.subItems">
+            <a
+              [routerLink]="subItem.link"
+              class="flex items-center p-2 rounded-lg text-gray-500 hover:border-primary-500 border border-white hover:text-warning-700 cursor-pointer group"
+              (click)="setActiveLink(subItem.name)"
+              [ngClass]="{
+                'bg-accent-200 text-warning-700': activeLink === subItem.name
+              }"
+            >
+              <i class="{{ subItem.icon }}"></i>
+              <span class="flex-1 ms-3 whitespace-nowrap">{{
+                subItem.name
+              }}</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Cerrar Sesión -->
         <a
           *ngIf="item.action"
           (click)="item.action()"
           [routerLink]="item.link"
           class="flex items-center p-2 rounded-lg text-gray-500 hover:border-primary-500 border border-white hover:text-warning-700 cursor-pointer group"
         >
-          <i class="{{ item.icon }} "></i>
-
+          <i class="{{ item.icon }}"></i>
           <span class="flex-1 ms-3 whitespace-nowrap">{{ item.name }}</span>
         </a>
       </li>

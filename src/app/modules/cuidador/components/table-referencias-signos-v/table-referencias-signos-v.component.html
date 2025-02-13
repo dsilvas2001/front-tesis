@@ -26,27 +26,96 @@
 
   <!-- Botones -->
   <div class="flex flex-wrap gap-4 pl-4 w-full md:w-auto">
-    <!-- Botón "Añadir Paciente" -->
-    <div class="relative w-full md:w-auto">
-      <label
-        for="fileSubmit"
-        class="w-full md:w-auto px-5 py-2.5 flex justify-center gap-3 text-sm font-medium text-warning-600 border-warning-700 border items-center hover:bg-primary-400 hover:text-black hover:border-white rounded-lg text-center cursor-pointer"
-      >
-        <i class="fa-solid fa-user-plus"></i>
-        Añadir Paciente
-      </label>
-      <input
-        id="fileSubmit"
-        type="submit"
-        (click)="abrirModal(null, 'add')"
-        class="hidden"
-      />
+    <!-- Contenedor principal ocupa el ancho completo -->
+    <div
+      class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-3 w-full"
+    >
+      <!-- Contenedor para el dropdown -->
+      <div class="relative w-full md:w-auto">
+        <button
+          id="filterDropdownButton"
+          (click)="toggleDropdown()"
+          class="w-full md:w-auto px-5 py-2.5 flex justify-between gap-3 text-sm font-medium text-warning-600 border-warning-700 border items-center hover:bg-primary-400 hover:text-black hover:border-white rounded-lg text-center cursor-pointer"
+          type="button"
+          aria-controls="filterDropdown"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+              clip-rule="evenodd"
+            />
+          </svg>
+          Filtrar Datos
+          <svg
+            class="-mr-1 ml-1.5 w-5 h-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+            />
+          </svg>
+        </button>
+
+        <!-- Dropdown (Siempre debajo del botón y adaptado a responsive) -->
+        <div
+          id="filterDropdown"
+          *ngIf="isDropdownOpen"
+          class="absolute left-0 mt-2 w-full md:w-56 bg-accent-200 border-neutral-800 shadow-xl rounded-lg z-50"
+        >
+          <div class="p-3">
+            <h6 class="mb-2 text-sm font-medium text-gray-900">Mostrar</h6>
+            <hr class="my-2 border-2 border-warning-700" />
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-center">
+                <input
+                  id="withReference"
+                  type="checkbox"
+                  [checked]="showWithReference"
+                  (change)="onCheckboxChange($event, 'withReference')"
+                  class="w-4 h-4 text-primary-600 border-gray-300"
+                />
+                <label
+                  for="withReference"
+                  class="ml-2 text-sm font-medium text-gray-900"
+                  >Pacientes con Referencia</label
+                >
+              </li>
+              <li class="flex items-center">
+                <input
+                  id="withoutReference"
+                  type="checkbox"
+                  [checked]="showWithoutReference"
+                  (change)="onCheckboxChange($event, 'withoutReference')"
+                  class="w-4 h-4 text-primary-600 rounded focus:ring-primary-500"
+                />
+                <label
+                  for="withoutReference"
+                  class="ml-2 text-sm font-medium text-gray-900"
+                  >Pacientes sin Referencia</label
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- Tabla -->
+
 <div
-  class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-lg bg-clip-border"
+  class="relative flex flex-col w-full h-full overflow-scroll bg-white shadow-md rounded-lg bg-clip-border"
 >
   <table class="w-full text-left table-auto min-w-max">
     <thead>
@@ -67,21 +136,23 @@
           </p>
         </th>
         <th class="p-4 border-b border-slate-300 bg-accent-300">
-          <p class="block text-sm font-p leading-none text-neutral-800">Edad</p>
-        </th>
-        <th class="p-4 border-b border-slate-300 bg-accent-300">
           <p class="block text-sm font-p leading-none text-neutral-800">
-            Genero
+            Presion Arterial
           </p>
         </th>
         <th class="p-4 border-b border-slate-300 bg-accent-300">
           <p class="block text-sm font-p leading-none text-neutral-800">
-            Signos Vitales
+            Frecuencia Cardiaca
           </p>
         </th>
         <th class="p-4 border-b border-slate-300 bg-accent-300">
           <p class="block text-sm font-p leading-none text-neutral-800">
-            Referencias
+            Frecuencia Respiratoria
+          </p>
+        </th>
+        <th class="p-4 border-b border-slate-300 bg-accent-300">
+          <p class="block text-sm font-p leading-none text-neutral-800">
+            Temperatura
           </p>
         </th>
         <th class="p-4 border-b border-slate-300 bg-accent-300"></th>
@@ -98,122 +169,42 @@
           {{ paciente.nombre }}
         </td>
         <td class="p-4 py-2 text-center">{{ paciente.apellido }}</td>
-        <td class="p-6 py-2 text-center">{{ paciente.edad }}</td>
-        <td class="p-5 py-2 text-center">{{ paciente.genero }}</td>
-        <td class="justify-items-center">
-          <div
-            class="w-48 flex flex-wrap items-center justify-center py-2 pl-4 pr-4 rounded-lg text-sm font-medium border-solid border"
-            [ngClass]="{
-              'bg-green-100 border-green-600 text-green-800 group':
-                paciente.signos_vitales === 'Actualizado',
-
-              'border-red-600 text-red-500 group bg-red-100':
-                paciente.signos_vitales === 'Pendiente'
-            }"
-          >
-            <p class="flex flex-row items-center mr-auto gap-x-2">
-              <svg
-                *ngIf="paciente.signos_vitales === 'Pendiente'"
-                stroke="currentColor"
-                fill="none"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                height="28"
-                width="28"
-                class="h-7 w-7"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
-                ></path>
-                <path d="M12 9v4"></path>
-                <path d="M12 17h.01"></path>
-              </svg>
-              <svg
-                *ngIf="paciente.signos_vitales === 'Actualizado'"
-                stroke="currentColor"
-                fill="none"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                height="28"
-                width="28"
-                class="h-7 w-7"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M12 20h9"></path>
-                <path
-                  d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"
-                ></path>
-              </svg>
-
-              {{ paciente.signos_vitales }}
-            </p>
+        <td class="py-2">
+          <div class="flex flex-col items-center">
+            min: {{ paciente.presion_arterial.sistolica_min }}/{{
+              paciente.presion_arterial.diastolica_min
+            }}<br />
+            max: {{ paciente.presion_arterial.sistolica_max }}/{{
+              paciente.presion_arterial.diastolica_max
+            }}
           </div>
         </td>
-        <td class="justify-items-center">
-          <div
-            class="w-48 flex flex-wrap items-center justify-center py-2 pl-4 pr-4 rounded-lg text-sm font-medium border-solid border"
-            [ngClass]="{
-              'bg-green-100 border-green-600 text-green-800 group':
-                paciente.referenciaSV === 'Registrado',
-
-              'border-red-600 text-red-500 group bg-red-100':
-                paciente.referenciaSV === 'Pendiente'
-            }"
-          >
-            <p class="flex flex-row items-center mr-auto gap-x-2">
-              <svg
-                *ngIf="paciente.referenciaSV === 'Pendiente'"
-                stroke="currentColor"
-                fill="none"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                height="28"
-                width="28"
-                class="h-7 w-7"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"
-                ></path>
-                <path d="M12 9v4"></path>
-                <path d="M12 17h.01"></path>
-              </svg>
-
-              <svg
-                *ngIf="paciente.referenciaSV === 'Registrado'"
-                stroke="currentColor"
-                fill="none"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                height="28"
-                width="28"
-                class="h-7 w-7"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M9 12l2 2 4-4"></path>
-                <path
-                  d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
-                ></path>
-                <path d="M14 2v6h6"></path>
-              </svg>
-
-              {{ paciente.referenciaSV }}
-            </p>
+        <td class="py-2">
+          <div class="flex flex-col items-center">
+            min: {{ paciente.frecuencia_cardiaca.min }}
+            <br />
+            max: {{ paciente.frecuencia_cardiaca.max }}
+          </div>
+        </td>
+        <td class="py-2">
+          <div class="flex flex-col items-center justify-center">
+            min: {{ paciente.frecuencia_respiratoria.min }}
+            <br />
+            max: {{ paciente.frecuencia_respiratoria.max }}
+          </div>
+        </td>
+        <td class="py-2">
+          <div class="flex flex-col items-center">
+            min: {{ paciente.temperatura.min }} °C
+            <br />
+            max: {{ paciente.frecuencia_respiratoria.max }} °C
           </div>
         </td>
 
         <td class="p-4 py-5 flex gap-3">
           <!-- Botón Editar Paciente -->
           <button
+            *ngIf="!showWithoutReference"
             class="text-slate-600 hover:text-slate-800"
             (click)="abrirModal(paciente, 'edit')"
           >
@@ -234,6 +225,7 @@
 
           <!-- Botón Eliminar Paciente -->
           <button
+            *ngIf="!showWithoutReference"
             class="text-slate-600 hover:text-slate-800"
             (click)="showDeleteNotification(paciente)"
           >
@@ -245,6 +237,22 @@
             >
               <path
                 d="M9 3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1h5a1 1 0 1 1 0 2h-1.23l-1.16 12.154A3 3 0 0 1 14.63 21H9.37a3 3 0 0 1-2.98-2.846L5.23 6H4a1 1 0 1 1 0-2h5V3Zm5 2V4h-4v1h4Zm-6 2 .76 11.027a1 1 0 0 0 .993.973h5.26a1 1 0 0 0 .994-.973L16 7H8Z"
+              />
+            </svg>
+          </button>
+          <button
+            *ngIf="showWithoutReference"
+            class="text-slate-600 hover:text-slate-800"
+            (click)="abrirModal(paciente, 'add')"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="w-5 h-5 text-green-600"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-13h-2v4H7v2h4v4h2v-4h4v-2h-4z"
               />
             </svg>
           </button>
@@ -274,14 +282,14 @@
   (pageChanged)="onPageChange($event)"
 ></app-pagination>
 
-<app-modal-paciente
+<app-modal-referencias-signosv
   [statusModal]="statusModal"
   [actionModal]="actionModal"
   [pacienteData]="pacienteData"
-  (closeModalEvent)="closeModal()"
+  (closeModalEvent)="closeModal($event)"
   (userIdEvent)="onUserIdReceived($event)"
 >
-</app-modal-paciente>
+</app-modal-referencias-signosv>
 
 <app-notifications
   [statusnotification]="statusnotification"

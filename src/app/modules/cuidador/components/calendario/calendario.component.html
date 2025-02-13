@@ -1,0 +1,175 @@
+<!-- Botón para mostrar/ocultar el calendario en móviles -->
+<button
+  (click)="toggleCalendar()"
+  class="fixed bottom-4 right-4 z-50 p-3 bg-primary-400 text-black rounded-full shadow-lg sm:hidden"
+>
+  <i class="fa-solid fa-calendar-days"></i>
+</button>
+
+<!-- Contenedor del calendario (visible en móviles y escritorio) -->
+<div class="sm:block">
+  <!-- Sidebar del calendario (solo para móviles) -->
+  <aside
+    id="calendar-sidebar"
+    class="fixed top-0 right-0 z-40 w-64 h-screen transition-transform bg-white shadow-2xl sm:hidden"
+    [ngClass]="{
+      'translate-x-full': !isCalendarOpen,
+      'translate-x-0': isCalendarOpen
+    }"
+  >
+    <div class="h-screen px-3 py-4 overflow-y-auto">
+      <!-- Contenido del calendario -->
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <h5
+            id="current-month"
+            class="text-xl font-poppins font-semibold text-warning-700"
+          >
+            {{ months[currentDate.getMonth()] }} {{ currentDate.getFullYear() }}
+          </h5>
+          <button
+            (click)="toggleCalendar()"
+            class="text-gray-500 hover:text-black"
+          >
+            <i class="fa-solid fa-times"></i>
+          </button>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="prev-month-mobile"
+            class="bg-secondary-100 p-1 rounded transition-all duration-300 hover:text-neutral-800 hover:bg-accent-300"
+          >
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <button
+            id="next-month-mobile"
+            class="bg-secondary-100 p-1 rounded transition-all duration-300 hover:text-neutral-800 hover:bg-accent-300"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="border border-indigo-200 rounded-xl">
+          <div
+            class="grid grid-cols-7 rounded-t-3xl border-b border-indigo-200"
+          >
+            <div
+              *ngFor="
+                let day of ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+              "
+              class="py-3.5 border-r border-indigo-200 bg-accent-300 flex items-center justify-center text-sm font-poppins font-semibold text-neutral-800"
+            >
+              {{ day }}
+            </div>
+          </div>
+          <div
+            #calendarDaysMobile
+            class="calendar-days grid grid-cols-7 rounded-b-xl"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Overlay para cerrar el sidebar al hacer clic fuera (solo para móviles) -->
+  <div
+    *ngIf="isCalendarOpen"
+    class="fixed inset-0 bg-black opacity-50 sm:hidden"
+    (click)="toggleCalendar()"
+  ></div>
+
+  <!-- Calendario en escritorio (visible siempre) -->
+  <div
+    class="col-span-12 xl:col-span-7 px-2.5 py-5 sm:p-8 bg-gradient-to-b from-white/25 to-white xl:bg-white rounded-2xl max-xl:row-start-1 hidden sm:block"
+  >
+    <div
+      class="flex flex-col md:flex-row gap-4 items-center justify-between mb-5"
+    >
+      <div class="flex items-center gap-4">
+        <h5
+          id="current-month"
+          class="text-xl leading-8 font-poppins font-semibold text-warning-700"
+        >
+          {{ months[currentDate.getMonth()] }} {{ currentDate.getFullYear() }}
+        </h5>
+        <div class="flex items-center gap-2">
+          <button
+            id="prev-month-desktop"
+            class="bg-secondary-100 p-1 rounded transition-all duration-300 hover:text-neutral-800 hover:bg-accent-300"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path
+                d="M10.0002 11.9999L6 7.99971L10.0025 3.99719"
+                stroke="currentcolor"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+          <button
+            id="next-month-desktop"
+            class="bg-secondary-100 p-1 rounded transition-all duration-300 hover:text-neutral-800 hover:bg-accent-300"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+            >
+              <path
+                d="M6.00236 3.99707L10.0025 7.99723L6 11.9998"
+                stroke="currentcolor"
+                stroke-width="1.3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <select
+          id="month-select"
+          class="p-2 border border-warning-600 rounded-lg font-semibold text-neutral-800"
+        >
+          <option *ngFor="let month of months; let i = index" [value]="i">
+            {{ month }}
+          </option>
+        </select>
+        <select
+          id="year-select"
+          class="p-2 border border-warning-600 text-neutral-800 font-semibold rounded-lg"
+        >
+          <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+        </select>
+        <button
+          id="reset-to-today"
+          class="py-2.5 px-5 rounded-lg bg-primary-400 text-black text-sm font-medium transition-all duration-300 hover:bg-primary-500"
+        >
+          Hoy
+        </button>
+      </div>
+    </div>
+    <div class="border border-indigo-200 rounded-xl">
+      <div class="grid grid-cols-7 rounded-t-3xl border-b border-indigo-200">
+        <div
+          *ngFor="let day of ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']"
+          class="py-3.5 border-r border-indigo-200 bg-accent-300 flex items-center justify-center text-sm font-poppins font-semibold text-neutral-800"
+        >
+          {{ day }}
+        </div>
+      </div>
+      <div
+        #calendarDaysDesktop
+        class="calendar-days grid grid-cols-7 rounded-b-xl"
+      ></div>
+    </div>
+  </div>
+</div>

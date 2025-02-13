@@ -3,7 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { WelcomeComponent } from './pages/welcome/welcome.component';
 import { GestionPacientesComponent } from './pages/pacientes/gestion-pacientes/gestion-pacientes.component';
-import { DashboardResolver } from './pages/dashboard-resolver';
+import { LimitesSignosVitalesComponent } from './pages/pacientes/limites-signos-vitales/limites-signos-vitales.component';
+import { GestionSignosVitalesComponent } from './pages/pacientes/gestion-signos-vitales/gestion-signos-vitales.component';
+import { PacienteResolver } from '../../core/cuidador/resolver/paciente.resolver';
+import { ReferenciaSignosVResolver } from '../../core/cuidador/resolver/referencia-signos-v.resolver';
 
 const routes: Routes = [
   {
@@ -14,15 +17,29 @@ const routes: Routes = [
         path: 'welcome',
         component: WelcomeComponent,
         resolve: {
-          data: DashboardResolver,
+          data: PacienteResolver,
         },
       },
       {
         path: 'gestion-pacientes',
         component: GestionPacientesComponent,
         resolve: {
-          data: DashboardResolver,
+          data: PacienteResolver,
         },
+      },
+      {
+        path: 'signos-vitales-referentes',
+        component: LimitesSignosVitalesComponent,
+        resolve: {
+          data: ReferenciaSignosVResolver,
+        },
+      },
+      {
+        path: 'signos-vitales-diarios',
+        component: GestionSignosVitalesComponent,
+        // resolve: {
+        //   data: DashboardResolver,
+        // },
       },
       { path: '**', redirectTo: 'welcome' },
     ],

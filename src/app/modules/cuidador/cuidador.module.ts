@@ -10,6 +10,7 @@ import { CardsComponent } from './components/cards/cards.component';
 import { GestionPacientesComponent } from './pages/pacientes/gestion-pacientes/gestion-pacientes.component';
 import { GestionSignosVitalesComponent } from './pages/pacientes/gestion-signos-vitales/gestion-signos-vitales.component';
 import { ComponentsModule } from './components/components.module';
+import { LimitesSignosVitalesComponent } from './pages/pacientes/limites-signos-vitales/limites-signos-vitales.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ComponentsModule } from './components/components.module';
     WelcomeComponent,
     GestionPacientesComponent,
     GestionSignosVitalesComponent,
+    LimitesSignosVitalesComponent,
   ],
   imports: [
     CommonModule,

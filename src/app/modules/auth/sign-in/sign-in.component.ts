@@ -52,19 +52,22 @@ export class SignInComponent implements OnInit {
   onSubmit(): void {
     if (this.authForm.valid) {
       const userDto = this.authForm.value;
+      this.loadingService.show();
 
       this.authServices.loginUser(userDto).subscribe(
         (response) => {
           console.log('Inicio de sesión exitoso:', response);
           localStorage.setItem('token', response.token);
           this.sesionActive();
-          this.router.navigate(['/loading']);
+
+          this.loadingService.hide();
+          this.router.navigate(['/Cuidador/home/welcome']);
         },
         (error: HttpErrorResponse) => {
           console.log('Error capturado al autenticar usuario:', error);
 
           if (typeof error.error === 'object') {
-            console.log('Error objeto:', error.error);
+            this.loadingService.hide();
             this.showNotification('Error', error.error.error, 'error');
           }
         }

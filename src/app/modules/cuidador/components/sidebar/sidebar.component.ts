@@ -25,6 +25,15 @@ export class SidebarComponent implements OnInit {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
+  toggleSubMenu(item: any): void {
+    if (item.subItems) {
+      item.isOpen = !item.isOpen;
+    } else {
+      this.setActiveLink(item.name);
+      this.router.navigate([item.link]);
+    }
+  }
+
   closeMenu() {
     this.isMenuOpen = false;
   }
@@ -45,9 +54,26 @@ export class SidebarComponent implements OnInit {
       link: '/Cuidador/home/gestion-pacientes',
     },
     {
+      name: 'Signos Vitales',
+      icon: 'fa-solid fa-heartbeat',
+      link: null, // No tiene un enlace directo
+      subItems: [
+        {
+          name: 'Signos Vitales Diarios',
+          icon: 'fa-solid fa-calendar-day',
+          link: '/Cuidador/home/signos-vitales-diarios',
+        },
+        {
+          name: 'Referencias SV',
+          icon: 'fa-solid fa-chart-line',
+          link: 'signos-vitales-referentes',
+        },
+      ],
+      isOpen: false, // Estado para controlar si el submenú está abierto
+    },
+    {
       name: 'Gestión de Estudiantes',
       icon: 'fa-solid fa-cubes',
-
       link: '/Dashboard/dashboard-home/list-user',
     },
     {

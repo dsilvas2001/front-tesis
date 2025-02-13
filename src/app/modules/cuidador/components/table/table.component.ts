@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PacienteService } from '../../../../core/cuidador/paciente/paciente.service';
+import { LoadingService } from '../../../../core/loading/loading.service';
 
 @Component({
   selector: 'app-table',
@@ -25,35 +26,26 @@ export class TableComponent implements OnInit {
   notificationType: string = '';
   pacienteData: any = null;
   statusDelete: boolean = false;
+  //loading
+  isLoading = false;
 
   constructor(private pacienteServices: PacienteService) {}
 
   ngOnInit() {
     this.mostrarUser();
   }
-  openModal(action: string) {
-    // this.actionModal = action? action : 'add';
-    this.actionModal = action;
-    this.statusModal = true;
-  }
 
   closeModal() {
     this.statusModal = false;
   }
 
-  abrirModalEditar(paciente: any): void {
-    this.actionModal = 'edit';
-    this.pacienteData = paciente;
-    console.log('Paciente:', this.pacienteData);
-
+  abrirModal(paciente: any, actionModal: string): void {
+    this.actionModal = actionModal;
+    this.pacienteData = actionModal === 'edit' ? paciente : null;
     this.statusModal = true; // Abrir el modal
   }
 
-  abrirModalAgregar(): void {
-    this.actionModal = 'add';
-    this.pacienteData = null; // Limpiar los datos del paciente
-    this.statusModal = true; // Abrir el modal
-  }
+  // EVENTOS
 
   handleDeleteAction(confirmed: boolean): void {
     if (confirmed) {
@@ -67,6 +59,11 @@ export class TableComponent implements OnInit {
       }
       console.log('El usuario hizo clic en Cancelar');
     }
+  }
+
+  onUserIdReceived(userId: string) {
+    this.mostrarUser();
+    this.countPacienteEvent.emit();
   }
 
   deletePaciente(pacientid: string): void {
@@ -84,6 +81,9 @@ export class TableComponent implements OnInit {
       }
     );
   }
+
+  // NOTIFICACION
+
   showDeleteNotification(paciente: any): void {
     this.pacienteData = paciente;
     this.showNotification(
@@ -92,15 +92,6 @@ export class TableComponent implements OnInit {
       'delete'
     );
   }
-
-  // showNotification(paciente: any): void {
-  //   this.pacienteData = paciente; // Asignar el paciente seleccionado
-  //   this.statusnotification = true;
-  //   this.notificationTitle = 'Eliminar Paciente';
-  //   this.notificationMessage =
-  //     '¿Estás seguro de que deseas eliminar este paciente?';
-  //   this.notificationType = 'delete';
-  // }
 
   showNotification(title: string, message: string, type: string) {
     this.statusnotification = true;
@@ -114,22 +105,25 @@ export class TableComponent implements OnInit {
     }
   }
 
-  onUserIdReceived(userId: string) {
-    this.mostrarUser();
-    this.countPacienteEvent.emit();
-  }
+  // TABLE
 
   mostrarUser() {
+    this.isLoading = true;
     this.pacienteServices.getAllPaciente().subscribe(
       (datas: any[]) => {
         this.pacientes = datas;
         this.updateDisplayedPacientes();
+        this.isLoading = false;
       },
       (error) => {
+        this.isLoading = false;
+
         console.error('Error fetching users:', error);
       }
     );
   }
+
+  // PAGINATION
 
   updateDisplayedPacientes() {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;

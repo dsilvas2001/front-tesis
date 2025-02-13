@@ -6,7 +6,7 @@
   aria-hidden="true"
   class="overflow-y-auto overflow-x-hidden flex z-50 justify-center fixed top-0 right-1 w-full max-h-full"
 >
-  <div class="relative p-4 w-full max-w-md max-h-full">
+  <div class="relative p-4 w-full max-w-3xl h-full md:h-auto">
     <!-- Modal content -->
     <div class="relative bg-white rounded-lg shadow-lg">
       <!-- Modal header -->
@@ -28,12 +28,13 @@
       </div>
       <!-- Modal body -->
       <form
+        action="#"
         class="p-4 md:p-5"
         (ngSubmit)="onSubmit()"
         [formGroup]="registerForm"
       >
-        <div class="grid gap-4 mb-4 grid-cols-2">
-          <div class="col-span-2">
+        <div class="grid gap-4 mb-4 sm:grid-cols-2">
+          <div>
             <label
               for="name"
               class="block mb-2 text-sm font-medium text-gray-900"
@@ -42,6 +43,7 @@
             <input
               type="text"
               name="name"
+              readonly
               formControlName="name"
               id="name"
               class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
@@ -58,7 +60,7 @@
               El nombre del paciente es obligatorio.
             </div>
           </div>
-          <div class="col-span-2">
+          <div>
             <label
               for="lastname"
               class="block mb-2 text-sm font-medium text-gray-900"
@@ -68,6 +70,7 @@
               type="text"
               name="lastname"
               formControlName="lastname"
+              readonly
               id="lastname"
               class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
               placeholder="Apellido del paciente"
@@ -83,65 +86,39 @@
               El apellido del paciente es obligatorio.
             </div>
           </div>
-          <div class="col-span-2 sm:col-span-1">
-            <label
-              for="age"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >Edad</label
-            >
-            <input
-              type="number"
-              name="age"
-              formControlName="age"
-              id="age"
-              class="bg-gray-50 border border-warning-600 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-              placeholder="0"
-              required=""
-            />
-            <div
-              class="text-red-500"
-              *ngIf="
-                registerForm.get('age')?.hasError('required') &&
-                registerForm.get('age')?.touched
-              "
-            >
-              El nombre del paciente es obligatorio.
-            </div>
-          </div>
-          <div class="col-span-2 sm:col-span-1">
-            <label
-              for="gender"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >Genero</label
-            >
-            <select
-              id="gender"
-              formControlName="gender"
-              class="bg-gray-50 border-warning-600 border text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500"
-            >
-              <option selected="">Seleccionar genero</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Femenino">Femenino</option>
-            </select>
-            <div
-              class="text-red-500"
-              *ngIf="
-                registerForm.get('gender')?.hasError('required') &&
-                registerForm.get('gender')?.touched
-              "
-            >
-              El genero del paciente es obligatorio.
-            </div>
-          </div>
+
+          <app-dropdown
+            dropdownTitle="Ingrese Presion Arterial"
+            [fields]="presionArterialFields"
+          ></app-dropdown>
+
+          <app-dropdown
+            dropdownTitle="Ingrese Frecuencia Cardiaca"
+            [fields]="frecuenciaCardiacaFields"
+            (fieldChange)="onFieldChange($event)"
+          ></app-dropdown>
+          <app-dropdown
+            dropdownTitle="Ingrese Frecuencia Respiratoria"
+            [fields]="frecuenciaRespiratoriaFields"
+            (fieldChange)="onFieldChange($event)"
+          ></app-dropdown>
+          <app-dropdown
+            dropdownTitle="Ingrese la Temperatura"
+            [fields]="temperaturaFields"
+            (fieldChange)="onFieldChange($event)"
+          ></app-dropdown>
         </div>
-        <button
-          type="submit"
-          class="w-full inline-flex items-center justify-center bg-primary-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:hover:bg-primary-500 dark:focus:ring-warning-600"
-          [disabled]="registerForm.invalid"
-        >
-          <i class="{{ icon }}"></i>
-          <span class="pl-3">{{ buttonModal }}</span>
-        </button>
+
+        <div class="items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
+          <button
+            type="submit"
+            class="w-full inline-flex items-center justify-center bg-primary-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:hover:bg-primary-500 dark:focus:ring-warning-600 cursor-pointer"
+            [disabled]="registerForm.invalid"
+          >
+            <i class="{{ icon }}"></i>
+            <span class="pl-3">{{ buttonModal }}</span>
+          </button>
+        </div>
       </form>
     </div>
   </div>

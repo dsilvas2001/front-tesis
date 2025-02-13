@@ -6,21 +6,19 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs';
+import { ReferenciaSignosVService } from '../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 
 @Injectable({ providedIn: 'root' })
 export class DashboardResolver implements Resolve<any> {
-  constructor(private pacienteService: PacienteService) {}
-  // resolve(
-  //   route: ActivatedRouteSnapshot,
-  //   state: RouterStateSnapshot
-  // ): Observable<any> | Promise<any> | any {
-  //   return this.pacienteService.getCountPaciente();
-  // }
+  constructor(
+    private pacienteService: PacienteService,
+    private referenciaSignosVService: ReferenciaSignosVService
+  ) {}
 
   resolve(): Observable<any> {
     return forkJoin({
       count_pacientes: this.pacienteService.getCountPaciente(),
-      // courses: this.authServices.getCountCourses(),
+      count_referencias: this.referenciaSignosVService.getCountReferencia(),
     });
   }
 }
