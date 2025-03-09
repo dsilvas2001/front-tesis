@@ -12,6 +12,7 @@ export class TableComponent implements OnInit {
   //Modal
   statusModal: boolean = false;
   actionModal: string = 'add';
+  pacienteData: any = null;
 
   //Tabla
   pacientes: any[] = [];
@@ -24,7 +25,6 @@ export class TableComponent implements OnInit {
   notificationTitle: string = '';
   notificationMessage: string = '';
   notificationType: string = '';
-  pacienteData: any = null;
   statusDelete: boolean = false;
   //loading
   isLoading = false;
@@ -112,8 +112,8 @@ export class TableComponent implements OnInit {
     this.pacienteServices.getAllPaciente().subscribe(
       (datas: any[]) => {
         this.pacientes = datas;
-        this.updateDisplayedPacientes();
         this.isLoading = false;
+        this.updateDisplayedPacientes();
       },
       (error) => {
         this.isLoading = false;

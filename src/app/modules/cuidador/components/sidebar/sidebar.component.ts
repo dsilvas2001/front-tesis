@@ -66,16 +66,30 @@ export class SidebarComponent implements OnInit {
         {
           name: 'Referencias SV',
           icon: 'fa-solid fa-chart-line',
-          link: 'signos-vitales-referentes',
+          link: '/Cuidador/home/signos-vitales-referentes',
         },
       ],
       isOpen: false, // Estado para controlar si el submenú está abierto
     },
     {
-      name: 'Gestión de Estudiantes',
+      name: 'Ejercicios Cognitivos',
       icon: 'fa-solid fa-cubes',
-      link: '/Dashboard/dashboard-home/list-user',
+      link: null, // No tiene un enlace directo
+      subItems: [
+        {
+          name: 'Ejercicios Diarios',
+          icon: 'fa-brands fa-bilibili',
+          link: '/Cuidador/home/gestion-ejercicios',
+        },
+        {
+          name: 'Supervision Ejercicios',
+          icon: 'fa-solid fa-list-check',
+          link: '/Cuidador/home/gestion-supervision-ejercicios',
+        },
+      ],
+      isOpen: false, // Estado para controlar si el submenú está abierto
     },
+
     {
       name: 'Cerrar Sesión',
       icon: 'fa-solid fa-arrow-right-from-bracket',

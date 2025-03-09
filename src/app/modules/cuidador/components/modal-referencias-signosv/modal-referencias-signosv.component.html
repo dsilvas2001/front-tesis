@@ -87,26 +87,176 @@
             </div>
           </div>
 
-          <app-dropdown
-            dropdownTitle="Ingrese Presion Arterial"
-            [fields]="presionArterialFields"
-          ></app-dropdown>
+          <div>
+            <app-dropdown
+              dropdownTitle="Ingrese Presion Arterial"
+              [fields]="presionArterialFields"
+            ></app-dropdown>
 
-          <app-dropdown
-            dropdownTitle="Ingrese Frecuencia Cardiaca"
-            [fields]="frecuenciaCardiacaFields"
-            (fieldChange)="onFieldChange($event)"
-          ></app-dropdown>
-          <app-dropdown
-            dropdownTitle="Ingrese Frecuencia Respiratoria"
-            [fields]="frecuenciaRespiratoriaFields"
-            (fieldChange)="onFieldChange($event)"
-          ></app-dropdown>
-          <app-dropdown
-            dropdownTitle="Ingrese la Temperatura"
-            [fields]="temperaturaFields"
-            (fieldChange)="onFieldChange($event)"
-          ></app-dropdown>
+            <!-- Verificación para PAS (Min) -->
+            <div
+              *ngIf="
+                presionArterialFields[0] &&
+                (presionArterialFields[0].value <
+                  RANGOS_PERMITIDOS.presionArterial.sistolica.min ||
+                  presionArterialFields[0].value >
+                    RANGOS_PERMITIDOS.presionArterial.sistolica.max)
+              "
+              class="text-red-500"
+            >
+              La presión arterial sistólica (PAS - Min) está fuera de rango.
+            </div>
+
+            <!-- Verificación para PAD (Min) -->
+            <div
+              *ngIf="
+                presionArterialFields[1] &&
+                (presionArterialFields[1].value <
+                  RANGOS_PERMITIDOS.presionArterial.diastolica.min ||
+                  presionArterialFields[1].value >
+                    RANGOS_PERMITIDOS.presionArterial.diastolica.max)
+              "
+              class="text-red-500"
+            >
+              La presión arterial diastólica (PAD - Min) está fuera de rango.
+            </div>
+
+            <!-- Verificación para PAS (Max) -->
+            <div
+              *ngIf="
+                presionArterialFields[2] &&
+                (presionArterialFields[2].value <
+                  RANGOS_PERMITIDOS.presionArterial.sistolica.min ||
+                  presionArterialFields[2].value >
+                    RANGOS_PERMITIDOS.presionArterial.sistolica.max)
+              "
+              class="text-red-500"
+            >
+              La presión arterial sistólica (PAS - Max) está fuera de rango.
+            </div>
+
+            <!-- Verificación para PAD (Max) -->
+            <div
+              *ngIf="
+                presionArterialFields[3] &&
+                (presionArterialFields[3].value <
+                  RANGOS_PERMITIDOS.presionArterial.diastolica.min ||
+                  presionArterialFields[3].value >
+                    RANGOS_PERMITIDOS.presionArterial.diastolica.max)
+              "
+              class="text-red-500"
+            >
+              La presión arterial diastólica (PAD - Max) está fuera de rango.
+            </div>
+          </div>
+
+          <div>
+            <app-dropdown
+              dropdownTitle="Ingrese Frecuencia Cardiaca"
+              [fields]="frecuenciaCardiacaFields"
+              (fieldChange)="onFieldChange($event)"
+            ></app-dropdown>
+
+            <!-- Verificación para Frecuencia Cardíaca (Min) -->
+            <div
+              *ngIf="
+                frecuenciaCardiacaFields[0] &&
+                (frecuenciaCardiacaFields[0].value <
+                  RANGOS_PERMITIDOS.frecuenciaCardiaca.min ||
+                  frecuenciaCardiacaFields[0].value >
+                    RANGOS_PERMITIDOS.frecuenciaCardiaca.max)
+              "
+              class="text-red-500"
+            >
+              La frecuencia cardíaca (Min) está fuera de rango.
+            </div>
+
+            <!-- Verificación para Frecuencia Cardíaca (Max) -->
+            <div
+              *ngIf="
+                frecuenciaCardiacaFields[1] &&
+                (frecuenciaCardiacaFields[1].value <
+                  RANGOS_PERMITIDOS.frecuenciaCardiaca.min ||
+                  frecuenciaCardiacaFields[1].value >
+                    RANGOS_PERMITIDOS.frecuenciaCardiaca.max)
+              "
+              class="text-red-500"
+            >
+              La frecuencia cardíaca (Max) está fuera de rango.
+            </div>
+          </div>
+
+          <div>
+            <app-dropdown
+              dropdownTitle="Ingrese Frecuencia Respiratoria"
+              [fields]="frecuenciaRespiratoriaFields"
+              (fieldChange)="onFieldChange($event)"
+            ></app-dropdown>
+
+            <!-- Verificación para Frecuencia Respiratoria (Min) -->
+            <div
+              *ngIf="
+                frecuenciaRespiratoriaFields[0] &&
+                (frecuenciaRespiratoriaFields[0].value <
+                  RANGOS_PERMITIDOS.frecuenciaRespiratoria.min ||
+                  frecuenciaRespiratoriaFields[0].value >
+                    RANGOS_PERMITIDOS.frecuenciaRespiratoria.max)
+              "
+              class="text-red-500"
+            >
+              La frecuencia respiratoria (Min) está fuera de rango.
+            </div>
+
+            <!-- Verificación para Frecuencia Respiratoria (Max) -->
+            <div
+              *ngIf="
+                frecuenciaRespiratoriaFields[1] &&
+                (frecuenciaRespiratoriaFields[1].value <
+                  RANGOS_PERMITIDOS.frecuenciaRespiratoria.min ||
+                  frecuenciaRespiratoriaFields[1].value >
+                    RANGOS_PERMITIDOS.frecuenciaRespiratoria.max)
+              "
+              class="text-red-500"
+            >
+              La frecuencia respiratoria (Max) está fuera de rango.
+            </div>
+          </div>
+
+          <div>
+            <app-dropdown
+              dropdownTitle="Ingrese la Temperatura"
+              [fields]="temperaturaFields"
+              (fieldChange)="onFieldChange($event)"
+            ></app-dropdown>
+
+            <!-- Verificación para Temperatura (Min) -->
+            <div
+              *ngIf="
+                temperaturaFields[0] &&
+                (temperaturaFields[0].value <
+                  RANGOS_PERMITIDOS.temperatura.min ||
+                  temperaturaFields[0].value >
+                    RANGOS_PERMITIDOS.temperatura.max)
+              "
+              class="text-red-500"
+            >
+              La temperatura (Min) está fuera de rango.
+            </div>
+
+            <!-- Verificación para Temperatura (Max) -->
+            <div
+              *ngIf="
+                temperaturaFields[1] &&
+                (temperaturaFields[1].value <
+                  RANGOS_PERMITIDOS.temperatura.min ||
+                  temperaturaFields[1].value >
+                    RANGOS_PERMITIDOS.temperatura.max)
+              "
+              class="text-red-500"
+            >
+              La temperatura (Max) está fuera de rango.
+            </div>
+          </div>
         </div>
 
         <div class="items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
@@ -121,14 +271,13 @@
         </div>
       </form>
     </div>
+    <app-notifications
+      [statusnotification]="statusnotification"
+      [title]="notificationTitle"
+      [message]="notificationMessage"
+      [type]="notificationType"
+    ></app-notifications>
   </div>
 </div>
 
 <div *ngIf="statusModal" class="fixed inset-0 bg-black opacity-50"></div>
-
-<app-notifications
-  [statusnotification]="statusnotification"
-  [title]="notificationTitle"
-  [message]="notificationMessage"
-  [type]="notificationType"
-></app-notifications>

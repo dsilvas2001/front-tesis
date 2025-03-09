@@ -7,6 +7,9 @@ import { LimitesSignosVitalesComponent } from './pages/pacientes/limites-signos-
 import { GestionSignosVitalesComponent } from './pages/pacientes/gestion-signos-vitales/gestion-signos-vitales.component';
 import { PacienteResolver } from '../../core/cuidador/resolver/paciente.resolver';
 import { ReferenciaSignosVResolver } from '../../core/cuidador/resolver/referencia-signos-v.resolver';
+import { SignosVResolver } from '../../core/cuidador/resolver/signosv.resolver';
+import { GestionEjerciciosComponent } from './pages/pacientes/gestion-ejercicios/gestion-ejercicios.component';
+import { GestionSupervisionComponent } from './pages/pacientes/gestion-supervision/gestion-supervision.component';
 
 const routes: Routes = [
   {
@@ -37,9 +40,17 @@ const routes: Routes = [
       {
         path: 'signos-vitales-diarios',
         component: GestionSignosVitalesComponent,
-        // resolve: {
-        //   data: DashboardResolver,
-        // },
+        resolve: {
+          data: SignosVResolver,
+        },
+      },
+      {
+        path: 'gestion-ejercicios',
+        component: GestionEjerciciosComponent,
+      },
+      {
+        path: 'gestion-supervision-ejercicios',
+        component: GestionSupervisionComponent,
       },
       { path: '**', redirectTo: 'welcome' },
     ],

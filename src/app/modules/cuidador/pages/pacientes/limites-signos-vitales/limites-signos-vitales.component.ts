@@ -42,7 +42,6 @@ export class LimitesSignosVitalesComponent implements OnInit {
         this.cards[0].count = countData.count_referentes;
         this.cards[1].count = countData.count_referentes_hoy;
         this.cards[2].count = countData.count_sin_referentes;
-        this.cards[3].count = countData.count_femenino;
       } else {
         console.error('No se encontraron datos de referentes.');
       }

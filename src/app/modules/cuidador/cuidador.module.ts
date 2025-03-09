@@ -11,6 +11,8 @@ import { GestionPacientesComponent } from './pages/pacientes/gestion-pacientes/g
 import { GestionSignosVitalesComponent } from './pages/pacientes/gestion-signos-vitales/gestion-signos-vitales.component';
 import { ComponentsModule } from './components/components.module';
 import { LimitesSignosVitalesComponent } from './pages/pacientes/limites-signos-vitales/limites-signos-vitales.component';
+import { GestionEjerciciosComponent } from './pages/pacientes/gestion-ejercicios/gestion-ejercicios.component';
+import { GestionSupervisionComponent } from './pages/pacientes/gestion-supervision/gestion-supervision.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { LimitesSignosVitalesComponent } from './pages/pacientes/limites-signos-
     GestionPacientesComponent,
     GestionSignosVitalesComponent,
     LimitesSignosVitalesComponent,
+    GestionEjerciciosComponent,
+    GestionSupervisionComponent,
   ],
   imports: [
     CommonModule,

@@ -147,11 +147,10 @@
   </div>
 </div>
 
-<div *ngIf="statusModal" class="fixed inset-0 bg-black opacity-50"></div>
-
 <app-notifications
   [statusnotification]="statusnotification"
   [title]="notificationTitle"
   [message]="notificationMessage"
   [type]="notificationType"
 ></app-notifications>
+<div *ngIf="statusModal" class="fixed inset-0 bg-black opacity-50"></div>

@@ -1,4 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-calendario',
@@ -31,11 +38,16 @@ export class CalendarioComponent implements OnInit {
   ];
   years: number[] = this.generateYears(2000, 2030); // Rango de años
 
+  // EVENTOS
+  @Output() clickFecha = new EventEmitter<string>();
+
   constructor() {
     this.currentDate = new Date();
   }
 
   ngOnInit(): void {
+    this.clickFecha.emit(this.currentDate.toISOString());
+
     this.renderCalendar(
       this.currentDate,
       this.calendarDaysMobile.nativeElement
@@ -122,12 +134,15 @@ export class CalendarioComponent implements OnInit {
     this.selectedDate = null;
     this.renderCalendar(
       this.currentDate,
+
       this.calendarDaysMobile.nativeElement
     );
+
     this.renderCalendar(
       this.currentDate,
       this.calendarDaysDesktop.nativeElement
     );
+    this.clickFecha.emit(this.currentDate.toISOString());
   }
 
   selectDay(day: number): void {
@@ -146,7 +161,7 @@ export class CalendarioComponent implements OnInit {
     );
 
     // Aquí imprimimos la fecha seleccionada en formato ISO (para MongoDB)
-    console.log('Fecha seleccionada:', this.selectedDate.toISOString());
+    this.clickFecha.emit(this.selectedDate.toISOString());
   }
 
   toggleCalendar(): void {
@@ -170,11 +185,11 @@ export class CalendarioComponent implements OnInit {
 
     // Rellenar los días del mes anterior
     for (let i = 0; i < startingDay; i++) {
-      daysHtml += `<div class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 border-r border-b border-indigo-200 transition-all duration-300 hover:bg-indigo-50 cursor-pointer"><span class="text-xs font-semibold text-gray-400">${new Date(
-        year,
-        month,
-        -startingDay + i + 1
-      ).getDate()}</span></div>`;
+      daysHtml += `<div class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 border-r border-b border-indigo-200 transition-all duration-300 hover:bg-indigo-50 cursor-pointer">
+                     <span class="text-xs font-semibold text-gray-400">
+                       ${new Date(year, month, -startingDay + i + 1).getDate()}
+                     </span>
+                   </div>`;
     }
 
     // Rellenar los días del mes actual
@@ -194,7 +209,9 @@ export class CalendarioComponent implements OnInit {
             isToday
               ? 'text-neutral-900 sm:w-6 sm:h-6 rounded-full sm:flex items-center justify-center sm:bg-accent-300 font-bold font-poppins'
               : 'text-gray-900'
-          }">${i}</span>
+          }">
+            ${i}
+          </span>
         </div>`;
     }
 
@@ -202,7 +219,9 @@ export class CalendarioComponent implements OnInit {
     const totalCells = 42; // 6 semanas * 7 días
     const remainingCells = totalCells - (startingDay + daysInMonth);
     for (let i = 1; i <= remainingCells; i++) {
-      daysHtml += `<div class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 border-r border-b border-indigo-200 transition-all duration-300 hover:bg-indigo-50 cursor-pointer"><span class="text-xs font-semibold text-gray-400">${i}</span></div>`;
+      daysHtml += `<div class="flex xl:aspect-square max-xl:min-h-[60px] p-3.5 bg-gray-50 border-r border-b border-indigo-200 transition-all duration-300 hover:bg-indigo-50 cursor-pointer">
+                     <span class="text-xs font-semibold text-gray-400">${i}</span>
+                   </div>`;
     }
 
     calendarDaysElement.innerHTML = daysHtml;

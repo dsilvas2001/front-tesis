@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ReferenciaSignosVService } from '../../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 import { ActivatedRoute } from '@angular/router';
+import { SignosVitalesService } from '../../../../../core/cuidador/signos-vitales/signos-vitales.service';
 
 @Component({
   selector: 'app-gestion-signos-vitales',
@@ -9,52 +10,68 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GestionSignosVitalesComponent {
   cards = [
-    { title: 'Pacientes Agregados', count: 120, icon: 'fa-solid fa-user' },
+    { title: 'Pacientes Agregados', count: 0, icon: 'fa-solid fa-user' },
     {
       title: 'Signos Vitales (Hoy)',
-      count: 5,
+      count: 0,
       icon: 'fa-solid fa-heart-circle-check',
     },
     {
       title: 'Emergencia (Hoy)',
-      count: 5,
+      count: 0,
       icon: 'fa-solid fa-heart-circle-exclamation',
     },
 
     {
       title: 'SV sin registrar',
-      count: 10,
+      count: 0,
       icon: 'fa-solid fa-heart-circle-xmark',
     },
   ];
   mostrarCalendario: any;
+  fechaCards: string = '';
 
   constructor(
-    private referenciaSignosVService: ReferenciaSignosVService,
+    private signosVitalesService: SignosVitalesService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
     this.route.data.subscribe(({ data }) => {
-      if (data && data.count_referencias) {
-        const countData = data.count_referencias;
-
-        this.cards[0].count = countData.count_referentes;
-        this.cards[1].count = countData.count_referentes_hoy;
-        this.cards[2].count = countData.count_sin_referentes;
-        this.cards[3].count = countData.count_femenino;
+      if (data && data.count_sv) {
+        const countData = data.count_sv;
+        this.cards[0].count = countData.count_pacientes_hoy;
+        this.cards[1].count = countData.count_signos_vitales_hoy;
+        this.cards[2].count = countData.count_emergencia_hoy;
+        this.cards[3].count = countData.count_sin_registrar;
       } else {
         console.error('No se encontraron datos de referentes.');
       }
     });
   }
 
-  mostrarCountPaciente() {
-    this.referenciaSignosVService.getCountReferencia().subscribe(
+  onDateReceived(fecha: string) {
+    this.fechaCards = fecha;
+    console.log('fecha');
+    console.log('fecha');
+    console.log(fecha);
+    this.mostrarCountPaciente(fecha);
+  }
+
+  mostrarCountPaciente(fecha: string) {
+    console.log('INGRESANDO A CONTAR');
+
+    this.signosVitalesService.countgetSignosV(fecha).subscribe(
       (datas: any) => {
-        this.cards[0].count = datas.count_referentes;
-        this.cards[1].count = datas.count_referentes_hoy;
-        this.cards[2].count = datas.count_sin_referentes;
+        console.log('datas');
+        console.log('datas');
+        console.log('datas');
+        console.log('datas');
+        console.log(datas);
+        this.cards[0].count = datas.count_pacientes_hoy;
+        this.cards[1].count = datas.count_signos_vitales_hoy;
+        this.cards[2].count = datas.count_emergencia_hoy;
+        this.cards[3].count = datas.count_sin_registrar;
       },
       (error) => {
         console.error('Error al obtener los datos de referentes:', error);
@@ -63,7 +80,7 @@ export class GestionSignosVitalesComponent {
   }
 
   countPacienteReceived() {
-    this.mostrarCountPaciente();
+    this.mostrarCountPaciente(this.fechaCards);
   }
 
   //

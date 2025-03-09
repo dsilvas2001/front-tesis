@@ -14,6 +14,9 @@ import { ModalReferenciasSignosvComponent } from './modal-referencias-signosv/mo
 import { DropdownComponent } from './dropdown/dropdown.component';
 import { CalendarioComponent } from './calendario/calendario.component';
 import { CardsSvComponent } from './cards-sv/cards-sv.component';
+import { ModalSignosvComponent } from './modal-signosv/modal-signosv.component';
+import { CardsPacienteEjercicioComponent } from './cards-paciente-ejercicio/cards-paciente-ejercicio.component';
+import { CategoriaEjercicioComponent } from './categoria-ejercicio/categoria-ejercicio.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +32,9 @@ import { CardsSvComponent } from './cards-sv/cards-sv.component';
     DropdownComponent,
     CalendarioComponent,
     CardsSvComponent,
+    ModalSignosvComponent,
+    CardsPacienteEjercicioComponent,
+    CategoriaEjercicioComponent,
   ],
   imports: [CommonModule, RouterModule, SharedModule],
   exports: [
@@ -38,7 +44,9 @@ import { CardsSvComponent } from './cards-sv/cards-sv.component';
     TableComponent,
     TableReferenciasSignosVComponent,
     CardsSvComponent,
+    CardsPacienteEjercicioComponent,
     CalendarioComponent,
+    CategoriaEjercicioComponent,
   ],
 })
 export class ComponentsModule {}

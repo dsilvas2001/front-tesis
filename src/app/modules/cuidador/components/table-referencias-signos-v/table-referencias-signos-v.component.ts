@@ -69,9 +69,13 @@ export class TableReferenciasSignosVComponent implements OnInit {
   }
 
   abrirModal(paciente: any, actionModal: string): void {
-    this.actionModal = actionModal;
-    this.pacienteData = paciente;
-    this.statusModal = true; // Abrir el modal
+    if (paciente && paciente.id) {
+      this.actionModal = actionModal;
+      this.pacienteData = paciente;
+      this.statusModal = true;
+    } else {
+      console.error('Paciente no válido:', paciente);
+    }
   }
 
   deletePaciente(pacientid: string): void {

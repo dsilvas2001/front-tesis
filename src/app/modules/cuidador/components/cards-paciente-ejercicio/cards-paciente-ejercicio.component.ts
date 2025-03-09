@@ -1,19 +1,21 @@
 import {
   Component,
+  EventEmitter,
   Input,
-  input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
+import { EjercicioPersonaService } from '../../../../core/cuidador/ejercicio-persona/ejercicio-persona.service';
 import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/signos-vitales.service';
 
 @Component({
-  selector: 'app-cards-sv',
-  templateUrl: './cards-sv.component.html',
+  selector: 'app-cards-paciente-ejercicio',
+  templateUrl: './cards-paciente-ejercicio.component.html',
   styles: ``,
 })
-export class CardsSvComponent implements OnInit, OnChanges {
+export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
   //Notificacion
   statusnotification: boolean = false;
   notificationTitle: string = '';
@@ -33,11 +35,12 @@ export class CardsSvComponent implements OnInit, OnChanges {
   displayedPacientes: any[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 5;
-  _fechaCards: string = '';
+  _fechaCards: string = new Date().toISOString();
   selectedFilter: string = 'todos';
 
   // DECORADORES
   @Input() fechaCards: string = '';
+  @Output() clickIdUser = new EventEmitter<any>();
 
   //Modal
   statusModal: boolean = false;
@@ -75,34 +78,42 @@ export class CardsSvComponent implements OnInit, OnChanges {
       checked: false,
     },
     {
-      id: 'emergency',
-      label: 'Pacientes en Emergencia',
+      id: 'incompleto',
+      label: 'Ejercicios Incompletos',
       checked: false,
     },
     {
-      id: 'stable',
-      label: 'Pacientes Estables',
+      id: 'completo',
+      label: 'Ejercicios Completos',
       checked: false,
     },
     {
-      id: 'withoutSV',
-      label: 'Pacientes sin SV',
+      id: 'pendiente',
+      label: 'Ejercicios Pendientes',
       checked: false,
     },
   ];
 
   events: any[] = [];
 
-  constructor(private signosVitalesService: SignosVitalesService) {}
+  constructor(
+    private ejercicioPersonaService: EjercicioPersonaService,
+    private signosVServices: SignosVitalesService
+  ) {}
 
   // MOSTRAR CARDS
 
   mostrarAllUser(fecha: string, status: string) {
     this.isLoading = true;
 
-    this.signosVitalesService.getAllSignosVitales(fecha, status).subscribe(
+    this.ejercicioPersonaService.getEjercicio(fecha, status).subscribe(
       (datas: any[]) => {
         this.pacientes = datas;
+        console.log('Pacientes:');
+        console.log('Pacientes:');
+        console.log('Pacientes:');
+        console.log(this.pacientes);
+
         if (this.pacientes.length == 0) {
           this.showNotification(
             'Signos Vitales',
@@ -111,13 +122,13 @@ export class CardsSvComponent implements OnInit, OnChanges {
           );
         }
 
-        // Agregar acciones y actualizar pacientes
-        this.pacientes.forEach((paciente) => {
-          paciente.actions = this.getActions(paciente.status);
-          paciente.showDropdown = false;
-        });
+        // // Agregar acciones y actualizar pacientes
+        // this.pacientes.forEach((paciente) => {
+        //   paciente.actions = this.getActions(paciente.status);
+        //   paciente.showDropdown = false;
+        // });
 
-        this.updateDisplayedPacientes();
+        // this.updateDisplayedPacientes();
         this.isLoading = false;
       },
       (error) => {
@@ -149,6 +160,22 @@ export class CardsSvComponent implements OnInit, OnChanges {
     | undefined {
     return this.filterOptions.find((option) => option.checked);
   }
+  //EXTRAER SIGNOS VITALES
+  onSelectPaciente(id: any) {
+    if (id) {
+      this.signosVServices
+        .findByPacienteAndFecha(id, this._fechaCards)
+        .subscribe(
+          (datas: any[]) => {
+            console.log('Signos vitales del paciente:', datas);
+            this.clickIdUser.emit(datas);
+          },
+          (error) => {
+            console.error('Error fetching users:', error);
+          }
+        );
+    }
+  }
 
   //CHECKBOX
 
@@ -165,19 +192,18 @@ export class CardsSvComponent implements OnInit, OnChanges {
       // Ejecutar la lógica según la opción seleccionada
       switch (optionId) {
         case 'allSV':
-          console.log('Mostrar pacientes con SV:', isChecked);
-          this.mostrarAllUser(this.fechaCards, 'todos');
+          this.mostrarAllUser(this._fechaCards, 'todos');
           break;
-        case 'emergency':
-          console.log('Mostrar pacientes en emergencia:', isChecked);
-          this.mostrarAllUser(this.fechaCards, 'emergencia');
+        case 'incompleto':
+          console.log('Mostrar pacientes en incompleto:', isChecked);
+          this.mostrarAllUser(this.fechaCards, 'incompleto');
           break;
-        case 'stable':
-          console.log('Mostrar pacientes estables:', isChecked);
-          this.mostrarAllUser(this.fechaCards, 'estable');
+        case 'completo':
+          console.log('Mostrar pacientes completo:', isChecked);
+          this.mostrarAllUser(this.fechaCards, 'completo');
           break;
-        case 'withoutSV':
-          console.log('Mostrar pacientes sin SV:', isChecked);
+        case 'pendiente':
+          console.log('Mostrar pacientes sin pendiente:', isChecked);
           this.mostrarAllUser(this.fechaCards, 'pendiente');
           break;
         default:
@@ -188,50 +214,26 @@ export class CardsSvComponent implements OnInit, OnChanges {
 
   // EVENTO
 
-  handleDeleteAction(confirmed: boolean): void {
-    if (confirmed) {
-      this.statusnotification = false;
-      console.log('El usuario hizo clic en Aceptar');
+  // handleDeleteAction(confirmed: boolean): void {
+  //   if (confirmed) {
+  //     this.statusnotification = false;
+  //     console.log('El usuario hizo clic en Aceptar');
 
-      this.deletePaciente(this.pacienteData.id_paciente);
-    } else {
-      {
-        this.statusnotification = false;
-      }
-      console.log('El usuario hizo clic en Cancelar');
-    }
-  }
+  //     this.deletePaciente(this.pacienteData.id_paciente);
+  //   } else {
+  //     {
+  //       this.statusnotification = false;
+  //     }
+  //     console.log('El usuario hizo clic en Cancelar');
+  //   }
+  // }
   onUserIdReceived(userId: string) {
-    console.log('onUserIdReceived');
-    console.log('onUserIdReceived');
-    console.log('onUserIdReceived');
-    console.log('onUserIdReceived');
-
     this.mostrarAllUser(this.fechaCards, 'todos');
 
     // this.countPacienteEvent.emit();
   }
 
   // STATUS NOTIFICATION
-
-  deletePaciente(pacientid: string): void {
-    this.signosVitalesService
-      .deletePaciente(pacientid, this.fechaCards)
-      .subscribe(
-        (data) => {
-          this.showNotification(
-            'Correcto!',
-            'Signos Vitales eliminada',
-            'success'
-          );
-          this.mostrarAllUser(this.fechaCards, 'todos');
-          // this.countPacienteEvent.emit();
-        },
-        (error) => {
-          console.error('Error al eliminar la Referencia eliminada:', error);
-        }
-      );
-  }
 
   showSVNotification(paciente: any, action: string): void {
     this.actionModal = action;
@@ -287,13 +289,13 @@ export class CardsSvComponent implements OnInit, OnChanges {
   getStatusIcon(status: string): string {
     switch (status) {
       case 'pendiente':
-        return 'fa-solid fa-heart-circle-plus text-blue-500 text-3xl animate-pulse';
-      case 'emergencia':
-        return 'fa-solid fa-heart-circle-exclamation text-red-500 text-3xl animate-bounce';
-      case 'estable':
-        return 'fa-solid fa-heart-pulse text-green-500 text-3xl';
+        return 'fa-solid fa-brain text-indigo-400 text-3xl animate-pulse';
+      case 'incompleto':
+        return 'fa-solid fa-hourglass-end text-orange-500 text-3xl animate-pulse';
+      case 'completo':
+        return 'fa-solid fa-lightbulb text-green-400 text-3xl animate-bounce';
       default:
-        return 'fa-solid fa-heart text-gray-500 text-3xl';
+        return 'fa-solid fa-info text-gray-400 text-3xl';
     }
   }
 
@@ -302,9 +304,9 @@ export class CardsSvComponent implements OnInit, OnChanges {
     switch (status) {
       case 'pendiente':
         return 'bg-purple-600';
-      case 'emergencia':
+      case 'incompleto':
         return 'bg-sky-400';
-      case 'estable':
+      case 'completo':
         return 'bg-emerald-600';
       default:
         return 'bg-gray-500';

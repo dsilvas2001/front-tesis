@@ -42,7 +42,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
     {
       id: 'pad-min',
@@ -50,7 +50,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
     {
       id: 'pas-max',
@@ -58,7 +58,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
     {
       id: 'pad-max',
@@ -66,7 +66,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
   ];
 
@@ -77,7 +77,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
     {
       id: 'cardiaca-max',
@@ -85,7 +85,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
   ];
   frecuenciaRespiratoriaFields = [
@@ -95,7 +95,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
     {
       id: 'respiratoria-max',
@@ -103,7 +103,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
   ];
   temperaturaFields = [
@@ -113,7 +113,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
     {
       id: 'temperatura-max',
@@ -121,9 +121,20 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       type: 'number',
       placeholder: '0',
       required: true,
-      value: null,
+      value: 0,
     },
   ];
+
+  // En tu componente, define los rangos permitidos
+  RANGOS_PERMITIDOS = {
+    presionArterial: {
+      sistolica: { min: 90, max: 130 },
+      diastolica: { min: 60, max: 89 },
+    },
+    frecuenciaCardiaca: { min: 70, max: 90 },
+    frecuenciaRespiratoria: { min: 11, max: 25 },
+    temperatura: { min: 36, max: 37.5 },
+  };
 
   //Decoradores
   @Input() statusModal: boolean = false;
@@ -176,6 +187,86 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {}
 
+  validateFields(): boolean {
+    let isValid = true;
+
+    // Validar presión arterial
+    const pasMin = this.presionArterialFields[0].value || 0;
+    const padMin = this.presionArterialFields[1].value || 0;
+    const pasMax = this.presionArterialFields[2].value || 0;
+    const padMax = this.presionArterialFields[3].value || 0;
+
+    if (
+      pasMin < this.RANGOS_PERMITIDOS.presionArterial.sistolica.min ||
+      pasMin > this.RANGOS_PERMITIDOS.presionArterial.sistolica.max ||
+      padMin < this.RANGOS_PERMITIDOS.presionArterial.diastolica.min ||
+      padMin > this.RANGOS_PERMITIDOS.presionArterial.diastolica.max ||
+      pasMax < this.RANGOS_PERMITIDOS.presionArterial.sistolica.min ||
+      pasMax > this.RANGOS_PERMITIDOS.presionArterial.sistolica.max ||
+      padMax < this.RANGOS_PERMITIDOS.presionArterial.diastolica.min ||
+      padMax > this.RANGOS_PERMITIDOS.presionArterial.diastolica.max
+    ) {
+      this.showNotification(
+        'Error',
+        'Presión arterial fuera de rango',
+        'error'
+      );
+      isValid = false;
+    }
+
+    // Validar frecuencia cardíaca
+    const cardiacaMin = this.frecuenciaCardiacaFields[0].value || 0;
+    const cardiacaMax = this.frecuenciaCardiacaFields[1].value || 0;
+
+    if (
+      cardiacaMin < this.RANGOS_PERMITIDOS.frecuenciaCardiaca!.min ||
+      cardiacaMin > this.RANGOS_PERMITIDOS.frecuenciaCardiaca!.max ||
+      cardiacaMax < this.RANGOS_PERMITIDOS.frecuenciaCardiaca!.min ||
+      cardiacaMax > this.RANGOS_PERMITIDOS.frecuenciaCardiaca!.max
+    ) {
+      this.showNotification(
+        'Error',
+        'Frecuencia cardíaca fuera de rango',
+        'error'
+      );
+      isValid = false;
+    }
+
+    // Validar frecuencia respiratoria
+    const respiratoriaMin = this.frecuenciaRespiratoriaFields[0].value || 0;
+    const respiratoriaMax = this.frecuenciaRespiratoriaFields[1].value || 0;
+
+    if (
+      respiratoriaMin < this.RANGOS_PERMITIDOS.frecuenciaRespiratoria.min ||
+      respiratoriaMin > this.RANGOS_PERMITIDOS.frecuenciaRespiratoria.max ||
+      respiratoriaMax < this.RANGOS_PERMITIDOS.frecuenciaRespiratoria.min ||
+      respiratoriaMax > this.RANGOS_PERMITIDOS.frecuenciaRespiratoria.max
+    ) {
+      this.showNotification(
+        'Error',
+        'Frecuencia respiratoria fuera de rango',
+        'error'
+      );
+      isValid = false;
+    }
+
+    // Validar temperatura
+    const temperaturaMin = this.temperaturaFields[0].value || 0;
+    const temperaturaMax = this.temperaturaFields[1].value || 0;
+
+    if (
+      temperaturaMin < this.RANGOS_PERMITIDOS!.temperatura.min ||
+      temperaturaMin > this.RANGOS_PERMITIDOS!.temperatura.max ||
+      temperaturaMax < this.RANGOS_PERMITIDOS!.temperatura.min ||
+      temperaturaMax > this.RANGOS_PERMITIDOS!.temperatura.max
+    ) {
+      this.showNotification('Error', 'Temperatura fuera de rango', 'error');
+      isValid = false;
+    }
+
+    return isValid;
+  }
+
   // CARGAR DATOS
 
   updateModalTitleAndButton(): void {
@@ -183,13 +274,12 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       this.tituloModal = 'Editar Referencia SV';
       this.buttonModal = 'Editar Referencia SV';
       this.icon = 'fa-regular fa-pen-to-square';
+      this.cargarDatosPaciente();
     } else {
       this.tituloModal = 'Añadir Referencia SV';
       this.buttonModal = 'Añadir Referencia SV';
       this.icon = 'fa-solid fa-plus';
     }
-
-    this.cargarDatosPaciente();
   }
 
   cargarDatosPaciente(): void {
@@ -231,7 +321,7 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
   // SERVICIOS
 
   onSubmit(): void {
-    if (this.registerForm.valid) {
+    if (this.registerForm.valid && this.validateFields()) {
       const referenciaDto = {
         presion_arterial: {
           sistolica_min: this.presionArterialFields[0].value || 0,

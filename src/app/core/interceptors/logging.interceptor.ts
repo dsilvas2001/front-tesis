@@ -15,7 +15,6 @@ export class loggingInterceptor implements HttpInterceptor {
     const modifiedRequest = request.clone({
       setHeaders: { 'X-Request-ID': '123' },
     });
-    console.log('Request:', modifiedRequest);
 
     return next
       .handle(modifiedRequest)

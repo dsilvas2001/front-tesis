@@ -1,0 +1,449 @@
+<!-- Overlay y contenedor del modal (se muestra solo si openModal = true) -->
+<div
+  *ngIf="statusModal"
+  class="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-50"
+>
+  <!-- Caja del modal -->
+  <div
+    class="bg-white w-11/12 sm:w-3/4 md:w-3/4 rounded shadow-lg p-6 relative"
+  >
+    <!-- Encabezado -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-lg font-semibold text-primary-titulo">
+        {{ tituloModal }}
+      </h2>
+      <!-- Botón de cierre -->
+      <button
+        type="button"
+        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-primary-500 dark:hover:text-white"
+        data-modal-toggle="crud-modal"
+        (click)="closeModal()"
+      >
+        <i class="fa-solid fa-xmark"></i>
+        <span class="sr-only">Close modal</span>
+      </button>
+    </div>
+
+    <!-- Contenido en dos columnas con grid -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Columna Izquierda -->
+        <div class="overflow-y-auto max-h-[80vh]">
+          <!-- Título -->
+          <div class="mb-4">
+            <label
+              for="name"
+              class="block mb-2 text-sm font-medium text-gray-900"
+              >Informacion del paciente</label
+            >
+            <input
+              type="text"
+              name="name"
+              readonly
+              formControlName="name"
+              id="name"
+              class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+              placeholder="Nombre del paciente"
+              required=""
+            />
+          </div>
+
+          <div class="mb-4">
+            <app-dropdown
+              dropdownTitle="Ingrese Presion Arterial"
+              [fields]="presionArterialFields"
+            ></app-dropdown>
+
+            <!-- Verificación para PAS -->
+            <div
+              *ngIf="
+                presionArterialFields[0].value != null &&
+                (presionArterialFields[0].value <
+                  RANGOS_PERMITIDOS.presionArterial.pas.min ||
+                  presionArterialFields[0].value >
+                    RANGOS_PERMITIDOS.presionArterial.pas.max)
+              "
+              class="text-red-500"
+            >
+              La presión arterial sistólica (PAS) está fuera de rango.
+            </div>
+
+            <!-- Verificación para PAD -->
+            <div
+              *ngIf="
+                presionArterialFields[1].value != null &&
+                (presionArterialFields[1].value <
+                  RANGOS_PERMITIDOS.presionArterial.pad.min ||
+                  presionArterialFields[1].value >
+                    RANGOS_PERMITIDOS.presionArterial.pad.max)
+              "
+              class="text-red-500"
+            >
+              La presión arterial diastólica (PAD) está fuera de rango.
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <app-dropdown
+              dropdownTitle="Ingrese Frecuencia Cardíaca"
+              [fields]="frecuenciaCardiacaFields"
+            ></app-dropdown>
+
+            <!-- Verificación para Frecuencia Cardíaca -->
+            <div
+              *ngIf="
+                frecuenciaCardiacaFields[0].value != null &&
+                (frecuenciaCardiacaFields[0].value <
+                  RANGOS_PERMITIDOS.frecuenciaCardiaca.min ||
+                  frecuenciaCardiacaFields[0].value >
+                    RANGOS_PERMITIDOS.frecuenciaCardiaca.max)
+              "
+              class="text-red-500"
+            >
+              La frecuencia cardíaca está fuera de rango.
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <app-dropdown
+              dropdownTitle="Ingrese Frecuencia Respiratoria"
+              [fields]="frecuenciaRespiratoriaFields"
+            ></app-dropdown>
+
+            <!-- Verificación para Frecuencia Respiratoria -->
+            <div
+              *ngIf="
+                frecuenciaRespiratoriaFields[0].value != null &&
+                (frecuenciaRespiratoriaFields[0].value <
+                  RANGOS_PERMITIDOS.frecuenciaRespiratoria.min ||
+                  frecuenciaRespiratoriaFields[0].value >
+                    RANGOS_PERMITIDOS.frecuenciaRespiratoria.max)
+              "
+              class="text-red-500"
+            >
+              La frecuencia respiratoria está fuera de rango.
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <app-dropdown
+              dropdownTitle="Ingrese Temperatura"
+              [fields]="temperaturaFields"
+            ></app-dropdown>
+
+            <!-- Verificación para Temperatura -->
+            <div
+              *ngIf="
+                temperaturaFields[0].value != null &&
+                (temperaturaFields[0].value <
+                  RANGOS_PERMITIDOS.temperatura.min ||
+                  temperaturaFields[0].value >
+                    RANGOS_PERMITIDOS.temperatura.max)
+              "
+              class="text-red-500"
+            >
+              La temperatura está fuera de rango.
+            </div>
+          </div>
+
+          <!-- Rango de hora -->
+          <div class="mb-4">
+            <div class="flex items-center space-x-2">
+              <button
+                type="submit"
+                [disabled]="isProcessing"
+                class="w-full inline-flex items-center justify-center bg-primary-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:hover:bg-primary-500 dark:focus:ring-warning-600 cursor-pointer transition-colors duration-200"
+              >
+                <!-- Ícono de cerebro (solo se muestra si NO está procesando) -->
+                <i class="fa-solid fa-brain text-2xl" *ngIf="!isProcessing"></i>
+
+                <!-- Spinner (solo se muestra si está procesando) -->
+                <svg
+                  *ngIf="isProcessing"
+                  class="mr-2 w-5 h-5 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"
+                  ></path>
+                </svg>
+
+                <!-- Texto: cambia según el estado -->
+                <span class="pl-3">
+                  {{
+                    isProcessing ? "Generando..." : "Generar Análisis con la IA"
+                  }}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columna Derecha -->
+        <div>
+          <div
+            *ngIf="visibleDescriptionIA"
+            class="overflow-y-auto max-h-[80vh]"
+          >
+            <!-- Etiqueta de descripción -->
+            <label
+              for="description"
+              class="block text-sm font-medium text-gray-700 mb-1"
+              >Generado por la IA</label
+            >
+
+            <!-- Barra de íconos (ejemplo) -->
+            <div class="flex items-center space-x-3 mb-2">
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700"
+                title="Bold"
+              >
+                <i class="fa fa-bold"></i>
+              </button>
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700"
+                title="Italic"
+              >
+                <i class="fa fa-italic"></i>
+              </button>
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700"
+                title="Link"
+              >
+                <i class="fa fa-link"></i>
+              </button>
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700"
+                title="Code"
+              >
+                <i class="fa fa-code"></i>
+              </button>
+              <button
+                type="button"
+                class="text-gray-500 hover:text-gray-700"
+                title="Image"
+              >
+                <i class="fa fa-image"></i>
+              </button>
+            </div>
+            <div
+              id="alert-additional-content-2"
+              class="p-4 mb-4"
+              [ngClass]="{
+                'text-red-800 border border-red-300 rounded-lg bg-red-50':
+                  statusSV === 'emergencia',
+                'text-green-800 border border-green-300 rounded-lg bg-green-50':
+                  statusSV === 'estable'
+              }"
+              role="alert"
+            >
+              <div class="flex items-center">
+                <svg
+                  class="shrink-0 w-4 h-4 me-2"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+                  />
+                </svg>
+                <span class="sr-only">Info</span>
+                <h3 class="text-lg font-medium">
+                  {{ titleStatusSV }}
+                </h3>
+              </div>
+              <div class="mt-2 mb-4 text-sm">
+                <ul class="list-disc pl-5">
+                  <li
+                    *ngFor="let alerta of analisisIaData.alertas"
+                    class="text-red-600"
+                  >
+                    {{ alerta }}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="flex">
+                <button
+                  type="button"
+                  class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-xs px-3 py-1.5 me-2 text-center inline-flex items-center"
+                  [ngClass]="{
+                    'dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800':
+                      statusSV === 'emergencia',
+                    'dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800':
+                      statusSV === 'estable'
+                  }"
+                  (click)="toggleVista('explicacion')"
+                >
+                  <svg
+                    class="me-2 h-3 w-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 20 14"
+                  >
+                    <path
+                      d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"
+                    />
+                  </svg>
+                  Explicación
+                </button>
+
+                <!-- Botón de Recomendaciones -->
+                <button
+                  type="button"
+                  class="bg-transparent border hover:text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-xs px-3 py-1.5 text-center"
+                  [ngClass]="{
+                    'text-red-800 border-red-800 hover:bg-red-900 focus:ring-red-300':
+                      statusSV === 'emergencia',
+                    'text-green-800 border-green-600 hover:bg-green-600  focus:ring-green-300':
+                      statusSV === 'estable'
+                  }"
+                  (click)="toggleVista('recomendaciones')"
+                >
+                  Recomendaciones
+                </button>
+              </div>
+            </div>
+
+            <!-- Área de texto para descripción -->
+            <div
+              class="grid grid-cols-1 md:grid-cols-1 gap-4 max-h-[500px] overflow-y-auto"
+            >
+              <!-- Tarjetas de Explicación (Predicción, Puntuación, Explicación) -->
+              <div class="flex gap-2 flex-col" *ngIf="mostrarExplicacion">
+                <!-- Tarjeta de Predicción -->
+                <div
+                  class="p-4 mx-5 bg-gradient-to-r from-blue-500 to-blue-600 rounded-md shadow-md transform transition-all hover:scale-105"
+                >
+                  <h3 class="text-lg font-bold text-white mb-1">Predicción</h3>
+                  <p class="text-xs font-bold text-blue-100">
+                    {{ analisisIaData.prediccion }}
+                  </p>
+                </div>
+
+                <!-- Tarjeta de Reporte Medico -->
+                <div
+                  class="p-4 mx-5 bg-gradient-to-r from-pink-500 to-pink-600 rounded-md shadow-md transform transition-all hover:scale-105"
+                >
+                  <h3 class="text-lg font-bold text-white mb-1">
+                    Reporte Medico
+                  </h3>
+                  <p class="text-xs font-bold text-pink-100">
+                    {{ analisisIaData.reporte_medico_estructurado }}
+                  </p>
+                </div>
+
+                <!-- Tarjeta de Explicación -->
+                <div
+                  class="p-4 mx-5 mb-5 bg-gradient-to-r from-teal-500 to-teal-600 rounded-md shadow-md transform transition-all hover:scale-105"
+                >
+                  <h3 class="text-lg font-bold text-white mb-1">Explicación</h3>
+                  <p class="text-xs font-bold text-teal-100">
+                    {{ analisisIaData.explicacion }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Tarjetas de Recomendaciones (Recomendaciones, Plan de Acción, Tendencias) -->
+              <div class="flex gap-2 flex-col" *ngIf="!mostrarExplicacion">
+                <!-- Tarjeta de Recomendaciones -->
+                <div
+                  class="p-4 mx-5 bg-gradient-to-r from-green-500 to-green-600 rounded-md shadow-md transform transition-all hover:scale-105"
+                >
+                  <h3 class="text-lg font-bold text-white mb-1">
+                    Recomendaciones
+                  </h3>
+                  <ul
+                    class="list-disc list-inside text-xs font-bold text-green-100"
+                  >
+                    <li
+                      *ngFor="
+                        let recomendacion of analisisIaData.recomendaciones
+                      "
+                    >
+                      {{ recomendacion }}
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Tarjeta de Plan de Acción -->
+                <div
+                  class="p-4 mx-5 bg-gradient-to-r from-purple-500 to-purple-600 rounded-md shadow-md transform transition-all hover:scale-105"
+                >
+                  <h3 class="text-lg font-bold text-white mb-1">
+                    Plan de Acción
+                  </h3>
+                  <p class="text-xs font-bold text-purple-100">
+                    {{ analisisIaData.plan_accion }}
+                  </p>
+                </div>
+
+                <!-- Tarjeta de Tendencias -->
+                <div
+                  class="p-4 mx-5 mb-5 bg-gradient-to-r from-orange-500 to-orange-600 rounded-md shadow-md transform transition-all hover:scale-105"
+                >
+                  <h3 class="text-lg font-bold text-white mb-1">Tendencias</h3>
+                  <p class="text-xs font-bold text-orange-100">
+                    {{ analisisIaData.tendencias }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!visibleDescriptionIA">
+            <img
+              class="hidden md:block"
+              src="../../../../../assets/images/SV/diagnosticando_IA.png"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones de acción -->
+      <div class="flex justify-end space-x-2 mt-4">
+        <button
+          *ngIf="ocultarClose"
+          type="button"
+          class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded"
+          (click)="closeModal()"
+        >
+          Cancel
+        </button>
+        <button
+          *ngIf="!ocultarClose"
+          type="button"
+          (click)="aceptCloseModal()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+        >
+          {{ buttonModal }}
+        </button>
+      </div>
+    </form>
+    <app-notifications
+      [statusnotification]="statusnotification"
+      [title]="notificationTitle"
+      [message]="notificationMessage"
+      [type]="notificationType"
+    ></app-notifications>
+  </div>
+</div>
