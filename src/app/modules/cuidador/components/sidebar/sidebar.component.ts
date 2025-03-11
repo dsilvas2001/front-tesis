@@ -105,6 +105,8 @@ export class SidebarComponent implements OnInit {
       localStorage.setItem('activeLink', 'home');
     } else {
       this.activeLink = statuSidebar;
+      this.userEmail = this.authServices.getUserEmail();
+      console.log(this.userEmail);
     }
     // this.userEmail = this.authServices.getUserEmail();
     console.log(this.userEmail);

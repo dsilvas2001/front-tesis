@@ -60,14 +60,15 @@ export class WelcomeComponent implements OnInit {
   }
 
   showCard() {
-    const resolvedData = this.route.snapshot.data['data'];
-
-    console.log('resolvedData:', resolvedData);
-
-    if (resolvedData) {
-      const countData = resolvedData.count_pacientes;
-
-      this.cards[0].count = countData.count_pacientes;
-    }
+    this.route.data.subscribe(({ data }) => {
+      if (data && data.count_Home) {
+        const countData = data.count_Home;
+        this.cards[0].count = countData.totalPacientes;
+        this.cards[1].count = countData.signosVitalesHoy;
+        this.cards[2].count = countData.ejerciciosHoy;
+      } else {
+        console.error('No se encontraron datos de referentes.');
+      }
+    });
   }
 }

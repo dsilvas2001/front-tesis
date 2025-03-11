@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ReferenciaSignosVService } from '../../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 import { ActivatedRoute } from '@angular/router';
 import { SignosVitalesService } from '../../../../../core/cuidador/signos-vitales/signos-vitales.service';
@@ -8,7 +8,7 @@ import { SignosVitalesService } from '../../../../../core/cuidador/signos-vitale
   templateUrl: './gestion-signos-vitales.component.html',
   styles: ``,
 })
-export class GestionSignosVitalesComponent {
+export class GestionSignosVitalesComponent implements OnInit {
   cards = [
     { title: 'Pacientes Agregados', count: 0, icon: 'fa-solid fa-user' },
     {

@@ -226,8 +226,6 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
 
       this.isProcessing = true;
 
-      this.ocultarClose = false;
-
       if (this._actionModal === 'Ingresar') {
         const signosVitalesDto = {
           ...sVitalesDto,

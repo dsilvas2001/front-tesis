@@ -10,6 +10,8 @@ import { ReferenciaSignosVResolver } from '../../core/cuidador/resolver/referenc
 import { SignosVResolver } from '../../core/cuidador/resolver/signosv.resolver';
 import { GestionEjerciciosComponent } from './pages/pacientes/gestion-ejercicios/gestion-ejercicios.component';
 import { GestionSupervisionComponent } from './pages/pacientes/gestion-supervision/gestion-supervision.component';
+import { EjercicioPacienteResolver } from '../../core/cuidador/resolver/ejercicio-paciente.resolver';
+import { DashboardHomeResolver } from '../../core/cuidador/resolver/dashboard-home.resolver';
 
 const routes: Routes = [
   {
@@ -20,7 +22,7 @@ const routes: Routes = [
         path: 'welcome',
         component: WelcomeComponent,
         resolve: {
-          data: PacienteResolver,
+          data: DashboardHomeResolver,
         },
       },
       {
@@ -47,6 +49,9 @@ const routes: Routes = [
       {
         path: 'gestion-ejercicios',
         component: GestionEjerciciosComponent,
+        resolve: {
+          data: EjercicioPacienteResolver,
+        },
       },
       {
         path: 'gestion-supervision-ejercicios',

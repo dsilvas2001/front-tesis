@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../assets/environments/environment.prod';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../assets/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +10,7 @@ export class PacienteService {
   constructor(private http: HttpClient) {}
   private apiUrl = `${environment.domain}`;
   private API_PATH = `/paciente/`;
+  private API_PATH_USER = `/usuario/`;
 
   registerPaciente(userData: {
     nombre: string;
@@ -52,5 +53,8 @@ export class PacienteService {
   }
   getCountPaciente(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}${this.API_PATH}count`);
+  }
+  getCountALLHOME(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}${this.API_PATH_USER}countHome`);
   }
 }
