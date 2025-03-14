@@ -5,6 +5,8 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { EjercicioPersonaService } from '../../../../core/cuidador/ejercicio-persona/ejercicio-persona.service';
+import { Route, Router } from '@angular/router';
 
 @Component({
   selector: 'app-categoria-ejercicio',
@@ -14,10 +16,19 @@ import {
 export class CategoriaEjercicioComponent implements OnInit, OnChanges {
   @Input() _pacienteData: any;
   vibilitiCategoria: boolean = false;
+  showInfo: boolean = false; // Controla la visibilidad de la ventana de información
+  categoriasFiltradas: any[] = []; // Categorías filtradas según el servicio
+  descripcionServicio: string = ''; // Descripción retornada por el servicio
+  //loading
+  isLoading = false;
+
+  // MODAL
+  statusModal: boolean = false;
+  _pacienteCategoria: any;
 
   categorias = [
     {
-      src: 'https://img.freepik.com/free-photo/side-view-people-studying-classroom_23-2150312826.jpg?t=st=1741625204~exp=1741628804~hmac=2c35ad63a305463a4157120bf54d0ff5a528dc2fb1990f1c6dfb67f0d62340ce&w=1380',
+      src: 'https://img.freepik.com/free-vector/flat-alzheimer-concept-illustration_23-2149042102.jpg?t=st=1741787152~exp=1741790752~hmac=d9af9c8ac4363c84770960fd9f1d452bbd8c31d50de731355b29d0e8350631ec&w=900',
       nombre: 'Memoria',
       explicacion: 'Mejora tu capacidad para recordar información importante.',
     },
@@ -33,7 +44,7 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
       explicacion: 'Fortalece tu vocabulario y habilidades de comunicación.',
     },
     {
-      src: 'https://img.freepik.com/free-photo/studio-shot-thoughtful-senior-man-holds-chin-contemplates-about-something-dressed-casually-tries-remember-something-gather-with-thoughts-poses-against-brown-wall_273609-44244.jpg?t=st=1741662302~exp=1741665902~hmac=4db53ddcd704504d5bdee47211828cc5c35329fa5d74d712344133b36becf309&w=1380',
+      src: 'https://img.freepik.com/free-vector/curiosity-brain-concept-illustration_114360-11037.jpg?t=st=1741787039~exp=1741790639~hmac=60486d2c309e2a2bcd657c4d138907cd66903094d5affea641a4047b066d67a2&w=900',
       nombre: 'Razonamiento',
       explicacion:
         'Desarrolla tu capacidad para resolver problemas de manera lógica.',
@@ -50,47 +61,73 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
     },
   ];
 
-  // categorias = [
-  //   {
-  //     nombre: 'Atención y Concentración',
-  //     imagen: 'assets/imgs/atencion.jpg',
-  //     descripcion:
-  //       'Ejercicios diseñados para mejorar la concentración y la agudeza mental.',
-  //     recomendado: true,
-  //   },
-  //   {
-  //     nombre: 'Memoria Relajada',
-  //     imagen: 'assets/imgs/memoria.jpg',
-  //     descripcion: 'Actividades enfocadas en la memoria con relajación.',
-  //     recomendado: true,
-  //   },
-  //   {
-  //     nombre: 'Cálculo Mental',
-  //     imagen: 'assets/imgs/calculo.jpg',
-  //     descripcion:
-  //       'Ejercicios de matemáticas para fortalecer la lógica. No recomendado en baja presión arterial.',
-  //     recomendado: false,
-  //   },
-  //   {
-  //     nombre: 'Relajación Cognitiva',
-  //     imagen: 'assets/imgs/relajacion.jpg',
-  //     descripcion:
-  //       'Ejercicios de respiración y música para mejorar la atención.',
-  //     recomendado: true,
-  //   },
-  // ];
+  constructor(
+    private ejercicioService: EjercicioPersonaService,
+    private router: Router
+  ) {}
 
-  ngOnInit() {
-    console.log('Paciente Data:', this._pacienteData);
-  }
+  ngOnInit() {}
+
   ngOnChanges(changes: SimpleChanges): void {
-    // Cuando cambia la fecha, ejecuta la lógica del checkbox seleccionado
     if (changes['_pacienteData'] && this._pacienteData) {
-      console.log('Paciente Data:', this._pacienteData);
+      this.obtenerCategoriaRecomendada();
     }
   }
+
+  obtenerCategoriaRecomendada(): void {
+    console.log('INGRESA AQUI?');
+    console.log('INGRESA AQUI?');
+    console.log(this._pacienteData[0].id_paciente);
+
+    const paciente = this._pacienteData[0];
+
+    const userData = {
+      id_paciente: paciente.id_paciente,
+      presion_arterial: {
+        sistolica: paciente.presion_arterial.sistolica,
+        diastolica: paciente.presion_arterial.diastolica,
+      },
+      frecuencia_cardiaca: paciente.frecuencia_cardiaca,
+      frecuencia_respiratoria: paciente.frecuencia_respiratoria,
+      temperatura: paciente.temperatura,
+    };
+    this.isLoading = true;
+
+    console.log('Datos del usuario:', userData);
+
+    // this.ejercicioService.getSelectCategoria(userData).subscribe({
+    //   next: (response) => {
+    //     console.log('Respuesta del servicio:', response);
+    //     this.descripcionServicio = response.descripcion; // Guardar la descripción
+    //     this.filtrarCategorias(response.categoria); // Filtrar categorías
+    //     this.isLoading = false;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error al obtener la categoría:', error);
+    //     this.isLoading = false;
+    //   },
+    // });
+  }
+
+  filtrarCategorias(categoriasServicio: string[]): void {
+    this.categoriasFiltradas = this.categorias.filter((categoria) =>
+      categoriasServicio.includes(categoria.nombre)
+    );
+  }
+
   seleccionarCategoria(categoria: string): void {
-    console.log('Categoría seleccionada:', categoria);
-    alert(`Has seleccionado la categoría: ${categoria}`);
+    // this._pacienteCategoria = {
+    //   ...this._pacienteData[0],
+    //   categoria,
+    // };
+    this.statusModal = true;
+  }
+
+  cerrarModal() {
+    this.statusModal = false;
+  }
+
+  toggleInfo(): void {
+    this.showInfo = !this.showInfo;
   }
 }

@@ -17,6 +17,22 @@ export class EjercicioPersonaService {
     );
   }
   getCountEjercicio(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}${this.API_PATH}/count`);
+    return this.http.get<any>(`${this.apiUrl}${this.API_PATH}count`);
+  }
+
+  getSelectCategoria(userData: {
+    id_paciente: string;
+    presion_arterial?: {
+      sistolica: number;
+      diastolica: number;
+    };
+    frecuencia_cardiaca?: number;
+    frecuencia_respiratoria?: number;
+    temperatura?: number;
+  }): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}${this.API_PATH}select`,
+      userData
+    );
   }
 }

@@ -1,7 +1,7 @@
 <div class="flex flex-col items-center w-full">
   <!-- Título con ícono -->
   <h2
-    class="text-xl font-semibold text-white bg-gradient-to-r from-yellow-200 to-orange-300 px-5 py-2 rounded-lg shadow-md mb-4 flex items-center space-x-2 animate-bounce"
+    class="text-xl font-semibold text-white bg-gradient-to-r from-yellow-200 to-orange-300 px-5 py-2 rounded-lg shadow-md flex items-center space-x-2 animate-bounce"
   >
     <i class="fas fa-brain text-yellow-600"></i>
     <i class="fas fa-clock text-yellow-500"></i>
@@ -9,6 +9,12 @@
       >¡Es hora de los ejercicios de estimulación cognitiva!</span
     >
   </h2>
+  <button
+    class="bg-primary-400 text-black px-4 py-2 rounded-lg hover:bg-primary-500 transition-colors duration-300"
+    (click)="seleccionarCategoria('Ejercicios de Memoria')"
+  >
+    Seleccionar
+  </button>
 
   <!-- Contenedor de imagen -->
   <div *ngIf="!_pacienteData">
@@ -20,8 +26,28 @@
   </div>
 
   <!-- Contenedor de botones y sección adicional -->
-  <div class="flex flex-col w-full items-center mt-4" *ngIf="_pacienteData">
+  <div class="flex flex-col w-full items-center" *ngIf="_pacienteData">
     <!-- Botones (fila en pantallas grandes, columna en móviles) -->
+    <div
+      *ngIf="vibilitiCategoria"
+      class="bg-gray-100 p-4 rounded-lg shadow-md flex items-center space-x-4"
+    >
+      <img
+        src="../../../../../assets/images/logo/LOGOTIPO.ico"
+        alt="Paciente"
+        class="w-16 h-16 rounded-full shadow-md"
+      />
+      <div>
+        <h2 class="text-lg font-semibold text-gray-800">
+          {{ _pacienteData[0]?.nombre }}
+          {{ _pacienteData[0]?.apellido }}
+        </h2>
+        <p class="text-gray-600 text-sm">
+          Edad: {{ _pacienteData[0]?.edad }} años | Género:
+          {{ _pacienteData[0]?.genero }}
+        </p>
+      </div>
+    </div>
     <div class="flex flex-wrap justify-center gap-4 w-full md:flex-row">
       <!-- Botón Signos Vitales -->
       <button
@@ -191,22 +217,58 @@
         </div>
       </div>
     </div>
-    <div *ngIf="vibilitiCategoria" class="w-full h-96">
-      <div class="min-h-screen flex justify-center bg-neutral-100 p-4">
-        <div class="bg-white rounded-xl p-4">
-          <h1
-            class="text-lg md:text-2xl font-bold mb-6 text-center text-primary-titulo"
+    <div *ngIf="vibilitiCategoria" class="">
+      <div
+        *ngIf="!isLoading; else loadingSpinner"
+        class="flex justify-center bg-neutral-100 p-4"
+      >
+        <div class="bg-white rounded-xl p-4 relative">
+          <!-- Título y Botón de Información -->
+          <div class="flex items-center justify-center mb-6 relative">
+            <!-- Título -->
+            <h1
+              class="text-lg md:text-2xl font-bold text-center text-primary-titulo mr-3"
+            >
+              🧠 Categorías de Estimulación
+            </h1>
+
+            <!-- Botón Circular con Animación -->
+            <button
+              class="w-8 h-8 bg-primary-400 rounded-full flex items-center justify-center animate-bounce hover:bg-primary-500 transition-all duration-300 shadow-lg hover:shadow-xl relative"
+              (click)="toggleInfo()"
+            >
+              <!-- Ícono más grande y moderno -->
+              <span class="text-white text-2xl font-bold">!</span>
+              <!-- Efecto de brillo al hacer hover -->
+              <div
+                class="absolute inset-0 rounded-full bg-white opacity-0 hover:opacity-20 transition-opacity duration-300"
+              ></div>
+            </button>
+          </div>
+
+          <!-- Ventana de Información (Flotante) -->
+          <div
+            *ngIf="showInfo"
+            class="absolute top-16 right-0 bg-white p-4 rounded-lg shadow-lg z-10 w-64"
           >
-            🧠 Categorías de Estimulación
-          </h1>
+            <p class="text-sm text-neutral-700 mb-4">
+              {{ descripcionServicio }}
+            </p>
+            <button
+              class="bg-primary-400 text-white px-3 py-1 rounded-lg hover:bg-primary-500 transition-colors duration-300"
+              (click)="toggleInfo()"
+            >
+              Cerrar
+            </button>
+          </div>
 
           <!-- Contenedor con scroll -->
           <div
-            class="max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-primary-400 scrollbar-track-gray-200 p-2"
+            class="min-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-primary-400 scrollbar-track-gray-200 p-2"
           >
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-6">
               <div
-                *ngFor="let categoria of categorias"
+                *ngFor="let categoria of categoriasFiltradas"
                 class="bg-secondary-50 rounded-lg p-5 text-center cursor-pointer hover:bg-secondary-100 transition-all duration-300 transform hover:-translate-y-2 shadow-md"
               >
                 <!-- Imagen con tamaño más grande y bordes redondeados -->
@@ -223,6 +285,7 @@
                 </p>
                 <button
                   class="bg-primary-400 text-black px-4 py-2 rounded-lg hover:bg-primary-500 transition-colors duration-300"
+                  (click)="seleccionarCategoria(categoria.nombre)"
                 >
                   Seleccionar
                 </button>
@@ -231,8 +294,28 @@
           </div>
         </div>
       </div>
+      <ng-template #loadingSpinner>
+        <div class="flex items-center justify-center">
+          <div class="flex items-center justify-center">
+            <div
+              class="w-14 h-14 my-10 border-t-4 border-warning-600 border-solid rounded-full animate-spin"
+            ></div>
+            <div
+              class="ml-4 font-poppins text-lg text-neutral-900 font-semibold"
+            >
+              Cargando...
+            </div>
+          </div>
+        </div>
+      </ng-template>
     </div>
 
     <!-- Mensaje si no hay datos -->
   </div>
 </div>
+
+<app-modal-main-generate
+  *ngIf="statusModal"
+  [_pacienteGenerate]="this._pacienteCategoria"
+  (cerrarModal)="cerrarModal()"
+></app-modal-main-generate>

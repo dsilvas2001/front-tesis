@@ -1,5 +1,6 @@
 import {
   Component,
+  EventEmitter,
   Input,
   input,
   OnChanges,
@@ -7,6 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/signos-vitales.service';
+import { Output } from '@angular/core';
 
 @Component({
   selector: 'app-cards-sv',
@@ -38,6 +40,7 @@ export class CardsSvComponent implements OnInit, OnChanges {
 
   // DECORADORES
   @Input() fechaCards: string = '';
+  @Output() countPacienteEvent = new EventEmitter<void>();
 
   //Modal
   statusModal: boolean = false;
@@ -202,14 +205,9 @@ export class CardsSvComponent implements OnInit, OnChanges {
     }
   }
   onUserIdReceived(userId: string) {
-    console.log('onUserIdReceived');
-    console.log('onUserIdReceived');
-    console.log('onUserIdReceived');
-    console.log('onUserIdReceived');
-
     this.mostrarAllUser(this.fechaCards, 'todos');
 
-    // this.countPacienteEvent.emit();
+    this.countPacienteEvent.emit();
   }
 
   // STATUS NOTIFICATION

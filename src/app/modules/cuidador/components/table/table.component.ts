@@ -69,7 +69,6 @@ export class TableComponent implements OnInit {
   deletePaciente(pacientid: string): void {
     this.pacienteServices.deletePaciente(pacientid).subscribe(
       (data) => {
-        console.log('Paciente eliminado:', data);
         this.mostrarUser();
 
         this.showNotification('Correcto!', 'Paciente Eliminado', 'success');

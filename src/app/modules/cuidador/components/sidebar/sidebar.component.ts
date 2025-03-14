@@ -99,14 +99,14 @@ export class SidebarComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.userEmail = this.authServices.getUserEmail();
+    console.log(this.userEmail);
     const statuSidebar = localStorage.getItem('activeLink');
     if (!statuSidebar) {
       this.activeLink = 'home';
       localStorage.setItem('activeLink', 'home');
     } else {
       this.activeLink = statuSidebar;
-      this.userEmail = this.authServices.getUserEmail();
-      console.log(this.userEmail);
     }
     // this.userEmail = this.authServices.getUserEmail();
     console.log(this.userEmail);

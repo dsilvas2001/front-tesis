@@ -109,10 +109,6 @@ export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
     this.ejercicioPersonaService.getEjercicio(fecha, status).subscribe(
       (datas: any[]) => {
         this.pacientes = datas;
-        console.log('Pacientes:');
-        console.log('Pacientes:');
-        console.log('Pacientes:');
-        console.log(this.pacientes);
 
         if (this.pacientes.length == 0) {
           this.showNotification(
@@ -212,21 +208,6 @@ export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
     }
   }
 
-  // EVENTO
-
-  // handleDeleteAction(confirmed: boolean): void {
-  //   if (confirmed) {
-  //     this.statusnotification = false;
-  //     console.log('El usuario hizo clic en Aceptar');
-
-  //     this.deletePaciente(this.pacienteData.id_paciente);
-  //   } else {
-  //     {
-  //       this.statusnotification = false;
-  //     }
-  //     console.log('El usuario hizo clic en Cancelar');
-  //   }
-  // }
   onUserIdReceived(userId: string) {
     this.mostrarAllUser(this.fechaCards, 'todos');
 

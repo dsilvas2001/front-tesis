@@ -13,6 +13,7 @@ import { ComponentsModule } from './components/components.module';
 import { LimitesSignosVitalesComponent } from './pages/pacientes/limites-signos-vitales/limites-signos-vitales.component';
 import { GestionEjerciciosComponent } from './pages/pacientes/gestion-ejercicios/gestion-ejercicios.component';
 import { GestionSupervisionComponent } from './pages/pacientes/gestion-supervision/gestion-supervision.component';
+import { ModalGenerateEjercicioComponent } from './pages/pacientes/modal-generate-ejercicio/modal-generate-ejercicio.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { GestionSupervisionComponent } from './pages/pacientes/gestion-supervisi
     LimitesSignosVitalesComponent,
     GestionEjerciciosComponent,
     GestionSupervisionComponent,
+    ModalGenerateEjercicioComponent,
   ],
   imports: [
     CommonModule,

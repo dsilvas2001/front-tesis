@@ -21,7 +21,10 @@
 
         <!-- Cards SV a la derecha -->
         <div class="w-full sm:w-1/2 shadow-lg">
-          <app-cards-sv [fechaCards]="fechaCards"></app-cards-sv>
+          <app-cards-sv
+            (countPacienteEvent)="countPacienteReceived()"
+            [fechaCards]="fechaCards"
+          ></app-cards-sv>
         </div>
       </div>
     </div>

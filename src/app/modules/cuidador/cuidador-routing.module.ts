@@ -12,6 +12,8 @@ import { GestionEjerciciosComponent } from './pages/pacientes/gestion-ejercicios
 import { GestionSupervisionComponent } from './pages/pacientes/gestion-supervision/gestion-supervision.component';
 import { EjercicioPacienteResolver } from '../../core/cuidador/resolver/ejercicio-paciente.resolver';
 import { DashboardHomeResolver } from '../../core/cuidador/resolver/dashboard-home.resolver';
+import { ModalGenerateEjercicioComponent } from './pages/pacientes/modal-generate-ejercicio/modal-generate-ejercicio.component';
+import { ModalMainGenerateComponent } from './components/modal-main-generate/modal-main-generate.component';
 
 const routes: Routes = [
   {
@@ -57,7 +59,19 @@ const routes: Routes = [
         path: 'gestion-supervision-ejercicios',
         component: GestionSupervisionComponent,
       },
+
       { path: '**', redirectTo: 'welcome' },
+    ],
+  },
+  {
+    path: 'modal',
+    component: ModalMainGenerateComponent, // Componente del modal principal
+    children: [
+      {
+        path: 'generate-ejercicio', // Ruta hija para el componente de generación de ejercicios
+        component: ModalGenerateEjercicioComponent,
+      },
+      { path: '**', redirectTo: 'generate-ejercicio' },
     ],
   },
 ];

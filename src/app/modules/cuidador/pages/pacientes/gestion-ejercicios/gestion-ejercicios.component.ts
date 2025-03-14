@@ -29,9 +29,6 @@ export class GestionEjerciciosComponent implements OnInit {
 
   onUserIdReceived(paciente: any) {
     this.pacienteGestion = paciente;
-    console.log('pacienteGestion');
-    console.log('pacienteGestion');
-    console.log(paciente);
   }
   constructor(
     private ejercicioPersonaService: EjercicioPersonaService,

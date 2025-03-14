@@ -190,6 +190,10 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
               this.temperaturaFields[0].value = datas[0].temperatura;
               this.analisisIaData = datas[0].analisis_ia;
               this.statusSV = datas[0].analisis_ia.statusSV;
+              this.titleStatusSV =
+                this.statusSV === 'emergencia'
+                  ? 'Paciente se encuentra inestable'
+                  : 'Paciente se encuentra estable';
             }
           },
           (error) => {
@@ -240,9 +244,14 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
             this.ocultarClose = false;
 
             this.isProcessing = false;
+            this.statusSV = response.analisis_ia.statusSV;
+
+            this.titleStatusSV =
+              this.statusSV === 'emergencia'
+                ? 'Paciente se encuentra inestable'
+                : 'Paciente se encuentra estable';
 
             this.visibleDescriptionIA = true;
-            this.statusSV = response.analisis_ia.statusSV;
 
             this.analisisIaData = response.analisis_ia;
           },

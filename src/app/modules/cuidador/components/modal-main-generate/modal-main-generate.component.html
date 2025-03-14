@@ -1,0 +1,141 @@
+<!-- Fondo oscuro semitransparente y contenedor centrado -->
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+>
+  <!-- Contenedor del modal -->
+  <div
+    class="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 overflow-y-auto"
+  >
+    <!-- Encabezado del modal -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold text-gray-800">
+        Generar Ejercicios para
+        <span class="text-primary-500">{{ nombrePaciente }}</span>
+      </h2>
+      <button
+        (click)="onCerrarModal()"
+        class="text-gray-500 hover:text-gray-700"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contenedor de dos columnas -->
+    <div class="flex flex-col md:flex-row gap-6">
+      <!-- Columna Izquierda (Formulario) -->
+      <div class="w-full md:w-1/3 p-4 bg-gray-50 rounded-lg shadow-md">
+        <!-- Imagen (solo visible si no hay ejercicios) -->
+        <div
+          *ngIf="ejerciciosGenerados.length === 0"
+          class="flex justify-center mb-6"
+        >
+          <img
+            src="assets/images/ejercicio.png"
+            alt="Imagen de ejercicios"
+            class="w-48 h-48 rounded-full object-cover"
+          />
+        </div>
+
+        <!-- Formulario para generar ejercicios -->
+        <div class="space-y-4">
+          <h3 class="text-lg font-semibold text-gray-800">
+            Modo de Selección:
+          </h3>
+          <div class="flex items-center space-x-2">
+            <input
+              type="radio"
+              id="webScraping"
+              name="modo"
+              class="form-radio text-primary-500"
+              checked
+            />
+            <label for="webScraping" class="text-gray-700"
+              >Selección automática</label
+            >
+          </div>
+          <p class="text-sm text-gray-600">
+            Los ejercicios se obtienen de fuentes en línea para ofrecerte
+            opciones personalizadas.
+          </p>
+
+          <!-- Input para el número de ejercicios -->
+          <div>
+            <label
+              for="cantidadEjercicios"
+              class="block text-sm font-medium text-gray-700"
+            >
+              Número de Ejercicios:
+            </label>
+            <input
+              type="number"
+              id="cantidadEjercicios"
+              class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm"
+              placeholder="Ej. 1, 3, 5"
+            />
+          </div>
+
+          <!-- Botón de Generar -->
+          <button
+            class="w-full bg-primary-500 text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors duration-300"
+            (click)="generarEjercicios()"
+          >
+            Generar
+          </button>
+        </div>
+      </div>
+
+      <!-- Columna Derecha (Ejercicios generados) -->
+      <div class="w-full md:w-2/3 p-4 bg-gray-50 rounded-lg shadow-md">
+        <!-- Tarjetas de ejercicios generados -->
+        <div *ngIf="ejerciciosGenerados.length > 0">
+          <h3 class="text-xl font-bold text-gray-800 mb-4">
+            Ejercicios Generados
+          </h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div
+              *ngFor="let ejercicio of ejerciciosGenerados"
+              class="bg-white rounded-lg p-4 cursor-pointer hover:transform hover:scale-105 transition-transform duration-300"
+            >
+              <h3 class="text-lg font-semibold text-gray-800">
+                {{ ejercicio.titulo }}
+              </h3>
+              <p class="text-sm text-gray-600">{{ ejercicio.descripcion }}</p>
+            </div>
+          </div>
+
+          <!-- Mensaje y botón para comenzar -->
+          <div class="text-center mt-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-2">
+              ¿Deseas realizar ejercicios?
+            </h2>
+            <button
+              class="bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors duration-300"
+            >
+              ¡Comenzar!
+            </button>
+          </div>
+        </div>
+
+        <!-- Mensaje cuando no hay ejercicios generados -->
+        <div *ngIf="ejerciciosGenerados.length === 0" class="text-center">
+          <p class="text-gray-600">
+            Genera ejercicios para ver las opciones disponibles.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

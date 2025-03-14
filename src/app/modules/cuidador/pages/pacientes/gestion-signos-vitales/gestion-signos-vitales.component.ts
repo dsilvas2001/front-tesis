@@ -63,11 +63,6 @@ export class GestionSignosVitalesComponent implements OnInit {
 
     this.signosVitalesService.countgetSignosV(fecha).subscribe(
       (datas: any) => {
-        console.log('datas');
-        console.log('datas');
-        console.log('datas');
-        console.log('datas');
-        console.log(datas);
         this.cards[0].count = datas.count_pacientes_hoy;
         this.cards[1].count = datas.count_signos_vitales_hoy;
         this.cards[2].count = datas.count_emergencia_hoy;

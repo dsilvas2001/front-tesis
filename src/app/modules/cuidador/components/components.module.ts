@@ -17,6 +17,7 @@ import { CardsSvComponent } from './cards-sv/cards-sv.component';
 import { ModalSignosvComponent } from './modal-signosv/modal-signosv.component';
 import { CardsPacienteEjercicioComponent } from './cards-paciente-ejercicio/cards-paciente-ejercicio.component';
 import { CategoriaEjercicioComponent } from './categoria-ejercicio/categoria-ejercicio.component';
+import { ModalMainGenerateComponent } from './modal-main-generate/modal-main-generate.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { CategoriaEjercicioComponent } from './categoria-ejercicio/categoria-eje
     ModalSignosvComponent,
     CardsPacienteEjercicioComponent,
     CategoriaEjercicioComponent,
+    ModalMainGenerateComponent,
   ],
   imports: [CommonModule, RouterModule, SharedModule],
   exports: [
