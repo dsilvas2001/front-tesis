@@ -95,18 +95,18 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
 
     console.log('Datos del usuario:', userData);
 
-    // this.ejercicioService.getSelectCategoria(userData).subscribe({
-    //   next: (response) => {
-    //     console.log('Respuesta del servicio:', response);
-    //     this.descripcionServicio = response.descripcion; // Guardar la descripción
-    //     this.filtrarCategorias(response.categoria); // Filtrar categorías
-    //     this.isLoading = false;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error al obtener la categoría:', error);
-    //     this.isLoading = false;
-    //   },
-    // });
+    this.ejercicioService.getSelectCategoria(userData).subscribe({
+      next: (response) => {
+        console.log('Respuesta del servicio:', response);
+        this.descripcionServicio = response.descripcion; // Guardar la descripción
+        this.filtrarCategorias(response.categoria); // Filtrar categorías
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error al obtener la categoría:', error);
+        this.isLoading = false;
+      },
+    });
   }
 
   filtrarCategorias(categoriasServicio: string[]): void {
@@ -116,10 +116,23 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
   }
 
   seleccionarCategoria(categoria: string): void {
-    // this._pacienteCategoria = {
-    //   ...this._pacienteData[0],
-    //   categoria,
+    // this._pacienteData = {
+    //   id_paciente: 12345,
+    //   nombre: 'Jacob Fabio',
+    //   apellido: 'Marzo Silva',
+    //   presion_arterial: {
+    //     sistolica: 120,
+    //     diastolica: 80,
+    //   },
+    //   frecuencia_cardiaca: 75,
+    //   frecuencia_respiratoria: 18,
+    //   temperatura: 36.5,
     // };
+
+    this._pacienteCategoria = {
+      ...this._pacienteData,
+      categoria: categoria,
+    };
     this.statusModal = true;
   }
 

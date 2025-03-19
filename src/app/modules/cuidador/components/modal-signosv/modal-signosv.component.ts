@@ -132,13 +132,7 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['statusModal'] && this.statusModal) {
-    //   // Solo ejecuta si el modal se abre
-    //   this.updateModalTitleAndButton();
-    //   this.cargarDatosPaciente();
-    // }
-  }
+  ngOnChanges(changes: SimpleChanges): void {}
   ngOnInit(): void {
     console.log('tituloModal');
     console.log(this.tituloModal);

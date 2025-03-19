@@ -14,6 +14,10 @@ import { LimitesSignosVitalesComponent } from './pages/pacientes/limites-signos-
 import { GestionEjerciciosComponent } from './pages/pacientes/gestion-ejercicios/gestion-ejercicios.component';
 import { GestionSupervisionComponent } from './pages/pacientes/gestion-supervision/gestion-supervision.component';
 import { ModalGenerateEjercicioComponent } from './pages/pacientes/modal-generate-ejercicio/modal-generate-ejercicio.component';
+import { WelcomeEjercicioComponent } from './pages/pacientes/ejercicios/welcome-ejercicio/welcome-ejercicio.component';
+import { EjercicioComponent } from './pages/pacientes/ejercicios/ejercicio/ejercicio.component';
+import { EjercicioMultipleComponent } from './pages/pacientes/ejercicios/ejercicio-multiple/ejercicio-multiple.component';
+import { EjercicioResultadosComponent } from './pages/pacientes/ejercicios/ejercicio-resultados/ejercicio-resultados.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,10 @@ import { ModalGenerateEjercicioComponent } from './pages/pacientes/modal-generat
     GestionEjerciciosComponent,
     GestionSupervisionComponent,
     ModalGenerateEjercicioComponent,
+    WelcomeEjercicioComponent,
+    EjercicioComponent,
+    EjercicioMultipleComponent,
+    EjercicioResultadosComponent,
   ],
   imports: [
     CommonModule,

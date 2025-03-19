@@ -14,6 +14,10 @@ import { EjercicioPacienteResolver } from '../../core/cuidador/resolver/ejercici
 import { DashboardHomeResolver } from '../../core/cuidador/resolver/dashboard-home.resolver';
 import { ModalGenerateEjercicioComponent } from './pages/pacientes/modal-generate-ejercicio/modal-generate-ejercicio.component';
 import { ModalMainGenerateComponent } from './components/modal-main-generate/modal-main-generate.component';
+import { WelcomeEjercicioComponent } from './pages/pacientes/ejercicios/welcome-ejercicio/welcome-ejercicio.component';
+import { EjercicioComponent } from './pages/pacientes/ejercicios/ejercicio/ejercicio.component';
+import { EjercicioMultipleComponent } from './pages/pacientes/ejercicios/ejercicio-multiple/ejercicio-multiple.component';
+import { EjercicioResultadosComponent } from './pages/pacientes/ejercicios/ejercicio-resultados/ejercicio-resultados.component';
 
 const routes: Routes = [
   {
@@ -59,19 +63,26 @@ const routes: Routes = [
         path: 'gestion-supervision-ejercicios',
         component: GestionSupervisionComponent,
       },
-
       { path: '**', redirectTo: 'welcome' },
     ],
   },
   {
-    path: 'modal',
-    component: ModalMainGenerateComponent, // Componente del modal principal
+    path: 'ejercicios',
+    component: EjercicioComponent,
     children: [
       {
-        path: 'generate-ejercicio', // Ruta hija para el componente de generación de ejercicios
-        component: ModalGenerateEjercicioComponent,
+        path: 'welcome',
+        component: WelcomeEjercicioComponent,
       },
-      { path: '**', redirectTo: 'generate-ejercicio' },
+      {
+        path: 'ejercicio-multiple',
+        component: EjercicioMultipleComponent,
+      },
+      {
+        path: 'ejercicio-resultados',
+        component: EjercicioResultadosComponent,
+      },
+      { path: '**', redirectTo: 'welcome' },
     ],
   },
 ];

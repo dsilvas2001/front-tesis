@@ -1,0 +1,36 @@
+<div
+  class="w-full max-w-4xl p-8 bg-white bg-opacity-10 backdrop-blur-md rounded-2xl shadow-xl flex flex-row items-center space-x-8"
+>
+  <!-- Imagen a la izquierda -->
+  <div class="flex-shrink-0">
+    <img
+      src="../../../../../../../assets/images/ejercicio/gif_welcome_start.gif"
+      alt="Ejercicios Cognitivos"
+      class="rounded-lg shadow-md w-full"
+    />
+  </div>
+
+  <!-- Contenido a la derecha -->
+  <div class="flex-grow text-left">
+    <h1
+      class="text-xl sm:text-2xl md:text-3xl font-bold mb-2 md:mb-4 leading-snug md:leading-normal drop-shadow-sm"
+    >
+      🌟 ¡Bienvenido a tu sesión de Estimulación Cognitiva!
+    </h1>
+
+    <p
+      class="text-sm sm:text-base md:text-lg text-neutral-800/90 mb-3 md:mb-6 leading-relaxed max-w-3xl"
+    >
+      Mantén tu mente activa con ejercicios diseñados para potenciar tu memoria,
+      atención y habilidades cognitivas. Dedica unos minutos al día y mejora tu
+      bienestar mental.
+    </p>
+
+    <a
+      (click)="iniciarEjercicio()"
+      class="px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 font-semibold bg-yellow-400 text-gray-800 rounded-lg text-sm sm:text-base md:text-lg hover:bg-yellow-500 active:scale-95 transition-all duration-200 shadow-sm hover:shadow-md inline-flex items-center cursor-pointer"
+    >
+      <i class="fas fa-clock mr-2"></i> ¡Comenzar Ejercicios!
+    </a>
+  </div>
+</div>
