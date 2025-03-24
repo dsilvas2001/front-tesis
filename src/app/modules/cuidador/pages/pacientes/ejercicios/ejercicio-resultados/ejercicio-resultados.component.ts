@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { EjercicioGeneradoService } from '../../../../../../core/cuidador/ejercicio-generado/ejercicio-generado.service';
 
 @Component({
   selector: 'app-ejercicio-resultados',
@@ -13,7 +14,16 @@ export class EjercicioResultadosComponent {
   totalPreguntas: number = 0;
   porcentajeExito: number = 0;
 
-  constructor(private router: Router) {
+  aiFeedback = {
+    tendencia: '',
+    recomendaciones: [] as string[],
+    fortalezas: [] as string[],
+  };
+
+  constructor(
+    private router: Router,
+    private ejercicioGeneradoService: EjercicioGeneradoService
+  ) {
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.totalErrores = navigation.extras.state['totalErrores'];
@@ -23,20 +33,45 @@ export class EjercicioResultadosComponent {
       this.porcentajeExito = Math.round(
         ((this.totalPreguntas - this.totalErrores) / this.totalPreguntas) * 100
       );
+      this.obtenerRecomendaciones();
     }
   }
-  aiFeedback = {
-    tendencia:
-      'Notamos que tienes mayor dificultad con preguntas relacionadas a memoria a corto plazo...',
-    recomendaciones: [
-      'Practica ejercicios de asociación visual 10 minutos al día',
-      'Intenta el modo "Contrarreloj" para mejorar tu velocidad',
-      'Revisa la sección de concentración en nuestra biblioteca',
-    ],
-    fortalezas: [
-      'Razonamiento lógico',
-      'Velocidad de respuesta',
-      'Persistencia',
-    ],
-  };
+
+  obtenerRecomendaciones(): void {
+    // Crear la tendencia como una cadena concatenada
+    const tendencia = `Total de errores: ${
+      this.totalErrores
+    }, Errores por pregunta: ${JSON.stringify(
+      this.erroresPorPregunta
+    )}, Tiempo transcurrido: ${
+      this.tiempoTranscurrido
+    } segundos, Total de preguntas: ${this.totalPreguntas}`;
+
+    // Crear el cuerpo de la solicitud
+    const body = {
+      tendencia,
+      porcentajeExito: this.porcentajeExito,
+      tiempoTranscurrido: this.tiempoTranscurrido,
+    };
+
+    // Llamar al servicio para obtener recomendaciones
+    this.ejercicioGeneradoService.getRecomendaciones(body).subscribe(
+      (response) => {
+        // Asignar la respuesta del backend a aiFeedback
+        this.aiFeedback = response;
+      },
+      (error) => {
+        console.error('Error al obtener recomendaciones:', error);
+        // En caso de error, usar valores por defecto
+        this.aiFeedback = {
+          tendencia: 'No se pudo obtener la tendencia de errores.',
+          recomendaciones: [
+            'Revisa la sección de ejercicios para mejorar.',
+            'Intenta el modo "Contrarreloj" para mejorar tu velocidad.',
+          ],
+          fortalezas: ['Persistencia', 'Esfuerzo'],
+        };
+      }
+    );
+  }
 }

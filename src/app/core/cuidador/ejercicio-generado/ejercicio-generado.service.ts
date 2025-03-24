@@ -30,4 +30,15 @@ export class EjercicioGeneradoService {
       userData
     );
   }
+
+  getRecomendaciones(body: {
+    tendencia: string;
+    porcentajeExito: number;
+    tiempoTranscurrido: number;
+  }): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}${this.API_PATH}recomendaciones`,
+      body
+    );
+  }
 }

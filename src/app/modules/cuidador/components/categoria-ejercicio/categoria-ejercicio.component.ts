@@ -43,22 +43,22 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
       nombre: 'Lenguaje',
       explicacion: 'Fortalece tu vocabulario y habilidades de comunicación.',
     },
-    {
-      src: 'https://img.freepik.com/free-vector/curiosity-brain-concept-illustration_114360-11037.jpg?t=st=1741787039~exp=1741790639~hmac=60486d2c309e2a2bcd657c4d138907cd66903094d5affea641a4047b066d67a2&w=900',
-      nombre: 'Razonamiento',
-      explicacion:
-        'Desarrolla tu capacidad para resolver problemas de manera lógica.',
-    },
-    {
-      src: 'assets/percepcion-icon.png',
-      nombre: 'Percepción',
-      explicacion: 'Mejora tu interpretación visual y espacial.',
-    },
-    {
-      src: 'assets/funciones-icon.png',
-      nombre: 'Funciones Ejecutivas',
-      explicacion: 'Optimiza tu planificación y toma de decisiones.',
-    },
+    // {
+    //   src: 'https://img.freepik.com/free-vector/curiosity-brain-concept-illustration_114360-11037.jpg?t=st=1741787039~exp=1741790639~hmac=60486d2c309e2a2bcd657c4d138907cd66903094d5affea641a4047b066d67a2&w=900',
+    //   nombre: 'Razonamiento',
+    //   explicacion:
+    //     'Desarrolla tu capacidad para resolver problemas de manera lógica.',
+    // },
+    // {
+    //   src: 'assets/percepcion-icon.png',
+    //   nombre: 'Percepción',
+    //   explicacion: 'Mejora tu interpretación visual y espacial.',
+    // },
+    // {
+    //   src: 'assets/funciones-icon.png',
+    //   nombre: 'Funciones Ejecutivas',
+    //   explicacion: 'Optimiza tu planificación y toma de decisiones.',
+    // },
   ];
 
   constructor(

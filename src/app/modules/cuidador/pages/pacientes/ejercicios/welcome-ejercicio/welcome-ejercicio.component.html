@@ -26,11 +26,26 @@
       bienestar mental.
     </p>
 
-    <a
+    <!-- Modificar el botón para mostrar estado de carga -->
+    <button
       (click)="iniciarEjercicio()"
       class="px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 font-semibold bg-yellow-400 text-gray-800 rounded-lg text-sm sm:text-base md:text-lg hover:bg-yellow-500 active:scale-95 transition-all duration-200 shadow-sm hover:shadow-md inline-flex items-center cursor-pointer"
+      [disabled]="!cargaCompleta && !errorCarga"
     >
-      <i class="fas fa-clock mr-2"></i> ¡Comenzar Ejercicios!
-    </a>
+      <i class="fas fa-clock mr-2"></i>
+
+      <div *ngIf="!cargaCompleta && !errorCarga" class="flex items-center">
+        <span class="mr-2">Cargando... {{ progresoCarga }}%</span>
+        <div class="w-20 bg-gray-200 rounded-full h-2.5">
+          <div
+            class="bg-blue-600 h-2.5 rounded-full"
+            [style.width.%]="progresoCarga"
+          ></div>
+        </div>
+      </div>
+
+      <span *ngIf="cargaCompleta">¡Comenzar Ejercicios!</span>
+      <span *ngIf="errorCarga">Continuar con carga incompleta</span>
+    </button>
   </div>
 </div>
