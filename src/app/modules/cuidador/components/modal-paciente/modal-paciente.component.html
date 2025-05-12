@@ -33,21 +33,24 @@
         [formGroup]="registerForm"
       >
         <div class="grid gap-4 mb-4 grid-cols-2">
-          <div class="col-span-2">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >Nombre</label
-            >
+          <div class="col-span-2 relative">
             <input
               type="text"
               name="name"
               formControlName="name"
               id="name"
-              class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-              placeholder="Nombre del paciente"
-              required=""
+              class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-warning-600 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+              placeholder=" "
+              required
+              [ngClass]="{ 'border-blue-600': registerForm.get('name')?.valid }"
             />
+            <label
+              for="name"
+              class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:transform peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:transform peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+            >
+              Nombre del paciente
+            </label>
+
             <div
               class="text-red-500"
               *ngIf="
@@ -58,21 +61,27 @@
               El nombre del paciente es obligatorio.
             </div>
           </div>
-          <div class="col-span-2">
-            <label
-              for="lastname"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >Apellido</label
-            >
+
+          <div class="col-span-2 relative">
             <input
               type="text"
               name="lastname"
               formControlName="lastname"
               id="lastname"
-              class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-              placeholder="Apellido del paciente"
-              required=""
+              class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-warning-600 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+              placeholder=" "
+              required
+              [ngClass]="{
+                'border-blue-600': registerForm.get('lastname')?.valid
+              }"
             />
+            <label
+              for="lastname"
+              class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:transform peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:transform peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+            >
+              Apellido del paciente
+            </label>
+
             <div
               class="text-red-500"
               *ngIf="
@@ -83,6 +92,7 @@
               El apellido del paciente es obligatorio.
             </div>
           </div>
+
           <div class="col-span-2 sm:col-span-1">
             <label
               for="age"
@@ -94,7 +104,7 @@
               name="age"
               formControlName="age"
               id="age"
-              class="bg-gray-50 border border-warning-600 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="bg-gray-50 border border-warning-600 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:placeholder-gray-400"
               placeholder="0"
               required=""
             />
@@ -108,6 +118,7 @@
               El nombre del paciente es obligatorio.
             </div>
           </div>
+
           <div class="col-span-2 sm:col-span-1">
             <label
               for="gender"
@@ -117,7 +128,7 @@
             <select
               id="gender"
               formControlName="gender"
-              class="bg-gray-50 border-warning-600 border text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              class="bg-gray-50 focus:border-blue-600 peer border-warning-600 border text-gray-900 text-sm rounded-lg focus:ring-primary-500 block w-full p-2.5 dark:placeholder-gray-400 dark:focus:ring-primary-500"
             >
               <option selected="">Seleccionar genero</option>
               <option value="Masculino">Masculino</option>

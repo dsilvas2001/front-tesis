@@ -13,6 +13,7 @@ export class EjercicioResultadosComponent {
   tiempoTranscurrido: number = 0;
   totalPreguntas: number = 0;
   porcentajeExito: number = 0;
+  isLoading: boolean = true; // Nuevo estado para controlar el loading
 
   aiFeedback = {
     tendencia: '',
@@ -59,6 +60,7 @@ export class EjercicioResultadosComponent {
       (response) => {
         // Asignar la respuesta del backend a aiFeedback
         this.aiFeedback = response;
+        this.isLoading = false; // Desactivar loading al recibir respuesta
       },
       (error) => {
         console.error('Error al obtener recomendaciones:', error);
@@ -71,6 +73,7 @@ export class EjercicioResultadosComponent {
           ],
           fortalezas: ['Persistencia', 'Esfuerzo'],
         };
+        this.isLoading = false; // Desactivar loading al recibir respuesta
       }
     );
   }

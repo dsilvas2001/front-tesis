@@ -146,41 +146,100 @@
           </div>
 
           <div class="flex-1 overflow-y-auto pr-4 -mr-4 space-y-6">
-            <!-- Sección de feedback -->
-            <div class="bg-white p-4 rounded-xl shadow-sm">
-              <h3 class="font-semibold text-purple-600 mb-2">
-                📈 Tendencia de errores:
-              </h3>
-              <p class="text-gray-700 leading-relaxed">
-                {{ aiFeedback.tendencia }}
-              </p>
+            <!-- Sección de imagen + loading (solo visible cuando no hay feedback) -->
+            <div
+              *ngIf="
+                !aiFeedback.tendencia &&
+                aiFeedback.recomendaciones.length === 0 &&
+                aiFeedback.fortalezas.length === 0
+              "
+              class="bg-white p-4 rounded-xl shadow-sm relative"
+            >
+              <img
+                src="../../../../../../../assets/images/item-ejercicio-generado/analisis-ia.jpg"
+                alt="Ejercicios Cognitivos"
+                class="rounded-lg shadow-md w-full"
+              />
+
+              <!-- Loading overlay -->
+              <div
+                *ngIf="isLoading"
+                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 rounded-lg"
+              >
+                <div
+                  class="bg-white p-4 rounded-lg shadow-lg flex items-center space-x-2"
+                >
+                  <svg
+                    class="animate-spin h-5 w-5 text-purple-600"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      class="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      stroke-width="4"
+                    ></circle>
+                    <path
+                      class="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  <span class="text-gray-700"
+                    >Generando recomendaciones...</span
+                  >
+                </div>
+              </div>
             </div>
 
-            <div class="bg-white p-4 rounded-xl shadow-sm">
-              <h3 class="font-semibold text-blue-600 mb-2">
-                💡 Recomendaciones:
-              </h3>
-              <ul class="list-disc list-inside space-y-2">
-                <li
-                  *ngFor="let rec of aiFeedback.recomendaciones"
-                  class="text-gray-700"
-                >
-                  {{ rec }}
-                </li>
-              </ul>
-            </div>
+            <!-- Sección de feedback (solo visible cuando hay datos) -->
+            <div
+              *ngIf="
+                aiFeedback.tendencia ||
+                aiFeedback.recomendaciones.length ||
+                aiFeedback.fortalezas.length
+              "
+            >
+              <!-- Sección de feedback -->
+              <div class="bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="font-semibold text-purple-600 mb-2">
+                  📈 Tendencia de errores:
+                </h3>
+                <p class="text-gray-700 leading-relaxed">
+                  {{ aiFeedback.tendencia }}
+                </p>
+              </div>
 
-            <div class="bg-white p-4 rounded-xl shadow-sm">
-              <h3 class="font-semibold text-green-600 mb-2">
-                🏆 Fortalezas detectadas:
-              </h3>
-              <div class="flex flex-wrap gap-2">
-                <span
-                  *ngFor="let fortaleza of aiFeedback.fortalezas"
-                  class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
-                >
-                  {{ fortaleza }}
-                </span>
+              <div class="bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="font-semibold text-blue-600 mb-2">
+                  💡 Recomendaciones:
+                </h3>
+                <ul class="list-disc list-inside space-y-2">
+                  <li
+                    *ngFor="let rec of aiFeedback.recomendaciones"
+                    class="text-gray-700"
+                  >
+                    {{ rec }}
+                  </li>
+                </ul>
+              </div>
+
+              <div class="bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="font-semibold text-green-600 mb-2">
+                  🏆 Fortalezas detectadas:
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="let fortaleza of aiFeedback.fortalezas"
+                    class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm"
+                  >
+                    {{ fortaleza }}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

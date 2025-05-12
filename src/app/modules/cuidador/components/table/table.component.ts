@@ -54,9 +54,8 @@ export class TableComponent implements OnInit {
 
       this.deletePaciente(this.pacienteData.id);
     } else {
-      {
-        this.statusnotification = false;
-      }
+      this.statusnotification = false;
+
       console.log('El usuario hizo clic en Cancelar');
     }
   }

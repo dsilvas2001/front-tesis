@@ -81,11 +81,11 @@ export class SidebarComponent implements OnInit {
           icon: 'fa-brands fa-bilibili',
           link: '/Cuidador/home/gestion-ejercicios',
         },
-        {
-          name: 'Supervision Ejercicios',
-          icon: 'fa-solid fa-list-check',
-          link: '/Cuidador/home/gestion-supervision-ejercicios',
-        },
+        // {
+        //   name: 'Supervision Ejercicios',
+        //   icon: 'fa-solid fa-list-check',
+        //   link: '/Cuidador/home/gestion-supervision-ejercicios',
+        // },
       ],
       isOpen: false, // Estado para controlar si el submenú está abierto
     },
