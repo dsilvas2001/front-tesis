@@ -1,11 +1,13 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnInit,
   Output,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { EjercicioGeneradoService } from '../../../../core/cuidador/ejercicio-generado/ejercicio-generado.service';
 import { Route, Router } from '@angular/router';
@@ -14,6 +16,7 @@ import { Route, Router } from '@angular/router';
   selector: 'app-modal-main-generate',
   templateUrl: './modal-main-generate.component.html',
   styles: ``,
+  standalone: false,
 })
 export class ModalMainGenerateComponent implements OnInit, OnChanges {
   @Input() _pacienteGenerate: any;
@@ -22,8 +25,11 @@ export class ModalMainGenerateComponent implements OnInit, OnChanges {
   isLoading: boolean = false; // Variable para controlar el estado de carga
 
   @Output() cerrarModal = new EventEmitter<void>(); // Emite un evento para cerrar el modal
+  @ViewChild('carrusel', { static: false }) carrusel!: ElementRef;
 
   ejerciciosGenerados: any[] = []; // Almacena los ejercicios generados
+
+  mostrarPrevisualizacion: boolean = false;
 
   categorias = [
     {
@@ -124,6 +130,23 @@ export class ModalMainGenerateComponent implements OnInit, OnChanges {
   iniciarEjercicio(): void {
     this.router.navigate(['/Cuidador/ejercicios/welcome'], {
       state: { ejercicios: this.ejerciciosGenerados },
+    });
+  }
+
+  abrirPrevisualizacion() {
+    this.mostrarPrevisualizacion = true;
+  }
+  cerrarPrevisualizacion() {
+    this.mostrarPrevisualizacion = false;
+  }
+
+  // carrucel
+  scrollCarrusel(direction: 'left' | 'right') {
+    const element = this.carrusel.nativeElement;
+    const scrollAmount = 320; // ancho de cada card + margen
+    element.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
     });
   }
 }

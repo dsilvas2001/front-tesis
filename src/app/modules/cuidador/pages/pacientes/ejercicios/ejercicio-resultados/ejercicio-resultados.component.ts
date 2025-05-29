@@ -6,6 +6,7 @@ import { EjercicioGeneradoService } from '../../../../../../core/cuidador/ejerci
   selector: 'app-ejercicio-resultados',
   templateUrl: './ejercicio-resultados.component.html',
   styles: ``,
+  standalone: false,
 })
 export class EjercicioResultadosComponent {
   totalErrores: number = 0;
@@ -25,17 +26,74 @@ export class EjercicioResultadosComponent {
     private router: Router,
     private ejercicioGeneradoService: EjercicioGeneradoService
   ) {
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      this.totalErrores = navigation.extras.state['totalErrores'];
-      this.erroresPorPregunta = navigation.extras.state['erroresPorPregunta'];
-      this.tiempoTranscurrido = navigation.extras.state['tiempoTranscurrido'];
-      this.totalPreguntas = navigation.extras.state['totalPreguntas'];
-      this.porcentajeExito = Math.round(
-        ((this.totalPreguntas - this.totalErrores) / this.totalPreguntas) * 100
-      );
+    // Intentar recuperar datos del localStorage primero
+    const savedData = localStorage.getItem('ejercicioResultados');
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      this.cargarDatos(parsedData);
       this.obtenerRecomendaciones();
+    } else {
+      // Si no hay datos guardados, intentar obtener del estado de navegación
+      const navigation = this.router.getCurrentNavigation();
+      if (navigation?.extras.state) {
+        this.cargarDatos(navigation.extras.state);
+        // Guardar en localStorage para futuras recargas
+        localStorage.setItem(
+          'ejercicioResultados',
+          JSON.stringify(navigation.extras.state)
+        );
+        this.obtenerRecomendaciones();
+      } else {
+        // No hay datos disponibles, redirigir o manejar el caso
+        this.router.navigate(['/ruta-de-fallback']);
+      }
     }
+  }
+
+  private cargarDatos(datos: any): void {
+    this.totalErrores = datos['totalErrores'];
+    this.erroresPorPregunta = datos['erroresPorPregunta'];
+    this.tiempoTranscurrido = datos['tiempoTranscurrido'];
+    this.totalPreguntas = datos['totalPreguntas'];
+    this.porcentajeExito = this.calcularPorcentajeExito(
+      this.totalPreguntas,
+      this.totalErrores
+    );
+  }
+
+  // private calcularPorcentajeExito(
+  //   totalPreguntas: number,
+  //   totalErrores: number
+  // ): number {
+  //   // Evita división por cero
+  //   if (totalPreguntas <= 0) return 0;
+
+  //   // Calcula el porcentaje asegurando que esté entre 0% y 100%
+  //   const porcentaje = ((totalPreguntas - totalErrores) / totalPreguntas) * 100;
+  //   return Math.max(0, Math.min(100, Math.round(porcentaje)));
+  // }
+
+  private calcularPorcentajeExito(
+    totalPreguntas: number,
+    totalErrores: number
+  ): number {
+    if (totalPreguntas <= 0) return 0;
+
+    // Asegurar que errores no excedan preguntas (evita porcentajes negativos)
+    const erroresAjustados = Math.min(totalErrores, totalPreguntas);
+
+    // Nueva fórmula:
+    // - Mínimo 20% si hay al menos 1 acierto (para no desmotivar).
+    // - Si todos son errores, sí mostrar 0%.
+    const aciertos = totalPreguntas - erroresAjustados;
+    let porcentaje = (aciertos / totalPreguntas) * 100;
+
+    // Ajuste para adultos mayores:
+    if (aciertos > 0 && porcentaje < 20) {
+      porcentaje = 20; // Puntaje mínimo de consolación
+    }
+
+    return Math.round(porcentaje);
   }
 
   obtenerRecomendaciones(): void {
@@ -76,5 +134,9 @@ export class EjercicioResultadosComponent {
         this.isLoading = false; // Desactivar loading al recibir respuesta
       }
     );
+  }
+  limpiarDatosAlmacenados(): void {
+    localStorage.removeItem('ejercicioResultados');
+    console.log('Datos de ejercicioResultados eliminados del localStorage.');
   }
 }

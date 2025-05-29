@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-calendario',
-  templateUrl: './calendario.component.html',
-  styles: ``,
+    selector: 'app-calendario',
+    templateUrl: './calendario.component.html',
+    styles: ``,
+    standalone: false
 })
 export class CalendarioComponent implements OnInit {
   @ViewChild('calendarDaysMobile', { static: true })

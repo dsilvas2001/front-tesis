@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { ReferenciaSignosVService } from '../../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 
 @Component({
-  selector: 'app-limites-signos-vitales',
-  templateUrl: './limites-signos-vitales.component.html',
-  styles: ``,
+    selector: 'app-limites-signos-vitales',
+    templateUrl: './limites-signos-vitales.component.html',
+    styles: ``,
+    standalone: false
 })
 export class LimitesSignosVitalesComponent implements OnInit {
   cards = [

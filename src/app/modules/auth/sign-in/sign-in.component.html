@@ -28,17 +28,27 @@
         [formGroup]="authForm"
         (ngSubmit)="onSubmit()"
       >
-        <div class="flex flex-col pt-4">
-          <label for="email" class="text-lg">Email</label>
+        <!-- Email -->
+        <div class="relative pt-4">
           <input
             type="email"
             id="email"
             formControlName="email"
-            placeholder="your@email.com"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder=" "
+            required
+            class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-gray-300 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+            [ngClass]="{ 'border-blue-600': authForm.get('email')?.valid }"
           />
+          <label
+            for="email"
+            class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+          >
+            Email del usuario
+          </label>
+
+          <!-- Errores -->
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               authForm.get('email')?.hasError('required') &&
               authForm.get('email')?.touched
@@ -47,7 +57,7 @@
             El email del usuario es obligatorio.
           </div>
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               authForm.get('email')?.hasError('email') &&
               authForm.get('email')?.touched
@@ -57,23 +67,33 @@
           </div>
         </div>
 
-        <div class="flex flex-col pt-4">
-          <label for="password" class="text-lg">Contraseña</label>
+        <!-- Contraseña -->
+        <div class="relative pt-4">
           <input
             type="password"
             id="password"
-            placeholder="Contraseña"
             formControlName="password"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder=" "
+            required
+            class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-gray-300 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+            [ngClass]="{ 'border-blue-600': authForm.get('password')?.valid }"
           />
+          <label
+            for="password"
+            class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+          >
+            Contraseña
+          </label>
+
+          <!-- Errores -->
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               authForm.get('password')?.hasError('required') &&
               authForm.get('password')?.touched
             "
           >
-            La contraseña del usuario es obligatorio.
+            La contraseña del usuario es obligatoria.
           </div>
         </div>
 

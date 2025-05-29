@@ -126,60 +126,69 @@
         }"
       >
         <!-- Tarjetas de ejercicios generados -->
+        <!-- Ejercicios Generados -->
         <div *ngIf="ejerciciosGenerados.length > 0">
-          <h3 class="text-lg md:text-xl font-bold text-gray-800 mb-4">
-            Ejercicios Generados
-          </h3>
-          <div
-            class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[500px] overflow-y-auto pr-2"
+          <h3
+            class="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center"
           >
-            <div
-              *ngFor="let ejercicio of ejerciciosGenerados; let i = index"
-              class="flex flex-row border-2 border-yellow-300/70 bg-yellow-50 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 w-full hover:scale-[1.005]"
+            🧠 Ejercicios Generados
+          </h3>
+
+          <!-- Carrusel con botones -->
+          <div class="relative">
+            <!-- Botón Izquierdo -->
+            <button
+              (click)="scrollCarrusel('left')"
+              class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-accent-200 border shadow-md rounded-full p-2 hover:bg-accent-300"
             >
-              <!-- Contenedor de imagen (sin cambios estructurales) -->
+              <i class="fas fa-chevron-left text-gray-700"></i>
+            </button>
+
+            <!-- Contenedor Carrusel -->
+            <div
+              #carrusel
+              class="flex gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-4"
+            >
               <div
-                class="w-1/3 flex items-center justify-center bg-yellow-200/80 rounded-l-xl overflow-hidden"
+                *ngFor="let ejercicio of ejerciciosGenerados; let i = index"
+                class="bg-white border border-gray-200 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden min-w-[300px] snap-start"
               >
-                <img
-                  [src]="getRandomImage(i)"
-                  alt="Ejercicio"
-                  class="w-full h-full object-fill"
-                />
-              </div>
-
-              <!-- Contenido (misma estructura, mejor tipografía) -->
-              <div class="w-2/3 p-4 flex flex-col justify-between">
-                <!-- Título con mejor jerarquía -->
-                <h2 class="text-lg font-bold text-yellow-900 mb-1 leading-snug">
-                  {{ ejercicio.titulo }}
-                </h2>
-
-                <!-- Descripción con mejor legibilidad -->
-                <p
-                  class="text-sm text-yellow-800/90 mb-2 leading-relaxed line-clamp-2"
-                >
-                  {{ ejercicio.descripcion }}
-                </p>
-
-                <!-- Instrucciones más claras -->
-                <div class="mb-2">
-                  <p class="text-xs font-medium text-yellow-900 mb-1">
-                    📌 Instrucciones:
-                  </p>
-                  <p class="text-sm text-yellow-800 leading-tight line-clamp-2">
-                    {{ ejercicio.instrucciones }}
-                  </p>
+                <!-- Imagen -->
+                <div class="bg-blue-100 flex items-center justify-center p-4">
+                  <img
+                    [src]="getRandomImage(i)"
+                    alt="Ejercicio"
+                    class="h-32 object-contain"
+                  />
                 </div>
 
-                <!-- Dificultad mejor integrada -->
-                <div class="flex items-center justify-between mt-auto">
-                  <div class="flex items-center">
-                    <span class="text-xs font-semibold text-yellow-900 mr-2">
-                      Dificultad:
-                    </span>
+                <!-- Contenido -->
+                <div class="p-4 flex flex-col gap-2 flex-grow">
+                  <h2 class="text-lg font-semibold text-gray-800">
+                    {{ ejercicio.titulo }}
+                  </h2>
+
+                  <p class="text-sm text-gray-600 line-clamp-2">
+                    {{ ejercicio.descripcion }}
+                  </p>
+
+                  <div>
+                    <p class="text-xs font-medium text-gray-700">
+                      📌 Instrucciones:
+                    </p>
+                    <p class="text-sm text-gray-600 line-clamp-2">
+                      {{ ejercicio.instrucciones }}
+                    </p>
+                  </div>
+
+                  <div class="mt-auto flex justify-end">
                     <span
-                      class="px-3 py-1 bg-amber-500/90 text-white font-medium rounded-full text-xs shadow-inner"
+                      class="text-xs font-semibold px-3 py-1 rounded-full text-white"
+                      [ngClass]="{
+                        'bg-green-500': ejercicio.dificultad === 'baja',
+                        'bg-yellow-500': ejercicio.dificultad === 'media',
+                        'bg-red-500': ejercicio.dificultad === 'alta'
+                      }"
                     >
                       {{ ejercicio.dificultad }}
                     </span>
@@ -187,17 +196,31 @@
                 </div>
               </div>
             </div>
+
+            <!-- Botón Derecho -->
+            <button
+              (click)="scrollCarrusel('right')"
+              class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-accent-200 border shadow-md rounded-full p-2 hover:bg-accent-300"
+            >
+              <i class="fas fa-chevron-right text-gray-700"></i>
+            </button>
           </div>
 
-          <!-- Mensaje y botón para comenzar -->
-          <div class="text-center mt-6">
-            <h2 class="text-lg md:text-xl font-bold text-gray-800 mb-2">
-              ¿Deseas realizar ejercicios?
-            </h2>
+          <!-- Botones de acción -->
+          <div class="flex justify-center gap-6 mt-8">
             <button
-              class="bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors duration-300 text-sm md:text-base animate-pulse"
+              class="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-6 py-2 rounded-full shadow transition-all duration-300 flex items-center gap-2"
+              (click)="abrirPrevisualizacion()"
+            >
+              <i class="fas fa-eye"></i>
+              Visualizar Ejercicios
+            </button>
+
+            <button
+              class="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-full shadow transition-all duration-300 flex items-center gap-2"
               (click)="iniciarEjercicio()"
             >
+              <i class="fas fa-play"></i>
               ¡Comenzar!
             </button>
           </div>
@@ -216,5 +239,10 @@
         </div>
       </div>
     </div>
+    <app-previsualizacion-ejercicios
+      [ejercicios]="ejerciciosGenerados"
+      (closeModalEvent)="cerrarPrevisualizacion()"
+      *ngIf="mostrarPrevisualizacion"
+    ></app-previsualizacion-ejercicios>
   </div>
 </div>

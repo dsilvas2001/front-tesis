@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
-  selector: 'app-sign-up',
-  templateUrl: './sign-up.component.html',
-  styles: ``,
+    selector: 'app-sign-up',
+    templateUrl: './sign-up.component.html',
+    styles: ``,
+    standalone: false
 })
 export class SignUpComponent implements OnInit {
   registerForm: FormGroup;

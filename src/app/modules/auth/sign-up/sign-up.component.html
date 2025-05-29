@@ -1,6 +1,8 @@
-<div class="w-full flex flex-wrap">
-  <div class="w-full md:w-1/2 flex flex-col">
-    <div class="flex justify-center md:justify-start pt-12 md:pl-12 md:-mb-11">
+<div class="w-full h-screen flex flex-col md:flex-row overflow-hidden">
+  <div class="w-full md:w-1/2 flex flex-col justify-between">
+    <div
+      class="flex justify-center md:justify-start pt-12 px-8 md:px-24 lg:px-32"
+    >
       <a
         href="/"
         class="text-black font-bold text-lg flex flex-row items-center gap-1"
@@ -15,7 +17,7 @@
     </div>
 
     <div
-      class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32"
+      class="flex flex-col justify-center md:justify-center my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32"
     >
       <h1 class="font-poppins font-semibold text-center text-2xl md:text-3xl">
         ¡Únete a nosotros hoy!
@@ -28,17 +30,24 @@
         (ngSubmit)="onSubmit()"
         [formGroup]="registerForm"
       >
-        <div class="flex flex-col pt-4">
-          <label for="name" class="text-lg">Nombre</label>
+        <div class="relative pt-4">
           <input
             type="text"
             id="name"
             formControlName="names"
-            placeholder="John"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder=" "
+            required
+            class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-gray-300 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+            [ngClass]="{ 'border-blue-600': registerForm.get('names')?.valid }"
           />
+          <label
+            for="name"
+            class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+          >
+            Nombre
+          </label>
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               registerForm.get('names')?.hasError('required') &&
               registerForm.get('names')?.touched
@@ -47,17 +56,27 @@
             El nombre del usuario es obligatorio.
           </div>
         </div>
-        <div class="flex flex-col pt-4">
-          <label for="lastNames" class="text-lg">Apellido</label>
+
+        <div class="relative pt-4">
           <input
             type="text"
             id="lastNames"
             formControlName="lastNames"
-            placeholder="Smith"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder=" "
+            required
+            class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-gray-300 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+            [ngClass]="{
+              'border-blue-600': registerForm.get('lastNames')?.valid
+            }"
           />
+          <label
+            for="lastNames"
+            class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+          >
+            Apellido
+          </label>
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               registerForm.get('lastNames')?.hasError('required') &&
               registerForm.get('lastNames')?.touched
@@ -66,37 +85,54 @@
             El apellido del usuario es obligatorio.
           </div>
         </div>
-        <div class="flex flex-col pt-4">
-          <label for="experience" class="text-lg">Experiencia en Años</label>
+
+        <div class="relative pt-4">
           <input
             type="number"
             id="experience"
             formControlName="experience"
-            placeholder="0"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder=" "
+            required
+            class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-gray-300 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+            [ngClass]="{
+              'border-blue-600': registerForm.get('experience')?.valid
+            }"
           />
+          <label
+            for="experience"
+            class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+          >
+            Experiencia en Años
+          </label>
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               registerForm.get('experience')?.hasError('required') &&
               registerForm.get('experience')?.touched
             "
           >
-            La experiencia del usuario es obligatorio.
+            La experiencia del usuario es obligatoria.
           </div>
         </div>
 
-        <div class="flex flex-col pt-4">
-          <label for="email" class="text-lg">Email</label>
+        <div class="relative pt-4">
           <input
             type="email"
             id="email"
             formControlName="email"
-            placeholder="your@email.com"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder=" "
+            required
+            class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-gray-300 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+            [ngClass]="{ 'border-blue-600': registerForm.get('email')?.valid }"
           />
+          <label
+            for="email"
+            class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+          >
+            Email
+          </label>
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               registerForm.get('email')?.hasError('required') &&
               registerForm.get('email')?.touched
@@ -105,7 +141,7 @@
             El email del usuario es obligatorio.
           </div>
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               registerForm.get('email')?.hasError('email') &&
               registerForm.get('email')?.touched
@@ -115,23 +151,32 @@
           </div>
         </div>
 
-        <div class="flex flex-col pt-4">
-          <label for="password" class="text-lg">Contraseña</label>
+        <div class="relative pt-4">
           <input
             type="password"
             id="password"
             formControlName="password"
-            placeholder="Contraseña"
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder=" "
+            required
+            class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-gray-300 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+            [ngClass]="{
+              'border-blue-600': registerForm.get('password')?.valid
+            }"
           />
+          <label
+            for="password"
+            class="absolute left-4 text-gray-500 pointer-events-none transform translate-y-3 transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] peer-focus:-translate-y-3 peer-focus:scale-75 peer-focus:text-blue-600 peer-focus:bg-white peer-valid:-translate-y-3 peer-valid:scale-75 peer-valid:text-blue-600 peer-valid:bg-white px-1"
+          >
+            Contraseña
+          </label>
           <div
-            class="text-red-500"
+            class="text-red-500 text-sm mt-1"
             *ngIf="
               registerForm.get('password')?.hasError('required') &&
               registerForm.get('password')?.touched
             "
           >
-            La contraseña del usuario es obligatorio.
+            La contraseña del usuario es obligatoria.
           </div>
         </div>
 
@@ -156,10 +201,11 @@
     </div>
   </div>
 
-  <div class="w-1/2 shadow-2xl">
+  <div class="hidden md:block md:w-1/2">
     <img
-      class="w-full hidden md:block"
+      class="h-full w-full object-cover"
       src="../../../../assets/images/sign-up/register_.png"
+      alt="Registro"
     />
   </div>
 </div>

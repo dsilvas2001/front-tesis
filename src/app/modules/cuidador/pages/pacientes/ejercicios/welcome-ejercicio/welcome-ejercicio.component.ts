@@ -13,9 +13,10 @@ interface Ejercicio {
 }
 
 @Component({
-  selector: 'app-welcome-ejercicio',
-  templateUrl: './welcome-ejercicio.component.html',
-  styles: ``,
+    selector: 'app-welcome-ejercicio',
+    templateUrl: './welcome-ejercicio.component.html',
+    styles: ``,
+    standalone: false
 })
 export class WelcomeEjercicioComponent {
   ejercicios: Ejercicio[] = [];

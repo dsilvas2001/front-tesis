@@ -3,9 +3,10 @@ import { AfterViewInit, Component, HostListener } from '@angular/core';
 import Swiper from 'swiper';
 
 @Component({
-  selector: 'app-homepage',
-  templateUrl: './homepage.component.html',
-  styles: ``,
+    selector: 'app-homepage',
+    templateUrl: './homepage.component.html',
+    styles: ``,
+    standalone: false
 })
 export class HomepageComponent implements AfterViewInit {
   isMenuOpen = false;

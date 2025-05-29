@@ -10,9 +10,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-notifications',
-  templateUrl: './notifications.component.html',
-  styles: ``,
+    selector: 'app-notifications',
+    templateUrl: './notifications.component.html',
+    styles: ``,
+    standalone: false
 })
 export class NotificationsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() statusnotification: boolean = false;

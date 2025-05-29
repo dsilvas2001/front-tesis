@@ -6,6 +6,7 @@ import { ReferenciaSignosVService } from '../../../../core/cuidador/referencia-s
   selector: 'app-table-referencias-signos-v',
   templateUrl: './table-referencias-signos-v.component.html',
   styles: ``,
+  standalone: false,
 })
 export class TableReferenciasSignosVComponent implements OnInit {
   @Output() countPacienteEvent = new EventEmitter<void>();
@@ -18,6 +19,7 @@ export class TableReferenciasSignosVComponent implements OnInit {
   displayedPacientes: any[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 5;
+  searchTerm: string = '';
 
   //Notificacion
   statusnotification: boolean = false;
@@ -143,29 +145,57 @@ export class TableReferenciasSignosVComponent implements OnInit {
 
   // DATA TABLE
 
+  // mostrarUser() {
+  //   this.isLoading = true;
+  //   this.referenciaSignosVServices.getAllReferencia().subscribe(
+  //     (datas: any[]) => {
+  //       this.pacientes = datas;
+
+  //       this.updateDisplayedPacientes();
+  //       this.isLoading = false;
+  //     },
+  //     (error) => {
+  //       this.isLoading = false;
+
+  //       console.error('Error fetching users:', error);
+  //     }
+  //   );
+  // }
+
   mostrarUser() {
     this.isLoading = true;
     this.referenciaSignosVServices.getAllReferencia().subscribe(
       (datas: any[]) => {
-        this.pacientes = datas;
+        this.pacientes = datas.map((paciente) => {
+          const min = paciente.temperatura?.min || 0;
+          const max = paciente.temperatura?.max || 0;
 
-        this.updateDisplayedPacientes();
+          return {
+            ...paciente,
+            temperatura: {
+              min,
+              max,
+            },
+          };
+        });
+
+        this.filterPacientes();
         this.isLoading = false;
       },
       (error) => {
         this.isLoading = false;
-
         console.error('Error fetching users:', error);
       }
     );
   }
+
   mostrarNotReferencia() {
     this.isLoading = true;
     this.referenciaSignosVServices.getAllNotReferencia().subscribe(
       (datas: any[]) => {
         this.pacientes = datas;
 
-        this.updateDisplayedPacientes();
+        this.filterPacientes();
         this.isLoading = false;
       },
       (error) => {
@@ -178,18 +208,42 @@ export class TableReferenciasSignosVComponent implements OnInit {
 
   //Pagination
 
-  updateDisplayedPacientes() {
+  // Getter para pacientes filtrados (igual que en tu ejemplo)
+  get filteredPacientes(): any[] {
+    if (!this.searchTerm) {
+      return this.pacientes;
+    }
+    return this.pacientes.filter(
+      (paciente) =>
+        paciente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        paciente.apellido.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  // Método para filtrar y paginar (igual que en tu ejemplo)
+  filterPacientes(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.displayedPacientes = this.pacientes.slice(startIndex, endIndex);
+    this.displayedPacientes = this.filteredPacientes.slice(
+      startIndex,
+      endIndex
+    );
   }
 
-  onPageChange(page: number) {
+  // Método de cambio de página (igual que en tu ejemplo)
+  onPageChange(page: number): void {
     this.currentPage = page;
-    this.updateDisplayedPacientes();
+    this.filterPacientes();
   }
 
+  // Método para calcular total de páginas (igual que en tu ejemplo)
   get totalPages(): number {
-    return Math.ceil(this.pacientes.length / this.itemsPerPage);
+    return Math.ceil(this.filteredPacientes.length / this.itemsPerPage);
+  }
+
+  // Método de cambio de búsqueda (modificado para usar onSearchTermChange)
+  onSearchTermChange(): void {
+    this.currentPage = 1;
+    this.filterPacientes();
   }
 }

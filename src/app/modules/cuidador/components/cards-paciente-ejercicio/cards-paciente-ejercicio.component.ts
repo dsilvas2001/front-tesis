@@ -11,9 +11,10 @@ import { EjercicioPersonaService } from '../../../../core/cuidador/ejercicio-per
 import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/signos-vitales.service';
 
 @Component({
-  selector: 'app-cards-paciente-ejercicio',
-  templateUrl: './cards-paciente-ejercicio.component.html',
-  styles: ``,
+    selector: 'app-cards-paciente-ejercicio',
+    templateUrl: './cards-paciente-ejercicio.component.html',
+    styles: ``,
+    standalone: false
 })
 export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
   //Notificacion

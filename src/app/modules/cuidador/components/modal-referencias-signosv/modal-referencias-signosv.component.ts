@@ -14,9 +14,10 @@ import { Router } from '@angular/router';
 import { ReferenciaSignosVService } from '../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 
 @Component({
-  selector: 'app-modal-referencias-signosv',
-  templateUrl: './modal-referencias-signosv.component.html',
-  styles: ``,
+    selector: 'app-modal-referencias-signosv',
+    templateUrl: './modal-referencias-signosv.component.html',
+    styles: ``,
+    standalone: false
 })
 export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
   registerForm: FormGroup;

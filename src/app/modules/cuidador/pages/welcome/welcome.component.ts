@@ -3,9 +3,10 @@ import { AuthService } from '../../../../core/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-welcome',
-  templateUrl: './welcome.component.html',
-  styles: ``,
+    selector: 'app-welcome',
+    templateUrl: './welcome.component.html',
+    styles: ``,
+    standalone: false
 })
 export class WelcomeComponent implements OnInit {
   statusnotification: boolean = false;

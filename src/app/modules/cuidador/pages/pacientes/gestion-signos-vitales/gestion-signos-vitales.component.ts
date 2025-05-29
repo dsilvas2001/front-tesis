@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { SignosVitalesService } from '../../../../../core/cuidador/signos-vitales/signos-vitales.service';
 
 @Component({
-  selector: 'app-gestion-signos-vitales',
-  templateUrl: './gestion-signos-vitales.component.html',
-  styles: ``,
+    selector: 'app-gestion-signos-vitales',
+    templateUrl: './gestion-signos-vitales.component.html',
+    styles: ``,
+    standalone: false
 })
 export class GestionSignosVitalesComponent implements OnInit {
   cards = [

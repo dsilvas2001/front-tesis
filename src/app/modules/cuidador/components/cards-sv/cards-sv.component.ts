@@ -11,9 +11,10 @@ import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/s
 import { Output } from '@angular/core';
 
 @Component({
-  selector: 'app-cards-sv',
-  templateUrl: './cards-sv.component.html',
-  styles: ``,
+    selector: 'app-cards-sv',
+    templateUrl: './cards-sv.component.html',
+    styles: ``,
+    standalone: false
 })
 export class CardsSvComponent implements OnInit, OnChanges {
   //Notificacion

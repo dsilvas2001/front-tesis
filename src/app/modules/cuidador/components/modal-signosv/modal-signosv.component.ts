@@ -14,8 +14,9 @@ import { PacienteService } from '../../../../core/cuidador/paciente/paciente.ser
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'app-modal-signosv',
-  templateUrl: './modal-signosv.component.html',
+    selector: 'app-modal-signosv',
+    templateUrl: './modal-signosv.component.html',
+    standalone: false
 })
 export class ModalSignosvComponent implements OnInit, OnChanges {
   registerForm: FormGroup;

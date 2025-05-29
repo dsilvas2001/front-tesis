@@ -152,7 +152,10 @@
           >
             {{ paciente.nombre }} {{ paciente.apellido }}
           </h6>
-          <i [ngClass]="getStatusIcon(paciente.status)"></i>
+          <i
+            [ngClass]="getStatusIcon(paciente.status)"
+            matTooltip="{{ paciente.status }}"
+          ></i>
         </div>
         <p class="text-sm md:text-base font-normal text-gray-600">
           {{ paciente.descripcion }}

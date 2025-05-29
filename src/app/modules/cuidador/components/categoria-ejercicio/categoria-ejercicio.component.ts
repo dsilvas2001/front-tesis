@@ -12,6 +12,7 @@ import { Route, Router } from '@angular/router';
   selector: 'app-categoria-ejercicio',
   templateUrl: './categoria-ejercicio.component.html',
   styles: ``,
+  standalone: false,
 })
 export class CategoriaEjercicioComponent implements OnInit, OnChanges {
   @Input() _pacienteData: any;
@@ -21,6 +22,13 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
   descripcionServicio: string = ''; // Descripción retornada por el servicio
   //loading
   isLoading = false;
+  modoSeleccion: 'ia' | 'manual' = 'ia';
+  categoriasRecomendadasIA: any[] = [];
+  razonesRecomendacion: { [key: string]: string } = {
+    Memoria: 'Basado en su historial de ejercicios cognitivos recientes',
+    Atención: 'Para mejorar su capacidad de concentración actual',
+    Lenguaje: 'Según su progreso en comunicación verbal',
+  };
 
   // MODAL
   statusModal: boolean = false;
@@ -74,40 +82,40 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
     }
   }
 
-  obtenerCategoriaRecomendada(): void {
-    console.log('INGRESA AQUI?');
-    console.log('INGRESA AQUI?');
-    console.log(this._pacienteData[0].id_paciente);
+  // obtenerCategoriaRecomendada(): void {
+  //   console.log('INGRESA AQUI?');
+  //   console.log('INGRESA AQUI?');
+  //   console.log(this._pacienteData[0].id_paciente);
 
-    const paciente = this._pacienteData[0];
+  //   const paciente = this._pacienteData[0];
 
-    const userData = {
-      id_paciente: paciente.id_paciente,
-      presion_arterial: {
-        sistolica: paciente.presion_arterial.sistolica,
-        diastolica: paciente.presion_arterial.diastolica,
-      },
-      frecuencia_cardiaca: paciente.frecuencia_cardiaca,
-      frecuencia_respiratoria: paciente.frecuencia_respiratoria,
-      temperatura: paciente.temperatura,
-    };
-    this.isLoading = true;
+  //   const userData = {
+  //     id_paciente: paciente.id_paciente,
+  //     presion_arterial: {
+  //       sistolica: paciente.presion_arterial.sistolica,
+  //       diastolica: paciente.presion_arterial.diastolica,
+  //     },
+  //     frecuencia_cardiaca: paciente.frecuencia_cardiaca,
+  //     frecuencia_respiratoria: paciente.frecuencia_respiratoria,
+  //     temperatura: paciente.temperatura,
+  //   };
+  //   this.isLoading = true;
 
-    console.log('Datos del usuario:', userData);
+  //   console.log('Datos del usuario:', userData);
 
-    this.ejercicioService.getSelectCategoria(userData).subscribe({
-      next: (response) => {
-        console.log('Respuesta del servicio:', response);
-        this.descripcionServicio = response.descripcion; // Guardar la descripción
-        this.filtrarCategorias(response.categoria); // Filtrar categorías
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error al obtener la categoría:', error);
-        this.isLoading = false;
-      },
-    });
-  }
+  //   this.ejercicioService.getSelectCategoria(userData).subscribe({
+  //     next: (response) => {
+  //       console.log('Respuesta del servicio:', response);
+  //       this.descripcionServicio = response.descripcion; // Guardar la descripción
+  //       this.filtrarCategorias(response.categoria); // Filtrar categorías
+  //       this.isLoading = false;
+  //     },
+  //     error: (error) => {
+  //       console.error('Error al obtener la categoría:', error);
+  //       this.isLoading = false;
+  //     },
+  //   });
+  // }
 
   filtrarCategorias(categoriasServicio: string[]): void {
     this.categoriasFiltradas = this.categorias.filter((categoria) =>
@@ -142,5 +150,47 @@ export class CategoriaEjercicioComponent implements OnInit, OnChanges {
 
   toggleInfo(): void {
     this.showInfo = !this.showInfo;
+  }
+
+  obtenerCategoriaRecomendada(): void {
+    const paciente = this._pacienteData[0];
+    const userData = {
+      id_paciente: paciente.id_paciente,
+      presion_arterial: {
+        sistolica: paciente.presion_arterial.sistolica,
+        diastolica: paciente.presion_arterial.diastolica,
+      },
+      frecuencia_cardiaca: paciente.frecuencia_cardiaca,
+      frecuencia_respiratoria: paciente.frecuencia_respiratoria,
+      temperatura: paciente.temperatura,
+    };
+    this.isLoading = true;
+
+    this.ejercicioService.getSelectCategoria(userData).subscribe({
+      next: (response) => {
+        this.descripcionServicio = response.descripcion;
+
+        // Procesar recomendaciones IA
+        this.categoriasRecomendadasIA = this.categorias
+          .filter((categoria) => response.categoria.includes(categoria.nombre))
+          .map((categoria) => ({
+            ...categoria,
+            razon:
+              this.razonesRecomendacion[categoria.nombre] ||
+              'Recomendado por nuestro sistema',
+          }));
+
+        this.filtrarCategorias(response.categoria);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error al obtener la categoría:', error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  cambiarModo(modo: 'ia' | 'manual'): void {
+    this.modoSeleccion = modo;
   }
 }

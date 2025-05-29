@@ -30,22 +30,40 @@
         <!-- Columna Izquierda -->
         <div class="overflow-y-auto max-h-[80vh]">
           <!-- Título -->
-          <div class="mb-4">
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >Informacion del paciente</label
-            >
+
+          <div class="col-span-2 mb-4 mt-4 relative">
             <input
               type="text"
               name="name"
-              readonly
               formControlName="name"
               id="name"
-              class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-              placeholder="Nombre del paciente"
-              required=""
+              readonly
+              class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-warning-600 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+              placeholder=" "
+              required
+              [ngClass]="{ 'border-blue-600': registerForm.get('name')?.valid }"
             />
+            <label
+              for="name"
+              class="absolute left-4 pointer-events-none transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] px-1"
+              [ngClass]="{
+                'transform -translate-y-3 scale-75 text-blue-600 bg-white':
+                  registerForm.get('name')?.value,
+                'translate-y-3 text-gray-500': !registerForm.get('name')?.value
+              }"
+            >
+              Nombre del paciente
+            </label>
+
+            <div
+              class="text-red-500"
+              *ngIf="
+                registerForm.get('name')?.hasError('required') &&
+                registerForm.get('name')?.touched
+              "
+            >
+              El nombre del paciente es obligatorio.
+            </div>
           </div>
 
           <div class="mb-4">
@@ -151,16 +169,20 @@
             <div class="flex items-center space-x-2">
               <button
                 type="submit"
+                *ngIf="ocultarClose"
                 [disabled]="isProcessing"
-                class="w-full inline-flex items-center justify-center bg-primary-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:hover:bg-primary-500 dark:focus:ring-warning-600 cursor-pointer transition-colors duration-200"
+                class="w-full inline-flex items-center justify-center rounded-[20px] font-medium text-lg border-double border-3 border-amber-200 text-neutral-800 bg-gradient-to-r from-amber-100 to-amber-200 transition-all duration-300 ease-in-out hover:border-amber-300 hover:rounded-tr-[5%] hover:rounded-bl-[5%] hover:shadow-md hover:shadow-amber-300/30 hover:text-xl group px-4 py-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <!-- Ícono de cerebro (solo se muestra si NO está procesando) -->
-                <i class="fa-solid fa-brain text-2xl" *ngIf="!isProcessing"></i>
+                <!-- Ícono de cerebro -->
+                <i
+                  *ngIf="!isProcessing"
+                  class="fa-solid fa-brain text-xl group-hover:scale-105 transition-transform text-amber-400"
+                ></i>
 
-                <!-- Spinner (solo se muestra si está procesando) -->
+                <!-- Spinner -->
                 <svg
                   *ngIf="isProcessing"
-                  class="mr-2 w-5 h-5 animate-spin"
+                  class="mr-2 w-4 h-4 animate-spin text-amber-300"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -171,7 +193,7 @@
                     cy="12"
                     r="10"
                     stroke="currentColor"
-                    stroke-width="4"
+                    stroke-width="3"
                   ></circle>
                   <path
                     class="opacity-75"
@@ -180,8 +202,8 @@
                   ></path>
                 </svg>
 
-                <!-- Texto: cambia según el estado -->
-                <span class="pl-3">
+                <!-- Texto -->
+                <span class="pl-2">
                   {{
                     isProcessing ? "Generando..." : "Generar Análisis con la IA"
                   }}

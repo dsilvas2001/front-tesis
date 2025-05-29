@@ -6,6 +6,7 @@ import { LoadingService } from '../../../../core/loading/loading.service';
   selector: 'app-table',
   templateUrl: './table.component.html',
   styles: ``,
+  standalone: false,
 })
 export class TableComponent implements OnInit {
   @Output() countPacienteEvent = new EventEmitter<void>();
@@ -19,6 +20,7 @@ export class TableComponent implements OnInit {
   displayedPacientes: any[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 5;
+  searchTerm: string = '';
 
   //Notificacion
   statusnotification: boolean = false;
@@ -111,7 +113,7 @@ export class TableComponent implements OnInit {
       (datas: any[]) => {
         this.pacientes = datas;
         this.isLoading = false;
-        this.updateDisplayedPacientes();
+        this.filterPacientes();
       },
       (error) => {
         this.isLoading = false;
@@ -122,19 +124,51 @@ export class TableComponent implements OnInit {
   }
 
   // PAGINATION
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.filterPacientes(); // Cambia esto de updateDisplayedPacientes a filterPacientes
+  }
+  get totalPages(): number {
+    const totalItems = this.searchTerm
+      ? this.pacientes.filter(
+          (p) =>
+            p.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            p.apellido.toLowerCase().includes(this.searchTerm.toLowerCase())
+        ).length
+      : this.pacientes.length;
+    return Math.ceil(totalItems / this.itemsPerPage);
+  }
 
-  updateDisplayedPacientes() {
+  // Método para obtener el total de items filtrados
+  get filteredPacientes(): any[] {
+    if (!this.searchTerm) {
+      return this.pacientes;
+    }
+    return this.pacientes.filter(
+      (paciente) =>
+        paciente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        paciente.apellido.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  // Método para filtrar y paginar
+  filterPacientes(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-    this.displayedPacientes = this.pacientes.slice(startIndex, endIndex);
+    this.displayedPacientes = this.filteredPacientes.slice(
+      startIndex,
+      endIndex
+    );
   }
 
-  onPageChange(page: number) {
-    this.currentPage = page;
-    this.updateDisplayedPacientes();
+  // Método para manejar cambios en el input de búsqueda
+  onSearchChange(searchValue: string): void {
+    this.searchTerm = searchValue;
+    this.currentPage = 1; // Resetear a la primera página al buscar
+    this.filterPacientes();
   }
-
-  get totalPages(): number {
-    return Math.ceil(this.pacientes.length / this.itemsPerPage);
+  onSearchTermChange(): void {
+    this.currentPage = 1;
+    this.filterPacientes();
   }
 }

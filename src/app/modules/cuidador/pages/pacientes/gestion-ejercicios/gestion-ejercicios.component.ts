@@ -3,9 +3,10 @@ import { EjercicioPersonaService } from '../../../../../core/cuidador/ejercicio-
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-gestion-ejercicios',
-  templateUrl: './gestion-ejercicios.component.html',
-  styles: ``,
+    selector: 'app-gestion-ejercicios',
+    templateUrl: './gestion-ejercicios.component.html',
+    styles: ``,
+    standalone: false
 })
 export class GestionEjerciciosComponent implements OnInit {
   pacienteGestion: any;

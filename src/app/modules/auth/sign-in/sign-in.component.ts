@@ -6,9 +6,10 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { LoadingService } from '../../../core/loading/loading.service';
 
 @Component({
-  selector: 'app-sign-in',
-  templateUrl: './sign-in.component.html',
-  styles: ``,
+    selector: 'app-sign-in',
+    templateUrl: './sign-in.component.html',
+    styles: ``,
+    standalone: false
 })
 export class SignInComponent implements OnInit {
   statusnotification: boolean = false;

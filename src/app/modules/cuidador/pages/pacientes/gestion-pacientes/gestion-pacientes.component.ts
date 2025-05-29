@@ -3,9 +3,10 @@ import { PacienteService } from '../../../../../core/cuidador/paciente/paciente.
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-gestion-pacientes',
-  templateUrl: './gestion-pacientes.component.html',
-  styles: ``,
+    selector: 'app-gestion-pacientes',
+    templateUrl: './gestion-pacientes.component.html',
+    styles: ``,
+    standalone: false
 })
 export class GestionPacientesComponent implements OnInit {
   cards = [

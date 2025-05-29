@@ -13,6 +13,8 @@
   <!-- Campo de búsqueda -->
   <div class="relative w-full lg:w-auto flex-grow max-w-sm min-w-[200px] mb-4">
     <input
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="onSearchTermChange()"
       class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
       placeholder="Buscar por el nombre del paciente..."
     />
@@ -110,6 +112,7 @@
               'border-red-600 text-red-500 group bg-red-100':
                 paciente.signos_vitales === 'Pendiente'
             }"
+            matTooltip="Faltan los signos vitales diarios del paciente"
           >
             <p class="flex flex-row items-center mr-auto gap-x-2">
               <svg
@@ -164,6 +167,8 @@
               'border-red-600 text-red-500 group bg-red-100':
                 paciente.referenciaSV === 'Pendiente'
             }"
+            matTooltip="Faltan las referencias del paciente"
+            matTooltipClass="tooltip-custom"
           >
             <p class="flex flex-row items-center mr-auto gap-x-2">
               <svg
@@ -213,10 +218,10 @@
 
         <td class="p-4 py-5 flex gap-3">
           <!-- Botón Editar Paciente -->
-          <!-- Botón Editar con Efecto Especial -->
           <button
             class="w-10 h-10 rounded-full bg-secondary-100 border-none font-semibold flex items-center justify-center shadow-lg cursor-pointer transition-all duration-300 overflow-hidden relative text-warning-600 hover:text-white hover:bg-primary-500 hover:rounded-xl group"
             (click)="abrirModal(paciente, 'edit')"
+            matTooltip="Editar paciente"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -238,6 +243,7 @@
           <button
             class="w-10 h-10 rounded-full bg-secondary-100 border-none font-semibold flex items-center justify-center shadow-lg cursor-pointer transition-all duration-300 overflow-hidden relative text-warning-600 hover:text-white hover:bg-red-500 hover:rounded-xl group"
             (click)="showDeleteNotification(paciente)"
+            matTooltip="Eliminar paciente"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -279,7 +285,7 @@
 <app-pagination
   [currentPage]="currentPage"
   [itemsPerPage]="itemsPerPage"
-  [totalItems]="pacientes.length"
+  [totalItems]="filteredPacientes.length"
   (pageChanged)="onPageChange($event)"
 ></app-pagination>
 

@@ -4,7 +4,7 @@
   tabindex="-1"
   *ngIf="statusModal"
   aria-hidden="true"
-  class="overflow-y-auto overflow-x-hidden flex z-50 justify-center fixed top-0 right-1 w-full max-h-full"
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
 >
   <div class="relative p-4 w-full max-w-3xl h-full md:h-auto">
     <!-- Modal content -->
@@ -34,22 +34,30 @@
         [formGroup]="registerForm"
       >
         <div class="grid gap-4 mb-4 sm:grid-cols-2">
-          <div>
-            <label
-              for="name"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >Nombre</label
-            >
+          <div class="relative">
             <input
               type="text"
               name="name"
-              readonly
               formControlName="name"
               id="name"
-              class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-              placeholder="Nombre del paciente"
-              required=""
+              readonly
+              class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-warning-600 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+              placeholder=" "
+              required
+              [ngClass]="{ 'border-blue-600': registerForm.get('name')?.valid }"
             />
+            <label
+              for="name"
+              class="absolute left-4 pointer-events-none transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] px-1"
+              [ngClass]="{
+                'transform -translate-y-3 scale-75 text-blue-600 bg-white':
+                  registerForm.get('name')?.value,
+                'translate-y-3 text-gray-500': !registerForm.get('name')?.value
+              }"
+            >
+              Nombre del paciente
+            </label>
+
             <div
               class="text-red-500"
               *ngIf="
@@ -60,22 +68,34 @@
               El nombre del paciente es obligatorio.
             </div>
           </div>
-          <div>
-            <label
-              for="lastname"
-              class="block mb-2 text-sm font-medium text-gray-900"
-              >Apellido</label
-            >
+          <div class="relative">
             <input
               type="text"
+              readonly
               name="lastname"
               formControlName="lastname"
-              readonly
               id="lastname"
-              class="bg-white w-full pr-11 h-10 pl-3 py-2 placeholder:text-slate-400 text-slate-700 text-sm border border-warning-600 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-              placeholder="Apellido del paciente"
-              required=""
+              class="bg-transparent w-full h-12 px-4 text-gray-900 text-sm border border-warning-600 rounded-2xl transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] focus:outline-none focus:border-blue-600 peer"
+              placeholder=" "
+              required
+              [ngClass]="{
+                'border-blue-600': registerForm.get('lastname')?.valid
+              }"
             />
+
+            <label
+              for="lastname"
+              class="absolute left-4 pointer-events-none transition-all duration-150 ease-[cubic-bezier(0.4,0,0.2,1)] px-1"
+              [ngClass]="{
+                'transform -translate-y-3 scale-75 text-blue-600 bg-white':
+                  registerForm.get('lastname')?.value,
+                'translate-y-3 text-gray-500':
+                  !registerForm.get('lastname')?.value
+              }"
+            >
+              Apellido del paciente
+            </label>
+
             <div
               class="text-red-500"
               *ngIf="

@@ -13,8 +13,9 @@ import { Router } from '@angular/router';
 import { PacienteService } from '../../../../core/cuidador/paciente/paciente.service';
 
 @Component({
-  selector: 'app-modal-paciente',
-  templateUrl: './modal-paciente.component.html',
+    selector: 'app-modal-paciente',
+    templateUrl: './modal-paciente.component.html',
+    standalone: false
 })
 export class ModalPacienteComponent implements OnInit, OnChanges {
   registerForm: FormGroup;
