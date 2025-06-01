@@ -20,54 +20,7 @@
         <div class="grid md:grid-cols-3 gap-8 mb-12">
           <!-- Progress Circle -->
           <!-- Progress Circle - Versión corregida -->
-          <div class="flex flex-col items-center">
-            <div class="relative w-48 h-48">
-              <svg class="w-full h-full" viewBox="0 0 100 100">
-                <!-- Círculo de fondo -->
-                <circle
-                  class="text-gray-200"
-                  stroke-width="8"
-                  stroke="currentColor"
-                  fill="transparent"
-                  r="45"
-                  cx="50"
-                  cy="50"
-                />
-                <!-- Círculo de progreso -->
-                <circle
-                  [ngClass]="{
-                    'text-green-500': porcentajeExito >= 70,
-                    'text-yellow-500':
-                      porcentajeExito >= 30 && porcentajeExito < 70,
-                    'text-red-500': porcentajeExito < 30
-                  }"
-                  stroke-width="8"
-                  stroke-linecap="round"
-                  stroke="currentColor"
-                  fill="transparent"
-                  r="45"
-                  cx="50"
-                  cy="50"
-                  [attr.stroke-dasharray]="283"
-                  [attr.stroke-dashoffset]="283 - (283 * porcentajeExito) / 100"
-                />
-              </svg>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <span
-                  class="text-3xl font-bold"
-                  [ngClass]="{
-                    'text-green-600': porcentajeExito >= 70,
-                    'text-yellow-600':
-                      porcentajeExito >= 30 && porcentajeExito < 70,
-                    'text-red-600': porcentajeExito < 30
-                  }"
-                >
-                  {{ porcentajeExito }}%
-                </span>
-              </div>
-            </div>
-            <p class="text-lg font-semibold text-gray-600 mt-4">Precisión</p>
-          </div>
+
           <!-- Stats Cards -->
           <div class="space-y-6">
             <div class="bg-blue-50 p-6 rounded-2xl">

@@ -13,13 +13,14 @@ interface Ejercicio {
 }
 
 @Component({
-    selector: 'app-welcome-ejercicio',
-    templateUrl: './welcome-ejercicio.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-welcome-ejercicio',
+  templateUrl: './welcome-ejercicio.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class WelcomeEjercicioComponent {
   ejercicios: Ejercicio[] = [];
+  _pacienteGenerate: any;
 
   mensaje: string = '¡Bienvenido a los Ejercicios Cognitivos!';
   descripcion: string =
@@ -107,13 +108,14 @@ export class WelcomeEjercicioComponent {
 
   private navegarDirectamente(): void {
     this.router.navigate(['/Cuidador/ejercicios/ejercicio-multiple'], {
-      state: { ejercicios: this.ejercicios },
+      state: { ejercicios: this.ejercicios, paciente: this._pacienteGenerate },
     });
   }
 
   ngOnInit(): void {
     if (history.state.ejercicios) {
       this.ejercicios = history.state.ejercicios;
+      this._pacienteGenerate = history.state.paciente;
       this.precargarImagenes();
     } else {
       this.router.navigate(['/Cuidador/ejercicios']);

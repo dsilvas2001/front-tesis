@@ -14,10 +14,10 @@ import { Router } from '@angular/router';
 import { ReferenciaSignosVService } from '../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 
 @Component({
-    selector: 'app-modal-referencias-signosv',
-    templateUrl: './modal-referencias-signosv.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-modal-referencias-signosv',
+  templateUrl: './modal-referencias-signosv.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
   registerForm: FormGroup;
@@ -132,8 +132,8 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
       sistolica: { min: 90, max: 130 },
       diastolica: { min: 60, max: 89 },
     },
-    frecuenciaCardiaca: { min: 70, max: 90 },
-    frecuenciaRespiratoria: { min: 11, max: 25 },
+    frecuenciaCardiaca: { min: 50, max: 100 }, // AJUSTADO
+    frecuenciaRespiratoria: { min: 12, max: 20 }, // AJUSTADO según rango clínico
     temperatura: { min: 36, max: 37.5 },
   };
 

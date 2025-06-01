@@ -3,10 +3,10 @@ import { EjercicioPersonaService } from '../../../../../core/cuidador/ejercicio-
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-gestion-ejercicios',
-    templateUrl: './gestion-ejercicios.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-gestion-ejercicios',
+  templateUrl: './gestion-ejercicios.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class GestionEjerciciosComponent implements OnInit {
   pacienteGestion: any;
@@ -17,7 +17,7 @@ export class GestionEjerciciosComponent implements OnInit {
       icon: 'fa-solid fa-heart-pulse',
     },
     {
-      title: 'Ejercicios Asignados (Hoy)',
+      title: 'Ejercicios Completados (Hoy)',
       count: 0,
       icon: 'fa-solid fa-chalkboard',
     },
@@ -41,7 +41,7 @@ export class GestionEjerciciosComponent implements OnInit {
       if (data && data.count_ejercicioP) {
         const countData = data.count_ejercicioP;
         this.cards[0].count = countData.pacientesEstables;
-        this.cards[1].count = countData.ejerciciosAsignados;
+        this.cards[1].count = countData.pacientesCompletados;
         this.cards[2].count = countData.pacientesPendientes;
       } else {
         console.error('No se encontraron datos de referentes.');
@@ -54,7 +54,7 @@ export class GestionEjerciciosComponent implements OnInit {
       (datas: any) => {
         console.log(datas);
         this.cards[0].count = datas.pacientesEstables;
-        this.cards[1].count = datas.ejerciciosAsignados;
+        this.cards[1].count = datas.pacientesCompletados;
         this.cards[2].count = datas.pacientesPendientes;
       },
       (error) => {

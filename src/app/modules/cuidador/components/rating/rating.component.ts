@@ -27,6 +27,7 @@ export class RatingComponent implements ControlValueAccessor {
   @Output() valueChange = new EventEmitter<number>();
   stars: number[] = [];
   hoverIndex: number | null = null; // Nueva variable para el efecto hover
+  @Input() disabled: boolean = false;
 
   // Funciones requeridas por ControlValueAccessor
   onChange: any = () => {};

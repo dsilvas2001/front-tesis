@@ -10,6 +10,7 @@ export class EjercicioGeneradoService {
   constructor(private http: HttpClient) {}
   private apiUrl = `${environment.domain}`;
   private API_PATH = `/GenerateEjercicio/`;
+  private API_PATH_RESULTADO = `/ejercicioResultado/`;
 
   getEjercicioGenerado(
     categoria: string,
@@ -39,6 +40,17 @@ export class EjercicioGeneradoService {
     return this.http.post<any>(
       `${this.apiUrl}${this.API_PATH}recomendaciones`,
       body
+    );
+  }
+  getEjercicioResultado(idPaciente: string): Observable<any[]> {
+    return this.http.get<any>(
+      `${this.apiUrl}${this.API_PATH_RESULTADO}${idPaciente}`
+    );
+  }
+  registerEjercicio(ejercicio: any): Observable<any[]> {
+    return this.http.post<any>(
+      `${this.apiUrl}${this.API_PATH_RESULTADO}register/`,
+      ejercicio
     );
   }
 }

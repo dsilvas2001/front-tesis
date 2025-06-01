@@ -92,63 +92,78 @@
       class="flex gap-5 flex-col max-h-[500px] overflow-y-auto"
       *ngIf="!isLoading; else loadingSpinner"
     >
-      <button
-        *ngFor="let paciente of pacientes"
-        class="p-6 rounded-xl bg-white relative group transition-shadow duration-300 overflow-hidden flex-shrink-0"
-        (click)="onSelectPaciente(paciente.id_paciente)"
-      >
-        <!-- Información del paciente -->
-        <div class="z-10">
-          <!-- Añadimos z-10 aquí -->
-          <label class="hidden">{{ paciente.id_paciente }}</label>
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-2.5">
-              <span
-                class="w-2.5 h-2.5 rounded-full"
-                [ngClass]="getStatusColor(paciente.estado)"
-              ></span>
-              <p class="text-sm md:text-base font-medium text-gray-900">
-                {{ paciente.date.fecha }} {{ paciente.date.hora }}
-              </p>
+      <div *ngFor="let paciente of pacientes" class="relative">
+        <!-- Botón principal como div contenedor -->
+        <div
+          matTooltip="Ejercicio {{ paciente.estado }}"
+          class="p-6 rounded-xl bg-white relative group transition-shadow duration-300 overflow-hidden flex-shrink-0 cursor-pointer"
+          (click)="handleCardClick($event, paciente.id_paciente)"
+        >
+          <!-- Contenido de la tarjeta -->
+          <div class="z-10">
+            <label class="hidden">{{ paciente.id_paciente }}</label>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="w-2.5 h-2.5 rounded-full"
+                  [ngClass]="getStatusColor(paciente.estado)"
+                ></span>
+                <p class="text-sm md:text-base font-medium text-gray-900">
+                  {{ paciente.date.fecha }} {{ paciente.date.hora }}
+                </p>
+              </div>
             </div>
+            <div class="flex items-center gap-3">
+              <h6
+                class="text-lg md:text-xl leading-8 font-semibold text-black mb-1"
+              >
+                {{ paciente.nombre }} {{ paciente.apellido }}
+              </h6>
+              <i [ngClass]="getStatusIcon(paciente.estado)"></i>
+            </div>
+            <p class="text-sm text-left md:text-base font-normal text-gray-600">
+              {{ paciente.descripcion }}
+            </p>
           </div>
-          <div class="flex items-center gap-3">
-            <h6
-              class="text-lg md:text-xl leading-8 font-semibold text-black mb-1"
-            >
-              {{ paciente.nombre }} {{ paciente.apellido }}
-            </h6>
-            <i [ngClass]="getStatusIcon(paciente.estado)"></i>
+
+          <!-- Efectos de borde -->
+          <div class="absolute inset-0">
+            <!-- Borde superior -->
+            <div
+              class="absolute w-full h-0.5 bg-yellow-500 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"
+              style="top: 0; left: 0"
+            ></div>
+            <!-- Borde derecho -->
+            <div
+              class="absolute w-0.5 h-full bg-yellow-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-500 delay-100"
+              style="top: 0; right: 0"
+            ></div>
+            <!-- Borde inferior -->
+            <div
+              class="absolute w-full h-0.5 bg-yellow-500 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500 delay-200"
+              style="bottom: 0; right: 0"
+            ></div>
+            <!-- Borde izquierdo -->
+            <div
+              class="absolute w-0.5 h-full bg-yellow-500 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 delay-300"
+              style="bottom: 0; left: 0"
+            ></div>
           </div>
-          <p class="text-sm text-left md:text-base font-normal text-gray-600">
-            {{ paciente.descripcion }}
-          </p>
         </div>
 
-        <!-- Efecto de borde que "sigue un caminito" -->
-        <div class="absolute inset-0">
-          <!-- Borde superior -->
-          <div
-            class="absolute w-full h-0.5 bg-yellow-500 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500"
-            style="top: 0; left: 0"
-          ></div>
-          <!-- Borde derecho -->
-          <div
-            class="absolute w-0.5 h-full bg-yellow-500 transform -translate-y-full group-hover:translate-y-0 transition-transform duration-500 delay-100"
-            style="top: 0; right: 0"
-          ></div>
-          <!-- Borde inferior -->
-          <div
-            class="absolute w-full h-0.5 bg-yellow-500 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500 delay-200"
-            style="bottom: 0; right: 0"
-          ></div>
-          <!-- Borde izquierdo -->
-          <div
-            class="absolute w-0.5 h-full bg-yellow-500 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 delay-300"
-            style="bottom: 0; left: 0"
-          ></div>
+        <!-- Botón "Ver ejercicios" POSICIONADO ABSOLUTAMENTE -->
+        <div
+          *ngIf="paciente.estado === 'completo'"
+          class="absolute bottom-4 right-4 z-20"
+        >
+          <button
+            (click)="openEjerciciosModal(paciente.id_paciente)"
+            class="text-sm bg-blue-100 text-blue-800 hover:bg-blue-200 px-3 py-1 rounded-md flex items-center shadow-md"
+          >
+            <i class="fas fa-eye mr-2"></i> Ver ejercicios
+          </button>
         </div>
-      </button>
+      </div>
       <div
         *ngIf="pacientes.length === 0"
         class="flex items-center justify-center w-full h-96"
@@ -190,3 +205,10 @@
   [message]="notificationMessage"
   [type]="notificationType"
 ></app-notifications>
+
+<app-ejercicio-realizado-modal
+  *ngIf="showEjerciciosModal"
+  [idPaciente]="selectedPacienteId"
+  (close)="closeEjerciciosModal()"
+>
+</app-ejercicio-realizado-modal>

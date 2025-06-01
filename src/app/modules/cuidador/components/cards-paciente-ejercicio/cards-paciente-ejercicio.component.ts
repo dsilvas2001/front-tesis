@@ -11,10 +11,10 @@ import { EjercicioPersonaService } from '../../../../core/cuidador/ejercicio-per
 import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/signos-vitales.service';
 
 @Component({
-    selector: 'app-cards-paciente-ejercicio',
-    templateUrl: './cards-paciente-ejercicio.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-cards-paciente-ejercicio',
+  templateUrl: './cards-paciente-ejercicio.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
   //Notificacion
@@ -76,21 +76,6 @@ export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
     {
       id: 'allSV',
       label: 'Mostrar Todo',
-      checked: false,
-    },
-    {
-      id: 'incompleto',
-      label: 'Ejercicios Incompletos',
-      checked: false,
-    },
-    {
-      id: 'completo',
-      label: 'Ejercicios Completos',
-      checked: false,
-    },
-    {
-      id: 'pendiente',
-      label: 'Ejercicios Pendientes',
       checked: false,
     },
   ];
@@ -313,5 +298,32 @@ export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
 
   get totalPages(): number {
     return Math.ceil(this.pacientes.length / this.itemsPerPage);
+  }
+
+  // VISUALIZAR EJERCICIOS REALIZADOS
+  // Agrega estas propiedades
+  showEjerciciosModal: boolean = false;
+  selectedPacienteId: string = '';
+
+  // Agrega estos métodos
+  openEjerciciosModal(idPaciente: string): void {
+    this.selectedPacienteId = idPaciente;
+    this.showEjerciciosModal = true;
+    console.log('this.selectedPacienteId', this.selectedPacienteId);
+  }
+
+  closeEjerciciosModal(): void {
+    this.showEjerciciosModal = false;
+    this.selectedPacienteId = '';
+  }
+
+  handleCardClick(event: MouseEvent, idPaciente: string) {
+    // Verificar si el click fue en el botón "Ver ejercicios"
+    const target = event.target as HTMLElement;
+    const isVerEjerciciosButton = target.closest('.bg-blue-100');
+
+    if (!isVerEjerciciosButton) {
+      this.onSelectPaciente(idPaciente);
+    }
   }
 }

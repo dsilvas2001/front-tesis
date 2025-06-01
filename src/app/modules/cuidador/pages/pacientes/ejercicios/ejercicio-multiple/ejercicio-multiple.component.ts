@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { EjercicioGeneradoService } from '../../../../../../core/cuidador/ejercicio-generado/ejercicio-generado.service';
 
 interface Ejercicio {
   titulo: string;
@@ -24,6 +25,7 @@ interface Ejercicio {
 })
 export class EjercicioMultipleComponent {
   ejercicios: Ejercicio[] = [];
+  _pacienteGenerate: any;
   ejercicioActualIndex: number = 0;
   respuestaSeleccionada: string | null = null;
   respuestaCorrectaSeleccionada = false;
@@ -39,7 +41,10 @@ export class EjercicioMultipleComponent {
   private utterance: SpeechSynthesisUtterance | null = null;
   isSpeaking = false;
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private ejercicioGeneradoService: EjercicioGeneradoService
+  ) {
     if (!('speechSynthesis' in window)) {
       console.warn('Text-to-Speech no está soportado en este navegador');
     }
@@ -48,6 +53,7 @@ export class EjercicioMultipleComponent {
   ngOnInit(): void {
     if (history.state.ejercicios) {
       this.ejercicios = history.state.ejercicios;
+      this._pacienteGenerate = history.state.paciente;
       this.inicializarImagenes();
       this.iniciarCronometro();
       this.preloadImages(0);
@@ -251,8 +257,61 @@ export class EjercicioMultipleComponent {
       // Lee automáticamente el nuevo ejercicio
       setTimeout(() => this.leerEjercicioActual(), 500);
     } else {
-      this.navegarResultados();
+      console.log('_pacienteGenerate');
+      console.log(this._pacienteGenerate);
+
+      const tiempoTotalSegundos = Math.round(this.tiempoTranscurrido / 1000);
+
+      const resultadoFinal = {
+        paciente: {
+          // <-- Solo agregué este objeto con los datos del paciente
+          id_paciente: this._pacienteGenerate.id_paciente,
+          nombre: this._pacienteGenerate.nombre,
+          apellido: this._pacienteGenerate.apellido,
+          edad: this._pacienteGenerate.edad,
+        },
+        ejercicios: this.ejercicios.map((ejercicio, index) => ({
+          ...ejercicio, // Incluye todos los campos originales del ejercicio
+          resultado: {
+            intentos: (this.erroresPorPregunta[index] || 0) + 1,
+            errores: this.erroresPorPregunta[index] || 0,
+          },
+        })),
+        resumen: {
+          total_ejercicios: this.ejercicios.length,
+          ejercicios_correctos: this.erroresPorPregunta.filter((e) => e === 0)
+            .length,
+          total_errores: this.totalErrores,
+          tiempo_total_segundos: tiempoTotalSegundos,
+          tiempo_total_minutos: +(tiempoTotalSegundos / 60).toFixed(2),
+          tiempo_total_formateado: this.formatearTiempo(tiempoTotalSegundos),
+        },
+      };
+
+      console.log(
+        'Resultado completo:',
+        JSON.stringify(resultadoFinal, null, 2)
+      );
+
+      this.ejercicioGeneradoService
+        .registerEjercicio(resultadoFinal)
+        .subscribe({
+          next: (response) => {
+            console.log('Resultados enviados exitosamente:', response);
+            this.navegarResultados();
+          },
+          error: (error) => {
+            console.error('Error al enviar resultados:', error);
+
+            this.navegarResultados();
+          },
+        });
     }
+  }
+  private formatearTiempo(segundos: number): string {
+    const mins = Math.floor(segundos / 60);
+    const secs = segundos % 60;
+    return mins > 0 ? `${mins} min ${secs} seg` : `${secs} segundos`;
   }
 
   private navegarResultados(): void {

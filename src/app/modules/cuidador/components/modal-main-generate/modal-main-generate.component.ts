@@ -31,6 +31,9 @@ export class ModalMainGenerateComponent implements OnInit, OnChanges {
 
   mostrarPrevisualizacion: boolean = false;
 
+  // VALIDAR
+  ejerciciosValidados: boolean = false;
+
   categorias = [
     {
       src: '../../../../../assets/images/ejercicio/Generar_ejercicio_memoria.webp',
@@ -61,6 +64,27 @@ export class ModalMainGenerateComponent implements OnInit, OnChanges {
     private router: Router,
     private ejercicioGeneradoService: EjercicioGeneradoService
   ) {}
+
+  // onEjerciciosValidados(validados: boolean): void {
+  //   this.ejerciciosValidados = validados;
+  // }
+
+  onEjerciciosValidados(validados: boolean): void {
+    this.ejerciciosValidados = validados;
+
+    // Opcional: Actualizar estado en el padre si es necesario
+    if (validados) {
+      this.ejerciciosGenerados = this.ejerciciosGenerados.map((e) => ({
+        ...e,
+        estado: 'aprobado',
+      }));
+    }
+  }
+
+  // Opcional: Método para forzar validación
+  validarEjercicios(): void {
+    // Si necesitas llamar manualmente la validación
+  }
 
   categoriaSeleccionada() {
     return this.categorias.find(
@@ -129,7 +153,17 @@ export class ModalMainGenerateComponent implements OnInit, OnChanges {
 
   iniciarEjercicio(): void {
     this.router.navigate(['/Cuidador/ejercicios/welcome'], {
-      state: { ejercicios: this.ejerciciosGenerados },
+      state: {
+        ejercicios: this.ejerciciosGenerados,
+        paciente: {
+          id_paciente: this._pacienteGenerate[0].id_paciente,
+          nombre: this._pacienteGenerate[0].nombre,
+          apellido: this._pacienteGenerate[0].apellido,
+          edad: this._pacienteGenerate[0].edad,
+          // Puedes añadir más campos si son necesarios
+          genero: this._pacienteGenerate[0].genero,
+        },
+      },
     });
   }
 

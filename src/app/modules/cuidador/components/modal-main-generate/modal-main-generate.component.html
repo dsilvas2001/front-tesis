@@ -219,6 +219,12 @@
             <button
               class="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-full shadow transition-all duration-300 flex items-center gap-2"
               (click)="iniciarEjercicio()"
+              [disabled]="!ejerciciosValidados"
+              matTooltip="{{
+                !ejerciciosValidados
+                  ? 'Antes de comenzar es recomendable validar los ejercicios'
+                  : '¡Ya puedes comenzar!'
+              }}"
             >
               <i class="fas fa-play"></i>
               ¡Comenzar!
@@ -242,6 +248,8 @@
     <app-previsualizacion-ejercicios
       [ejercicios]="ejerciciosGenerados"
       (closeModalEvent)="cerrarPrevisualizacion()"
+      [paciente]="_pacienteGenerate[0]"
+      (ejerciciosValidados)="onEjerciciosValidados($event)"
       *ngIf="mostrarPrevisualizacion"
     ></app-previsualizacion-ejercicios>
   </div>

@@ -20,6 +20,7 @@ import { CategoriaEjercicioComponent } from './categoria-ejercicio/categoria-eje
 import { ModalMainGenerateComponent } from './modal-main-generate/modal-main-generate.component';
 import { PrevisualizacionEjerciciosComponent } from './previsualizacion-ejercicios/previsualizacion-ejercicios.component';
 import { RatingComponent } from './rating/rating.component';
+import { EjercicioRealizadoModalComponent } from './ejercicio-realizado-modal/ejercicio-realizado-modal.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { RatingComponent } from './rating/rating.component';
     ModalMainGenerateComponent,
     PrevisualizacionEjerciciosComponent,
     RatingComponent,
+    EjercicioRealizadoModalComponent,
   ],
   imports: [CommonModule, RouterModule, SharedModule],
   exports: [

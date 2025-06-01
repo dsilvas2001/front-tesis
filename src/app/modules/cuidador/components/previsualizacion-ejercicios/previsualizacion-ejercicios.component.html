@@ -58,16 +58,26 @@
         >
           <summary
             (click)="selectItem(i)"
-            [class.bg-secondary-100]="selectedIndex === i"
-            class="list-none cursor-pointer hover:bg-secondary-100 transition-colors"
+            [class.bg-green-50]="estaAprobado(ejercicio)"
+            [class.border-green-300]="estaAprobado(ejercicio)"
+            [class.bg-secondary-100]="
+              selectedIndex === i && !estaAprobado(ejercicio)
+            "
+            class="list-none cursor-pointer hover:bg-secondary-100 transition-colors border border-transparent"
           >
             <div class="p-5 flex justify-between items-start">
               <div>
                 <div class="flex items-center gap-3">
                   <span
-                    class="bg-primary-400 text-neutral-800 text-sm font-medium px-3 py-1 rounded-full"
+                    [class.bg-green-400]="estaAprobado(ejercicio)"
+                    [class.bg-primary-400]="!estaAprobado(ejercicio)"
+                    class="text-neutral-800 text-sm font-medium px-3 py-1 rounded-full"
                   >
                     Ejercicio {{ i + 1 }}
+                    <i
+                      *ngIf="estaAprobado(ejercicio)"
+                      class="fas fa-check ml-1"
+                    ></i>
                   </span>
                   <span
                     [ngClass]="getDificultadClass(ejercicio.dificultad)"
@@ -80,10 +90,15 @@
                   {{ ejercicio.titulo }}
                 </h3>
               </div>
-              <span
-                class="text-neutral-400 transform transition-transform duration-200 details-arrow mr-2"
-                >▼</span
-              >
+              <div class="flex items-center gap-2">
+                <span *ngIf="estaAprobado(ejercicio)" class="text-green-500">
+                  <i class="fas fa-check-circle"></i>
+                </span>
+                <span
+                  class="text-neutral-400 transform transition-transform duration-200 details-arrow mr-2"
+                  >▼</span
+                >
+              </div>
             </div>
           </summary>
 
@@ -241,55 +256,59 @@
                       <div
                         *ngFor="
                           let opcion of ejercicio.contenido.opciones;
-                          let j = index;
-                          trackBy: trackByOpcion
+                          let j = index
                         "
-                        class="relative rounded-xl border border-neutral-200 p-4 bg-white space-y-2 hover:shadow-md transition duration-300 cursor-pointer"
-                        (click)="seleccionarOpcion(j)"
-                        [class.border-blue-500]="opcionSeleccionada === j"
+                        class="relative rounded-xl border border-neutral-200 p-4 bg-white space-y-2 hover:shadow-md transition duration-300"
                       >
-                        <!-- Checkbox personalizado -->
-                        <label
-                          class="absolute top-2 right-2 z-10 block h-6 w-6 cursor-pointer select-none"
-                        >
-                          <input
-                            type="checkbox"
-                            class="absolute opacity-0 cursor-pointer peer"
-                            [checked]="opcionSeleccionada === j"
-                            (click)="
-                              $event.stopPropagation(); seleccionarOpcion(j)
-                            "
-                          />
-                          <div
-                            class="relative w-[1.3em] h-[1.3em] transition-all duration-300 scale-0 rounded-full peer-checked:bg-[#20c580] peer-checked:scale-100 after:content-[''] after:absolute after:hidden after:left-[0.45em] after:top-[0.25em] after:w-[0.30em] after:h-[0.5em] after:border-white after:border-r-[0.15em] after:border-b-[0.15em] after:rotate-45 peer-checked:after:block"
-                          ></div>
-                        </label>
-
-                        <!-- Contenido de la opción -->
+                        <!-- Área de selección (sin el botón) -->
                         <div
-                          *ngIf="opcion.imagen"
-                          class="w-full h-32 overflow-hidden rounded-lg border border-neutral-100"
-                          style="contain: strict"
-                          matTooltip="Haz clic aquí para editar la imagen"
+                          class="cursor-pointer"
+                          (click)="seleccionarOpcion(j)"
                         >
-                          <img
-                            [src]="opcion.imagen"
-                            alt="Opción {{ j + 1 }}"
-                            class="w-full h-full object-cover"
-                            loading="lazy"
-                            (error)="onImageError($event)"
-                          />
-                        </div>
-                        <p class="text-neutral-800 font-medium text-center">
-                          {{ opcion.texto }}
-                        </p>
+                          <!-- Checkbox -->
+                          <label
+                            class="absolute top-2 right-2 z-10 block h-6 w-6 cursor-pointer select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              class="absolute opacity-0 cursor-pointer peer"
+                              [checked]="opcionSeleccionada === j"
+                              (click)="
+                                $event.stopPropagation(); seleccionarOpcion(j)
+                              "
+                            />
+                            <div
+                              class="relative w-[1.3em] h-[1.3em] transition-all duration-300 scale-0 rounded-full peer-checked:bg-[#20c580] peer-checked:scale-100 after:content-[''] after:absolute after:hidden after:left-[0.45em] after:top-[0.25em] after:w-[0.30em] after:h-[0.5em] after:border-white after:border-r-[0.15em] after:border-b-[0.15em] after:rotate-45 peer-checked:after:block"
+                            ></div>
+                          </label>
 
-                        <!-- Botón Editar imagen (solo visible cuando está seleccionado) -->
+                          <!-- Contenido -->
+                          <div
+                            *ngIf="opcion.imagen"
+                            class="w-full h-32 overflow-hidden rounded-lg border border-neutral-100"
+                          >
+                            <img
+                              [src]="opcion.imagen"
+                              alt="Opción {{ j + 1 }}"
+                              class="w-full h-full object-cover"
+                            />
+                          </div>
+                          <p class="text-neutral-800 font-medium text-center">
+                            {{ opcion.texto }}
+                          </p>
+                        </div>
+
+                        <!-- Botón FUERA del área de selección -->
                         <div *ngIf="opcionSeleccionada === j" class="pt-2">
+                          <input
+                            type="file"
+                            id="fileInput{{ i }}{{ j }}"
+                            (change)="handleImageUpload($event, i, j)"
+                            accept="image/*"
+                            class="hidden"
+                          />
                           <button
-                            (click)="
-                              openImageModal(i, j); $event.stopPropagation()
-                            "
+                            (click)="triggerFileInput(i, j)"
                             class="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition duration-200 flex items-center justify-center gap-2"
                           >
                             <svg
@@ -379,23 +398,30 @@
                   </h4>
 
                   <div class="space-y-4">
+                    <!-- Calidad -->
                     <div>
                       <label
                         class="block text-sm font-medium text-neutral-800 mb-1"
                         >Calidad</label
                       >
                       <div class="flex items-center">
-                        <app-rating
-                          [value]="ejercicio.calidad ?? 0"
-                          [max]="5"
-                          (valueChange)="ejercicio.calidad = $event"
-                        ></app-rating>
-                        <span class="ml-2 text-sm text-neutral-500">{{
-                          getRatingText(ejercicio.calidad ?? 0)
-                        }}</span>
+                        <div [class.disabled-rating]="estaAprobado(ejercicio)">
+                          <app-rating
+                            [value]="ejercicio.calidad ?? 0"
+                            [max]="5"
+                            (valueChange)="
+                              !estaAprobado(ejercicio) &&
+                                (ejercicio.calidad = $event)
+                            "
+                          ></app-rating>
+                        </div>
+                        <span class="ml-2 text-sm text-neutral-500">
+                          {{ getRatingText(ejercicio.calidad ?? 0) }}
+                        </span>
                       </div>
                     </div>
 
+                    <!-- Ajustes necesarios -->
                     <div>
                       <label
                         class="block text-sm font-medium text-neutral-800 mb-1"
@@ -403,7 +429,8 @@
                       >
                       <select
                         [(ngModel)]="ejercicio.ajustesNecesarios"
-                        class="w-full border border-neutral-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-primary-200"
+                        [disabled]="estaAprobado(ejercicio)"
+                        class="w-full border border-neutral-300 rounded-md p-2 text-sm focus:ring-2 focus:ring-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <option value="ninguno">Ninguno</option>
                         <option value="menores">Ajustes menores</option>
@@ -414,6 +441,7 @@
                       </select>
                     </div>
 
+                    <!-- Notas -->
                     <div>
                       <label
                         class="block text-sm font-medium text-neutral-800 mb-1"
@@ -421,19 +449,113 @@
                       >
                       <textarea
                         [(ngModel)]="ejercicio.notasValidacion"
-                        class="w-full border border-neutral-300 rounded-md p-2 text-sm h-20 focus:ring-2 focus:ring-primary-200"
+                        [disabled]="estaAprobado(ejercicio)"
+                        class="w-full border border-neutral-300 rounded-md p-2 text-sm h-20 focus:ring-2 focus:ring-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         placeholder="Agregue comentarios..."
                       ></textarea>
                     </div>
                   </div>
                 </div>
 
+                <!-- Botón de Aprobar -->
                 <button
+                  (click)="aprobarEjercicio(i)"
+                  [class.bg-green-600]="estaAprobado(ejercicio)"
+                  [class.cursor-default]="estaAprobado(ejercicio)"
                   class="w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition-colors flex items-center justify-center gap-2"
+                  [disabled]="isRegenerating"
                 >
                   <i class="fas fa-check"></i>
-                  Aprobar ejercicio
+                  {{
+                    estaAprobado(ejercicio)
+                      ? "Ejercicio Aprobado"
+                      : "Aprobar Ejercicio"
+                  }}
                 </button>
+
+                <!-- Opciones de rechazo -->
+                <div *ngIf="!estaAprobado(ejercicio)">
+                  <!-- Botón de rechazo con validación -->
+                  <button
+                    (click)="intentarRechazar(i)"
+                    class="w-full bg-red-100 text-red-600 py-2 rounded-md hover:bg-red-200 transition-colors relative"
+                    [disabled]="
+                      isRegenerating || validacionIncompleta(ejercicio)
+                    "
+                    [class.opacity-50]="
+                      validacionIncompleta(ejercicio) || isRegenerating
+                    "
+                    [class.cursor-not-allowed]="
+                      validacionIncompleta(ejercicio) || isRegenerating
+                    "
+                  >
+                    <i class="fas fa-times mr-1"></i> Rechazar Ejercicio
+                    <div
+                      *ngIf="validacionIncompleta(ejercicio)"
+                      class="absolute inset-0 flex items-center justify-center bg-white bg-opacity-70"
+                    >
+                      <span class="text-xs text-red-600 font-medium"
+                        >Complete validación</span
+                      >
+                    </div>
+                  </button>
+
+                  <!-- Panel de opciones de rechazo -->
+                  <div
+                    *ngIf="showRejectionOptions === i"
+                    class="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-200"
+                  >
+                    <!-- Mensaje de validación incompleta -->
+                    <div
+                      *ngIf="validacionIncompleta(ejercicio)"
+                      class="mb-3 p-2 bg-yellow-50 text-yellow-800 text-sm rounded border border-yellow-200"
+                    >
+                      <i class="fas fa-exclamation-circle mr-1"></i> Complete
+                      primero:
+                      <span
+                        *ngIf="!ejercicio.calidad || ejercicio.calidad === 0"
+                      >
+                        Calidad,</span
+                      >
+                      <span *ngIf="!ejercicio.ajustesNecesarios">
+                        Ajustes necesarios,</span
+                      >
+                      <span *ngIf="!ejercicio.notasValidacion"> Notas</span>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="flex gap-2">
+                      <button
+                        (click)="regenerarEjercicio(i)"
+                        class="flex-1 bg-blue-100 text-blue-600 py-2 rounded-md hover:bg-blue-200 transition-colors text-sm flex items-center justify-center gap-2"
+                        [disabled]="
+                          validacionIncompleta(ejercicio) || isRegenerating
+                        "
+                      >
+                        <span *ngIf="!isRegenerating">
+                          <i class="fas fa-sync-alt mr-1"></i> Regenerar
+                        </span>
+                        <span
+                          *ngIf="isRegenerating"
+                          class="flex items-center gap-2"
+                        >
+                          <i class="fas fa-circle-notch fa-spin"></i>
+                          Generando...
+                        </span>
+                      </button>
+
+                      <button
+                        (click)="eliminarEjercicio(i)"
+                        class="flex-1 bg-red-100 text-red-600 py-2 rounded-md hover:bg-red-200 transition-colors text-sm flex items-center justify-center"
+                        [disabled]="
+                          validacionIncompleta(ejercicio) || isRegenerating
+                        "
+                      >
+                        <i class="fas fa-trash-alt mr-1"></i> Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -460,14 +582,12 @@
       </button>
       <div class="flex gap-3">
         <button
-          class="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg hover:bg-blue-50 transition-colors"
+          (click)="aprobarTodosEjercicios()"
+          class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center"
+          matTooltip="Validar todos los ejercicios"
+          matTooltipPosition="above"
         >
-          Guardar borrador
-        </button>
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center"
-        >
-          <i class="fas fa-save mr-2"></i> Publicar ejercicios
+          <i class="fas fa-check-double mr-2"></i> Validar todos los ejercicios
         </button>
       </div>
     </div>
