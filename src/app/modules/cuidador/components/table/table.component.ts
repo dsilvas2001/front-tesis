@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PacienteService } from '../../../../core/cuidador/paciente/paciente.service';
 import { LoadingService } from '../../../../core/loading/loading.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-table',
@@ -30,10 +31,32 @@ export class TableComponent implements OnInit {
   statusDelete: boolean = false;
   //loading
   isLoading = false;
+  centroId: any = null;
+  // ... otras propiedades
+  esAdministrador: boolean = false;
 
-  constructor(private pacienteServices: PacienteService) {}
+  constructor(
+    private pacienteServices: PacienteService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    this.centroId = decodedToken.centro_info.id;
+    this.esAdministrador = decodedToken?.es_administrador === true;
+
     this.mostrarUser();
   }
 
@@ -109,7 +132,7 @@ export class TableComponent implements OnInit {
 
   mostrarUser() {
     this.isLoading = true;
-    this.pacienteServices.getAllPaciente().subscribe(
+    this.pacienteServices.getAllPaciente(this.centroId).subscribe(
       (datas: any[]) => {
         this.pacientes = datas;
         this.isLoading = false;

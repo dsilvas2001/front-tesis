@@ -11,6 +11,11 @@ import { filter } from 'rxjs';
   standalone: false,
 })
 export class SidebarComponent implements OnInit {
+  // ... otras propiedades
+  centroNombre: string | null = null;
+  centroCodigo: string | null = null;
+  esAdministrador: boolean = false;
+  // Propiedades para el tooltip
   collapseShow = 'hidden';
   activeLink: string = '';
   userEmail: unknown = 'email';
@@ -43,8 +48,9 @@ export class SidebarComponent implements OnInit {
     this.isMenuOpen = false;
   }
   logout() {
-    this.router.navigate(['/Auth/login']);
     localStorage.removeItem('activeLink');
+    localStorage.removeItem('token');
+    this.router.navigate(['/Auth/login']);
   }
 
   menuItems = [
@@ -106,6 +112,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.userEmail = this.authServices.getUserEmail();
     this.initializeConnectionTime();
+    this.loadCentroInfo();
 
     // Suscribirse a los cambios de ruta
     this.router.events
@@ -175,6 +182,43 @@ export class SidebarComponent implements OnInit {
       }
 
       this.tooltipMessage = `Conectado desde: ${storedConnection}`;
+    }
+  }
+  private loadCentroInfo() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = this.authServices.getDecodedToken(token);
+        this.centroNombre = decodedToken?.centro_info?.nombre || null;
+        this.centroCodigo = decodedToken?.centro_info?.codigo_unico || null;
+        this.esAdministrador = decodedToken?.es_administrador === true;
+
+        // Actualizar tooltip con info del centro
+        if (this.centroNombre) {
+          this.tooltipMessage += `\nCentro: ${this.centroNombre}`;
+          if (this.centroCodigo) {
+            this.tooltipMessage += `\nCódigo: ${this.centroCodigo}`;
+          }
+        }
+      } catch (error) {
+        console.error('Error al decodificar token:', error);
+      }
+    }
+  }
+
+  copiarCodigoCentro() {
+    if (this.centroCodigo) {
+      navigator.clipboard
+        .writeText(this.centroCodigo)
+        .then(() => {
+          // Mostrar notificación de copiado
+          const originalTooltip = this.tooltipMessage;
+          this.tooltipMessage = '¡Código copiado al portapapeles!';
+          setTimeout(() => (this.tooltipMessage = originalTooltip), 2000);
+        })
+        .catch((err) => {
+          console.error('Error al copiar:', err);
+        });
     }
   }
 }

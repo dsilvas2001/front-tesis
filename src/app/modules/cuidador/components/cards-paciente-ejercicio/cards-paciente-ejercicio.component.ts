@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { EjercicioPersonaService } from '../../../../core/cuidador/ejercicio-persona/ejercicio-persona.service';
 import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/signos-vitales.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-cards-paciente-ejercicio',
@@ -84,7 +85,8 @@ export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
 
   constructor(
     private ejercicioPersonaService: EjercicioPersonaService,
-    private signosVServices: SignosVitalesService
+    private signosVServices: SignosVitalesService,
+    private authService: AuthService
   ) {}
 
   // MOSTRAR CARDS
@@ -92,32 +94,50 @@ export class CardsPacienteEjercicioComponent implements OnInit, OnChanges {
   mostrarAllUser(fecha: string, status: string) {
     this.isLoading = true;
 
-    this.ejercicioPersonaService.getEjercicio(fecha, status).subscribe(
-      (datas: any[]) => {
-        this.pacientes = datas;
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('token');
 
-        if (this.pacientes.length == 0) {
-          this.showNotification(
-            'Signos Vitales',
-            `No hay pacientes con signos vitales ${status} para esta fecha`,
-            'error'
-          );
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    const centroId = decodedToken.centro_info.id;
+
+    this.ejercicioPersonaService
+      .getEjercicio(fecha, status, centroId)
+      .subscribe(
+        (datas: any[]) => {
+          this.pacientes = datas;
+
+          if (this.pacientes.length == 0) {
+            this.showNotification(
+              'Signos Vitales',
+              `No hay pacientes con signos vitales ${status} para esta fecha`,
+              'error'
+            );
+          }
+
+          // // Agregar acciones y actualizar pacientes
+          // this.pacientes.forEach((paciente) => {
+          //   paciente.actions = this.getActions(paciente.status);
+          //   paciente.showDropdown = false;
+          // });
+
+          // this.updateDisplayedPacientes();
+          this.isLoading = false;
+        },
+        (error) => {
+          this.isLoading = false;
+          console.error('Error fetching users:', error);
         }
-
-        // // Agregar acciones y actualizar pacientes
-        // this.pacientes.forEach((paciente) => {
-        //   paciente.actions = this.getActions(paciente.status);
-        //   paciente.showDropdown = false;
-        // });
-
-        // this.updateDisplayedPacientes();
-        this.isLoading = false;
-      },
-      (error) => {
-        this.isLoading = false;
-        console.error('Error fetching users:', error);
-      }
-    );
+      );
   }
 
   ngOnInit(): void {

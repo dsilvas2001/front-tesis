@@ -12,11 +12,12 @@ import { Router } from '@angular/router';
 import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/signos-vitales.service';
 import { PacienteService } from '../../../../core/cuidador/paciente/paciente.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
-    selector: 'app-modal-signosv',
-    templateUrl: './modal-signosv.component.html',
-    standalone: false
+  selector: 'app-modal-signosv',
+  templateUrl: './modal-signosv.component.html',
+  standalone: false,
 })
 export class ModalSignosvComponent implements OnInit, OnChanges {
   registerForm: FormGroup;
@@ -31,6 +32,7 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
   ocultarClose: boolean = true;
   analisisIaData: any = ' ';
   mostrarExplicacion: boolean = true;
+  //
 
   // DROP
   presionArterialFields = [
@@ -126,6 +128,8 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
   constructor(
     private formbuilder: FormBuilder,
     private router: Router,
+    private authService: AuthService,
+
     private signosVServices: SignosVitalesService
   ) {
     this.registerForm = this.formbuilder.group({
@@ -135,7 +139,6 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {}
   ngOnInit(): void {
-    console.log('tituloModal');
     console.log(this.tituloModal);
   }
 

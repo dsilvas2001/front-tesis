@@ -85,13 +85,68 @@
           </p>
 
           <!-- Estado simplificado y unificado -->
-          <div class="mt-1 flex items-center gap-2">
+          <div class="mt-1 flex flex-col gap-1">
             <span
               class="text-xs font-medium text-green-600 flex items-center gap-1"
             >
               <span class="w-2 h-2 bg-green-500 rounded-full"></span>
               En línea
             </span>
+
+            <!-- Nombre del centro con tooltip -->
+            <div
+              class="flex items-center gap-1"
+              *ngIf="centroNombre"
+              [matTooltip]="centroNombre"
+              matTooltipPosition="right"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-3 w-3 text-gray-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+              <span class="text-xs text-gray-600 truncate max-w-[180px]">
+                {{ centroNombre }}
+              </span>
+            </div>
+
+            <!-- Código del centro para administradores -->
+            <div
+              class="flex items-center gap-1 cursor-pointer"
+              *ngIf="esAdministrador && centroCodigo"
+              (click)="copiarCodigoCentro()"
+              [matTooltip]="'Código: ' + centroCodigo + ' (Click para copiar)'"
+              matTooltipPosition="right"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-3 w-3 text-amber-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                />
+              </svg>
+              <span
+                class="text-xs font-medium text-amber-600 truncate max-w-[180px]"
+              >
+                {{ centroCodigo }}
+              </span>
+            </div>
           </div>
         </div>
 

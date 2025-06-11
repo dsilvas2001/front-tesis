@@ -48,13 +48,17 @@ export class PacienteService {
     );
   }
 
-  getAllPaciente(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}${this.API_PATH}`);
+  getAllPaciente(centroId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}${this.API_PATH}/${centroId}`);
   }
-  getCountPaciente(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}${this.API_PATH}count`);
+  getCountPaciente(centroId: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}${this.API_PATH}count/${centroId}`
+    );
   }
-  getCountALLHOME(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}${this.API_PATH_USER}countHome`);
+  getCountALLHOME(centroId: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}${this.API_PATH_USER}countHome/${centroId}`
+    );
   }
 }

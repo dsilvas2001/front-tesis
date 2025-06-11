@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ReferenciaSignosVService } from '../../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
 import { ActivatedRoute } from '@angular/router';
 import { SignosVitalesService } from '../../../../../core/cuidador/signos-vitales/signos-vitales.service';
+import { AuthService } from '../../../../../core/auth/auth.service';
 
 @Component({
-    selector: 'app-gestion-signos-vitales',
-    templateUrl: './gestion-signos-vitales.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-gestion-signos-vitales',
+  templateUrl: './gestion-signos-vitales.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class GestionSignosVitalesComponent implements OnInit {
   cards = [
@@ -34,6 +35,8 @@ export class GestionSignosVitalesComponent implements OnInit {
 
   constructor(
     private signosVitalesService: SignosVitalesService,
+    private authService: AuthService,
+
     private route: ActivatedRoute
   ) {}
 
@@ -60,9 +63,22 @@ export class GestionSignosVitalesComponent implements OnInit {
   }
 
   mostrarCountPaciente(fecha: string) {
-    console.log('INGRESANDO A CONTAR');
+    const token = localStorage.getItem('token');
 
-    this.signosVitalesService.countgetSignosV(fecha).subscribe(
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    const centroId = decodedToken.centro_info.id;
+
+    this.signosVitalesService.countgetSignosV(fecha, centroId).subscribe(
       (datas: any) => {
         this.cards[0].count = datas.count_pacientes_hoy;
         this.cards[1].count = datas.count_signos_vitales_hoy;

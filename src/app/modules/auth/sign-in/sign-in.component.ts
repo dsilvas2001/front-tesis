@@ -6,10 +6,10 @@ import { AuthService } from '../../../core/auth/auth.service';
 import { LoadingService } from '../../../core/loading/loading.service';
 
 @Component({
-    selector: 'app-sign-in',
-    templateUrl: './sign-in.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-sign-in',
+  templateUrl: './sign-in.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class SignInComponent implements OnInit {
   statusnotification: boolean = false;
@@ -47,9 +47,38 @@ export class SignInComponent implements OnInit {
         'logout'
       );
       localStorage.removeItem('prueba');
+      localStorage.removeItem('token_seleccion');
     }
   }
 
+  // onSubmit(): void {
+  //   if (this.authForm.valid) {
+  //     const userDto = this.authForm.value;
+  //     this.loadingService.show();
+
+  //     this.authServices.loginUser(userDto).subscribe(
+  //       (response) => {
+  //         console.log('Inicio de sesión exitoso:', response);
+  //         localStorage.setItem('token', response.token);
+  //         this.sesionActive();
+
+  //         this.loadingService.hide();
+  //         // this.router.navigate(['/Cuidador/home/welcome']);
+  //         this.router.navigate(['/Auth/centro-gerontologico/seleccionar']);
+  //       },
+  //       (error: HttpErrorResponse) => {
+  //         console.log('Error capturado al autenticar usuario:', error);
+
+  //         if (typeof error.error === 'object') {
+  //           this.loadingService.hide();
+  //           this.showNotification('Error', error.error.error, 'error');
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     console.log('Formulario inválido:', this.authForm);
+  //   }
+  // }
   onSubmit(): void {
     if (this.authForm.valid) {
       const userDto = this.authForm.value;
@@ -57,12 +86,19 @@ export class SignInComponent implements OnInit {
 
       this.authServices.loginUser(userDto).subscribe(
         (response) => {
-          console.log('Inicio de sesión exitoso:', response);
-          localStorage.setItem('token', response.token);
-          this.sesionActive();
+          if (response.user.tiene_centro_asignado) {
+            console.log('Inicio de sesión exitoso:', response);
+            localStorage.setItem('token', response.token);
+            this.sesionActive();
+            this.loadingService.hide();
+            this.router.navigate(['/Cuidador/home/welcome']);
+          } else {
+            localStorage.setItem('token_seleccion', response.token);
 
-          this.loadingService.hide();
-          this.router.navigate(['/Cuidador/home/welcome']);
+            this.loadingService.hide();
+
+            this.router.navigate(['/Auth/centro-gerontologico/seleccionar']);
+          }
         },
         (error: HttpErrorResponse) => {
           console.log('Error capturado al autenticar usuario:', error);

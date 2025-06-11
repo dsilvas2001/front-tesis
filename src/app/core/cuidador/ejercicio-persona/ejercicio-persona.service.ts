@@ -11,13 +11,20 @@ export class EjercicioPersonaService {
   private apiUrl = `${environment.domain}`;
   private API_PATH = `/ejercicioP/`;
 
-  getEjercicio(date: string, status: string): Observable<any[]> {
+  getEjercicio(
+    date: string,
+    status: string,
+    centroId: string
+  ): Observable<any[]> {
     return this.http.get<any[]>(
-      `${this.apiUrl}${this.API_PATH}${date}/${status}`
+      `${this.apiUrl}${this.API_PATH}${date}/${status}/${centroId}`
     );
   }
-  getCountEjercicio(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}${this.API_PATH}count`);
+
+  getCountEjercicio(centroId: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}${this.API_PATH}count/${centroId}`
+    );
   }
 
   getSelectCategoria(userData: {

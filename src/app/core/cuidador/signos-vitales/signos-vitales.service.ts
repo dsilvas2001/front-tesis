@@ -53,9 +53,13 @@ export class SignosVitalesService {
     );
   }
 
-  getAllSignosVitales(date: string, status: string): Observable<any[]> {
+  getAllSignosVitales(
+    date: string,
+    status: string,
+    centroId: string
+  ): Observable<any[]> {
     return this.http.get<any[]>(
-      `${this.apiUrl}${this.API_PATH}${date}/${status}`
+      `${this.apiUrl}${this.API_PATH}${date}/${status}/${centroId}`
     );
   }
 
@@ -65,9 +69,9 @@ export class SignosVitalesService {
     );
   }
 
-  countgetSignosV(fecha: string): Observable<any> {
+  countgetSignosV(fecha: string, centroId: string): Observable<any> {
     return this.http.get<any>(
-      `${this.apiUrl}${this.API_PATH}count/todos/${fecha}`
+      `${this.apiUrl}${this.API_PATH}count/todos/${fecha}/${centroId}`
     );
   }
 }

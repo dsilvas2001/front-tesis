@@ -11,6 +11,7 @@ export class AuthService {
   constructor(private http: HttpClient) {}
   private apiUrl = `${environment.domain}`;
   private API_PATH = `/usuario/`;
+  private API_PATH_CENTRO_GERONTOLOGICO = `/centro/`;
 
   getDecodedToken(token: string): any {
     try {
@@ -38,5 +39,19 @@ export class AuthService {
       return decodedToken ? decodedToken.email : null;
     }
     return null;
+  }
+
+  //CENTRO GERONTOLOGICO
+  registerCentroGerontologico(centroGerontologicoData: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}${this.API_PATH_CENTRO_GERONTOLOGICO}crear`,
+      centroGerontologicoData
+    );
+  }
+  codigoCentroGerontologico(centroGerontologicoData: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}${this.API_PATH_CENTRO_GERONTOLOGICO}unirse`,
+      centroGerontologicoData
+    );
   }
 }

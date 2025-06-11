@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PacienteService } from '../../../../core/cuidador/paciente/paciente.service';
 import { ReferenciaSignosVService } from '../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-table-referencias-signos-v',
@@ -35,10 +36,32 @@ export class TableReferenciasSignosVComponent implements OnInit {
   isDropdownOpen = false;
   showWithReference = true;
   showWithoutReference = false;
+  //
+  centroId: any = null;
+  esAdministrador: boolean = false;
 
-  constructor(private referenciaSignosVServices: ReferenciaSignosVService) {}
+  constructor(
+    private referenciaSignosVServices: ReferenciaSignosVService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    this.centroId = decodedToken.centro_info.id;
+    this.esAdministrador = decodedToken?.es_administrador === true;
+
     this.mostrarUser();
   }
 
@@ -164,7 +187,7 @@ export class TableReferenciasSignosVComponent implements OnInit {
 
   mostrarUser() {
     this.isLoading = true;
-    this.referenciaSignosVServices.getAllReferencia().subscribe(
+    this.referenciaSignosVServices.getAllReferencia(this.centroId).subscribe(
       (datas: any[]) => {
         this.pacientes = datas.map((paciente) => {
           const min = paciente.temperatura?.min || 0;
@@ -191,7 +214,7 @@ export class TableReferenciasSignosVComponent implements OnInit {
 
   mostrarNotReferencia() {
     this.isLoading = true;
-    this.referenciaSignosVServices.getAllNotReferencia().subscribe(
+    this.referenciaSignosVServices.getAllNotReferencia(this.centroId).subscribe(
       (datas: any[]) => {
         this.pacientes = datas;
 

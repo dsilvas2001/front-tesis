@@ -72,11 +72,13 @@ export class ReferenciaSignosVService {
       userData
     );
   }
-  getAllReferencia(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}${this.API_PATH}`);
+  getAllReferencia(centroId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}${this.API_PATH}${centroId}`);
   }
-  getAllNotReferencia(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}${this.API_PATH}notreferencia/`);
+  getAllNotReferencia(centroId: string): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.apiUrl}${this.API_PATH}notreferencia/${centroId}`
+    );
   }
 
   deleteReferencia(id_paciente: string): Observable<any> {
@@ -86,7 +88,9 @@ export class ReferenciaSignosVService {
     );
   }
 
-  getCountReferencia(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}${this.API_PATH}count`);
+  getCountReferencia(centroId: string): Observable<any> {
+    return this.http.get<any>(
+      `${this.apiUrl}${this.API_PATH}count/${centroId}`
+    );
   }
 }

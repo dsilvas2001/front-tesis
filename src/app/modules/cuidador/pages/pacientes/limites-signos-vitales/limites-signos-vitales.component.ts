@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { PacienteService } from '../../../../../core/cuidador/paciente/paciente.service';
 import { ActivatedRoute } from '@angular/router';
 import { ReferenciaSignosVService } from '../../../../../core/cuidador/referencia-signosV/referencia-signos-v.service';
+import { AuthService } from '../../../../../core/auth/auth.service';
 
 @Component({
-    selector: 'app-limites-signos-vitales',
-    templateUrl: './limites-signos-vitales.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-limites-signos-vitales',
+  templateUrl: './limites-signos-vitales.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class LimitesSignosVitalesComponent implements OnInit {
   cards = [
@@ -17,7 +18,7 @@ export class LimitesSignosVitalesComponent implements OnInit {
       icon: 'fa-solid fa-gears',
     },
     {
-      title: 'SV del Dia',
+      title: 'SV del Día',
       count: 0,
       icon: 'fa-solid fa-user-gear',
     },
@@ -29,13 +30,30 @@ export class LimitesSignosVitalesComponent implements OnInit {
     },
   ];
   count_pacientes: any[] = [];
+  centroId: any = null;
 
   constructor(
     private referenciaSignosVService: ReferenciaSignosVService,
+    private authService: AuthService,
+
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    this.centroId = decodedToken.centro_info.id;
     this.route.data.subscribe(({ data }) => {
       if (data && data.count_referencias) {
         const countData = data.count_referencias;
@@ -50,7 +68,7 @@ export class LimitesSignosVitalesComponent implements OnInit {
   }
 
   mostrarCountPaciente() {
-    this.referenciaSignosVService.getCountReferencia().subscribe(
+    this.referenciaSignosVService.getCountReferencia(this.centroId).subscribe(
       (datas: any) => {
         this.cards[0].count = datas.count_referentes;
         this.cards[1].count = datas.count_referentes_hoy;

@@ -9,12 +9,13 @@ import {
 } from '@angular/core';
 import { SignosVitalesService } from '../../../../core/cuidador/signos-vitales/signos-vitales.service';
 import { Output } from '@angular/core';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
-    selector: 'app-cards-sv',
-    templateUrl: './cards-sv.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-cards-sv',
+  templateUrl: './cards-sv.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class CardsSvComponent implements OnInit, OnChanges {
   //Notificacion
@@ -97,38 +98,57 @@ export class CardsSvComponent implements OnInit, OnChanges {
 
   events: any[] = [];
 
-  constructor(private signosVitalesService: SignosVitalesService) {}
+  constructor(
+    private signosVitalesService: SignosVitalesService,
+    private authService: AuthService
+  ) {}
 
   // MOSTRAR CARDS
 
   mostrarAllUser(fecha: string, status: string) {
     this.isLoading = true;
+    const token = localStorage.getItem('token');
 
-    this.signosVitalesService.getAllSignosVitales(fecha, status).subscribe(
-      (datas: any[]) => {
-        this.pacientes = datas;
-        if (this.pacientes.length == 0) {
-          this.showNotification(
-            'Signos Vitales',
-            `No hay pacientes con signos vitales ${status} para esta fecha`,
-            'error'
-          );
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    const centroId = decodedToken.centro_info.id;
+
+    this.signosVitalesService
+      .getAllSignosVitales(fecha, status, centroId)
+      .subscribe(
+        (datas: any[]) => {
+          this.pacientes = datas;
+          if (this.pacientes.length == 0) {
+            this.showNotification(
+              'Signos Vitales',
+              `No hay pacientes con signos vitales ${status} para esta fecha`,
+              'error'
+            );
+          }
+
+          // Agregar acciones y actualizar pacientes
+          this.pacientes.forEach((paciente) => {
+            paciente.actions = this.getActions(paciente.status);
+            paciente.showDropdown = false;
+          });
+
+          this.updateDisplayedPacientes();
+          this.isLoading = false;
+        },
+        (error) => {
+          this.isLoading = false;
+          console.error('Error fetching users:', error);
         }
-
-        // Agregar acciones y actualizar pacientes
-        this.pacientes.forEach((paciente) => {
-          paciente.actions = this.getActions(paciente.status);
-          paciente.showDropdown = false;
-        });
-
-        this.updateDisplayedPacientes();
-        this.isLoading = false;
-      },
-      (error) => {
-        this.isLoading = false;
-        console.error('Error fetching users:', error);
-      }
-    );
+      );
   }
 
   ngOnInit(): void {
@@ -261,10 +281,20 @@ export class CardsSvComponent implements OnInit, OnChanges {
 
   // Devuelve las acciones según el estado
   getActions(status: string): string[] {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+    const esAdministrador = decodedToken?.es_administrador === true;
+
     if (status === 'pendiente') {
       return ['Ingresar'];
     } else if (status === 'emergencia' || status === 'estable') {
-      return ['Editar', 'Eliminar'];
+      return esAdministrador ? ['Editar', 'Eliminar'] : ['Editar'];
     }
     return [];
   }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EjercicioPersonaService } from '../../../../../core/cuidador/ejercicio-persona/ejercicio-persona.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-gestion-ejercicios',
@@ -33,7 +34,8 @@ export class GestionEjerciciosComponent implements OnInit {
   }
   constructor(
     private ejercicioPersonaService: EjercicioPersonaService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -50,7 +52,23 @@ export class GestionEjerciciosComponent implements OnInit {
   }
 
   mostrarCountPacienteEjercicio() {
-    this.ejercicioPersonaService.getCountEjercicio().subscribe(
+    // Obtener el token del localStorage
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    const centroId = decodedToken.centro_info.id;
+
+    this.ejercicioPersonaService.getCountEjercicio(centroId).subscribe(
       (datas: any) => {
         console.log(datas);
         this.cards[0].count = datas.pacientesEstables;

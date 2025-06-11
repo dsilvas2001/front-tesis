@@ -2,7 +2,7 @@
   <!-- Título y descripción -->
   <div class="mb-3 lg:mb-0">
     <h3 class="text-lg font-bold text-slate-800">
-      Pacientes del Centro Gerontologico
+      Pacientes del Centro Gerontológico
     </h3>
     <p class="text-slate-500">Resumen de los pacientes.</p>
   </div>
@@ -73,7 +73,7 @@
         </th>
         <th class="p-4 border-b border-slate-300 bg-accent-300">
           <p class="block text-sm font-p leading-none text-neutral-800">
-            Genero
+            Género
           </p>
         </th>
         <th class="p-4 border-b border-slate-300 bg-accent-300">
@@ -241,6 +241,7 @@
           <!-- Botón Eliminar Paciente -->
 
           <button
+            *ngIf="esAdministrador"
             class="w-10 h-10 rounded-full bg-secondary-100 border-none font-semibold flex items-center justify-center shadow-lg cursor-pointer transition-all duration-300 overflow-hidden relative text-warning-600 hover:text-white hover:bg-red-500 hover:rounded-xl group"
             (click)="showDeleteNotification(paciente)"
             matTooltip="Eliminar paciente"

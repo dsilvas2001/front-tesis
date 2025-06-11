@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { PacienteService } from '../../../../../core/cuidador/paciente/paciente.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../../../core/auth/auth.service';
 
 @Component({
-    selector: 'app-gestion-pacientes',
-    templateUrl: './gestion-pacientes.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-gestion-pacientes',
+  templateUrl: './gestion-pacientes.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class GestionPacientesComponent implements OnInit {
   cards = [
@@ -32,6 +33,7 @@ export class GestionPacientesComponent implements OnInit {
 
   constructor(
     private pacienteServices: PacienteService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
@@ -51,7 +53,22 @@ export class GestionPacientesComponent implements OnInit {
   }
 
   mostrarCountPaciente() {
-    this.pacienteServices.getCountPaciente().subscribe(
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    const centroId = decodedToken.centro_info.id;
+
+    this.pacienteServices.getCountPaciente(centroId).subscribe(
       (datas: any) => {
         this.cards[0].count = datas.count_pacientes;
         this.cards[1].count = datas.count_paciente_hoy;

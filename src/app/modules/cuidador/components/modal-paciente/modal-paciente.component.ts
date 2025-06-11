@@ -11,11 +11,12 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PacienteService } from '../../../../core/cuidador/paciente/paciente.service';
+import { AuthService } from '../../../../core/auth/auth.service';
 
 @Component({
-    selector: 'app-modal-paciente',
-    templateUrl: './modal-paciente.component.html',
-    standalone: false
+  selector: 'app-modal-paciente',
+  templateUrl: './modal-paciente.component.html',
+  standalone: false,
 })
 export class ModalPacienteComponent implements OnInit, OnChanges {
   registerForm: FormGroup;
@@ -31,6 +32,8 @@ export class ModalPacienteComponent implements OnInit, OnChanges {
   icon: string = '';
   tituloModal: string = '';
   buttonModal: string = '';
+  //
+  centroId: any = null;
 
   //Decoradores
   @Input() statusModal: boolean = false;
@@ -49,17 +52,32 @@ export class ModalPacienteComponent implements OnInit, OnChanges {
   constructor(
     private formbuilder: FormBuilder,
     private router: Router,
+    private authService: AuthService,
     private pacienteServices: PacienteService
   ) {
     this.registerForm = this.formbuilder.group({
       name: ['', [Validators.required]],
       lastname: ['', Validators.required],
-      age: ['', [Validators.required]],
+      age: ['', [Validators.required, Validators.min(0)]],
       gender: ['Seleccionar genero', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No se encontró token de autenticación');
+    }
+
+    // Decodificar el token para obtener la información del centro
+    const decodedToken = this.authService.getDecodedToken(token);
+
+    if (!decodedToken?.centro_info?.id) {
+      throw new Error('El usuario no tiene un centro asignado');
+    }
+
+    this.centroId = decodedToken.centro_info.id;
     this.updateModalTitleAndButton();
   }
 
@@ -88,12 +106,15 @@ export class ModalPacienteComponent implements OnInit, OnChanges {
 
   onSubmit(): void {
     if (this.registerForm.valid) {
+      console.log('id_centro_gerontologico:', this.centroId);
+
       const pacienteDto = {
         nombre: this.registerForm.get('name')?.value,
         apellido: this.registerForm.get('lastname')?.value,
         edad: this.registerForm.get('age')?.value,
         genero: this.registerForm.get('gender')?.value,
         roles: 'Paciente',
+        id_centro_gerontologico: this.centroId,
       };
       if (this._actionModal === 'add') {
         this.pacienteServices.registerPaciente(pacienteDto).subscribe(
