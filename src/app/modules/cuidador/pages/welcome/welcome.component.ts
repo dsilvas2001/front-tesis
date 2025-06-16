@@ -3,10 +3,10 @@ import { AuthService } from '../../../../core/auth/auth.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-    selector: 'app-welcome',
-    templateUrl: './welcome.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-welcome',
+  templateUrl: './welcome.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class WelcomeComponent implements OnInit {
   statusnotification: boolean = false;
@@ -16,14 +16,14 @@ export class WelcomeComponent implements OnInit {
   userEmail: unknown = 'email';
 
   cards = [
-    { title: 'Pacientes Agregados', count: 120, icon: 'fa-solid fa-user' },
+    { title: 'Pacientes agregados', count: 120, icon: 'fa-solid fa-user' },
     {
-      title: 'Signos Vitales (Hoy)',
+      title: 'Signos vitales (Hoy)',
       count: 5,
       icon: 'fa-solid fa-heart-pulse',
     },
     {
-      title: 'Ejercicios Generados (Hoy)',
+      title: 'Ejercicios generados (Hoy)',
       count: 10,
       icon: 'fa-solid fa-chalkboard-user',
     },

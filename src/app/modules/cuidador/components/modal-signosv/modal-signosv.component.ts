@@ -275,7 +275,7 @@ export class ModalSignosvComponent implements OnInit, OnChanges {
           )
           .subscribe(
             (response) => {
-              console.log('Signos Vitales con éxito:', response);
+              console.log('Signos vitales con éxito:', response);
               this.isProcessing = false;
               this.ocultarClose = false;
 

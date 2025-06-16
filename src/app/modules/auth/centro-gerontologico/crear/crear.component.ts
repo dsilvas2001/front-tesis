@@ -3,6 +3,7 @@ import { LoadingService } from '../../../../core/loading/loading.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-crear',
@@ -23,6 +24,10 @@ export class CrearComponent {
   notificationMessage: string = '';
   notificationType: string = '';
   authForm: FormGroup;
+
+  //
+  password: string = '';
+  email: string = '';
 
   constructor(
     private router: Router,
@@ -53,10 +58,17 @@ export class CrearComponent {
     const token = localStorage.getItem('token_seleccion');
     const decoded = this.authServices.getDecodedToken(token || '');
     const id_administrador = decoded?.id;
+    this.email = decoded?.email;
+
+    this.password = localStorage.getItem('object') || '';
 
     if (!id_administrador) {
       this.showNotification('Error', 'Sesión no válida', 'error');
+
       this.loadingService.hide();
+      setTimeout(() => {
+        this.router.navigate(['/Auth/login']);
+      }, 2000);
       return;
     }
 
@@ -75,7 +87,6 @@ export class CrearComponent {
 
         this.codigoGenerado = response.codigo_unico;
         this.showSuccess = true;
-        localStorage.removeItem('token_seleccion');
 
         this.showNotification(
           'Centro creado',
@@ -96,8 +107,45 @@ export class CrearComponent {
   }
 
   irADashboard() {
-    this.router.navigate(['/Auth/login']);
+    this.onSubmit();
   }
+
+  onSubmit(): void {
+    const userDto = {
+      email: this.email,
+      password: this.password,
+    };
+    console.log('Datos del usuario:', userDto);
+
+    this.loadingService.show();
+
+    this.authServices.loginUser(userDto).subscribe(
+      (response) => {
+        if (response.user.tiene_centro_asignado) {
+          console.log('Inicio de sesión exitoso:', response);
+          localStorage.setItem('token', response.token);
+          localStorage.removeItem('token_seleccion');
+          localStorage.removeItem('object');
+          this.sesionActive();
+          this.loadingService.hide();
+          this.router.navigate(['/Cuidador/home/welcome']);
+        }
+      },
+      (error: HttpErrorResponse) => {
+        console.log('Error capturado al autenticar usuario:', error);
+
+        if (typeof error.error === 'object') {
+          this.loadingService.hide();
+          this.showNotification('Error', error.error.error, 'error');
+        }
+      }
+    );
+  }
+
+  sesionActive() {
+    localStorage.setItem('prueba', 'true');
+  }
+
   showNotification(title: string, message: string, type: string) {
     this.statusnotification = true;
     this.notificationTitle = title;

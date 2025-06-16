@@ -11,20 +11,20 @@ import { AuthService } from '../../../../../core/auth/auth.service';
 })
 export class GestionPacientesComponent implements OnInit {
   cards = [
-    { title: 'Pacientes Agregados', count: 0, icon: 'fa-solid fa-user' },
+    { title: 'Pacientes agregados', count: 0, icon: 'fa-solid fa-user' },
     {
-      title: 'Pacientes Nuevos',
+      title: 'Pacientes nuevos',
       count: 0,
       icon: 'fa-solid fa-user-check',
     },
 
     {
-      title: 'Genero Masculino',
+      title: 'Genero masculino',
       count: 0,
       icon: 'fa-solid fa-mars-stroke',
     },
     {
-      title: 'Genero Femenino',
+      title: 'Genero femenino',
       count: 0,
       icon: 'fa-solid fa-venus',
     },

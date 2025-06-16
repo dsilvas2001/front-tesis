@@ -13,17 +13,17 @@ export class GestionEjerciciosComponent implements OnInit {
   pacienteGestion: any;
   cards = [
     {
-      title: 'Pacientes Estables',
+      title: 'Pacientes estables',
       count: 0,
       icon: 'fa-solid fa-heart-pulse',
     },
     {
-      title: 'Ejercicios Completados (Hoy)',
+      title: 'Ejercicios completados (Hoy)',
       count: 0,
       icon: 'fa-solid fa-chalkboard',
     },
     {
-      title: 'Ejercicios Pendientes (Hoy)',
+      title: 'Ejercicios pendientes (Hoy)',
       count: 0,
       icon: 'fa-solid fa-clock',
     },

@@ -110,7 +110,7 @@ export class TableComponent implements OnInit {
   showDeleteNotification(paciente: any): void {
     this.pacienteData = paciente;
     this.showNotification(
-      'Eliminar Paciente',
+      'Eliminar paciente',
       '¿Estás seguro de que deseas eliminar este paciente?',
       'delete'
     );

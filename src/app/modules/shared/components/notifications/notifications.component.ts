@@ -10,10 +10,10 @@ import {
 } from '@angular/core';
 
 @Component({
-    selector: 'app-notifications',
-    templateUrl: './notifications.component.html',
-    styles: ``,
-    standalone: false
+  selector: 'app-notifications',
+  templateUrl: './notifications.component.html',
+  styles: ``,
+  standalone: false,
 })
 export class NotificationsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() statusnotification: boolean = false;
@@ -23,6 +23,7 @@ export class NotificationsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() duration: number = 3000;
   @Output() deleteAction = new EventEmitter<boolean>();
   @Output() notificationClosed = new EventEmitter<void>();
+  @Output() acceptAction = new EventEmitter<boolean>();
 
   progressWidth = 100;
   private intervalId: any;
@@ -81,6 +82,9 @@ export class NotificationsComponent implements OnInit, OnDestroy, OnChanges {
     if (this.type === 'delete') {
       this.deleteAction.emit(false);
     }
+    if (this.type === 'accept') {
+      this.acceptAction.emit(false);
+    }
   }
 
   closeNotificationDelete() {
@@ -93,5 +97,19 @@ export class NotificationsComponent implements OnInit, OnDestroy, OnChanges {
     this.clearTimers();
     this.statusnotification = false;
     this.deleteAction.emit(true);
+  }
+
+  //
+
+  closeAcceptNotification() {
+    this.clearTimers();
+    this.statusnotification = false;
+    this.acceptAction.emit(false);
+  }
+
+  confirmAccept(): void {
+    this.clearTimers();
+    this.statusnotification = false;
+    this.acceptAction.emit(true);
   }
 }

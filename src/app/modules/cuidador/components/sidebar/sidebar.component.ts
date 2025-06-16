@@ -59,23 +59,24 @@ export class SidebarComponent implements OnInit {
       icon: 'fa-solid fa-house',
       link: '/Cuidador/home/welcome',
     },
+
     {
-      name: 'Gestión De Pacientes',
+      name: 'Gestión de pacientes',
       icon: 'fa-solid fa-users',
       link: '/Cuidador/home/gestion-pacientes',
     },
     {
-      name: 'Signos Vitales',
+      name: 'Signos vitales',
       icon: 'fa-solid fa-heartbeat',
       link: null, // No tiene un enlace directo
       subItems: [
         {
-          name: 'Signos Vitales Diarios',
+          name: 'Signos vitales diarios',
           icon: 'fa-solid fa-calendar-day',
           link: '/Cuidador/home/signos-vitales-diarios',
         },
         {
-          name: 'Referencias SV',
+          name: 'Referencias sv',
           icon: 'fa-solid fa-chart-line',
           link: '/Cuidador/home/signos-vitales-referentes',
         },
@@ -83,12 +84,12 @@ export class SidebarComponent implements OnInit {
       isOpen: false, // Estado para controlar si el submenú está abierto
     },
     {
-      name: 'Ejercicios Cognitivos',
+      name: 'Ejercicios cognitivos',
       icon: 'fa-solid fa-cubes',
       link: null, // No tiene un enlace directo
       subItems: [
         {
-          name: 'Ejercicios Diarios',
+          name: 'Ejercicios diarios',
           icon: 'fa-solid fa-puzzle-piece',
           link: '/Cuidador/home/gestion-ejercicios',
         },
@@ -102,7 +103,7 @@ export class SidebarComponent implements OnInit {
     },
 
     {
-      name: 'Cerrar Sesión',
+      name: 'Cerrar sesión',
       icon: 'fa-solid fa-arrow-right-from-bracket',
       link: null,
       action: () => this.logout(),
@@ -113,6 +114,14 @@ export class SidebarComponent implements OnInit {
     this.userEmail = this.authServices.getUserEmail();
     this.initializeConnectionTime();
     this.loadCentroInfo();
+    // Agregar item solo si es administrador
+    if (this.esAdministrador) {
+      this.menuItems.splice(1, 0, {
+        name: 'Gestión de cuidadores',
+        icon: 'fa-solid fa-users',
+        link: '/Cuidador/home/cuidador',
+      });
+    }
 
     // Suscribirse a los cambios de ruta
     this.router.events

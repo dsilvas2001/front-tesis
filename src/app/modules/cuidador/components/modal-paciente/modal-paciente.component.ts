@@ -83,8 +83,8 @@ export class ModalPacienteComponent implements OnInit, OnChanges {
 
   updateModalTitleAndButton(): void {
     if (this._actionModal === 'edit') {
-      this.tituloModal = 'Editar Paciente';
-      this.buttonModal = 'Editar Paciente';
+      this.tituloModal = 'Editar paciente';
+      this.buttonModal = 'Editar paciente';
       this.icon = 'fa-regular fa-pen-to-square';
       this.cargarDatosPaciente(); // Cargar datos del paciente en el formulario
     } else {

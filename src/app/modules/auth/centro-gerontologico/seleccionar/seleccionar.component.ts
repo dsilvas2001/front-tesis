@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { LoadingService } from '../../../../core/loading/loading.service';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-seleccionar',
@@ -50,6 +51,9 @@ export class SeleccionarComponent {
     if (!token) {
       this.showNotification('Error', 'Sesión no válida', 'error');
       this.loadingService.hide();
+      setTimeout(() => {
+        this.router.navigate(['/Auth/login']);
+      }, 2000);
       return;
     }
 

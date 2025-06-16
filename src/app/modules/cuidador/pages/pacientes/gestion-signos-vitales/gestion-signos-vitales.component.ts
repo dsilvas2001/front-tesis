@@ -12,9 +12,9 @@ import { AuthService } from '../../../../../core/auth/auth.service';
 })
 export class GestionSignosVitalesComponent implements OnInit {
   cards = [
-    { title: 'Pacientes Agregados', count: 0, icon: 'fa-solid fa-user' },
+    { title: 'Pacientes agregados', count: 0, icon: 'fa-solid fa-user' },
     {
-      title: 'Signos Vitales (Hoy)',
+      title: 'Signos vitales (Hoy)',
       count: 0,
       icon: 'fa-solid fa-heart-circle-check',
     },

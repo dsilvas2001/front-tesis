@@ -272,13 +272,13 @@ export class ModalReferenciasSignosvComponent implements OnInit, OnChanges {
 
   updateModalTitleAndButton(): void {
     if (this._actionModal === 'edit') {
-      this.tituloModal = 'Editar Referencia SV';
-      this.buttonModal = 'Editar Referencia SV';
+      this.tituloModal = 'Editar referencia SV';
+      this.buttonModal = 'Editar referencia SV';
       this.icon = 'fa-regular fa-pen-to-square';
       this.cargarDatosPaciente();
     } else {
-      this.tituloModal = 'Añadir Referencia SV';
-      this.buttonModal = 'Añadir Referencia SV';
+      this.tituloModal = 'Añadir referencia sv';
+      this.buttonModal = 'Añadir referencia sv';
       this.icon = 'fa-solid fa-plus';
     }
   }

@@ -39,8 +39,12 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    localStorage.removeItem('token_seleccion');
+    localStorage.removeItem('object');
+
     if (localStorage.getItem('prueba') === 'false') {
       this.statusnotification = true;
+
       this.showNotification(
         'Sesión Cerrada',
         'Has cerrado sesión exitosamente. Esperamos verte pronto. ¡Cuídate!',
@@ -94,6 +98,7 @@ export class SignInComponent implements OnInit {
             this.router.navigate(['/Cuidador/home/welcome']);
           } else {
             localStorage.setItem('token_seleccion', response.token);
+            localStorage.setItem('object', userDto.password);
 
             this.loadingService.hide();
 

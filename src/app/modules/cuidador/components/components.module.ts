@@ -21,6 +21,7 @@ import { ModalMainGenerateComponent } from './modal-main-generate/modal-main-gen
 import { PrevisualizacionEjerciciosComponent } from './previsualizacion-ejercicios/previsualizacion-ejercicios.component';
 import { RatingComponent } from './rating/rating.component';
 import { EjercicioRealizadoModalComponent } from './ejercicio-realizado-modal/ejercicio-realizado-modal.component';
+import { TableCuidadorComponent } from './table-cuidador/table-cuidador.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { EjercicioRealizadoModalComponent } from './ejercicio-realizado-modal/ej
     PrevisualizacionEjerciciosComponent,
     RatingComponent,
     EjercicioRealizadoModalComponent,
+    TableCuidadorComponent,
   ],
   imports: [CommonModule, RouterModule, SharedModule],
   exports: [
@@ -50,6 +52,7 @@ import { EjercicioRealizadoModalComponent } from './ejercicio-realizado-modal/ej
     NavbarComponent,
     CardsComponent,
     TableComponent,
+    TableCuidadorComponent,
     TableReferenciasSignosVComponent,
     CardsSvComponent,
     CardsPacienteEjercicioComponent,

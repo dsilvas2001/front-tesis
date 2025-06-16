@@ -76,22 +76,22 @@ export class CardsSvComponent implements OnInit, OnChanges {
   filterOptions = [
     {
       id: 'allSV',
-      label: 'Mostrar Todo',
+      label: 'Mostrar todo',
       checked: false,
     },
     {
       id: 'emergency',
-      label: 'Pacientes en Emergencia',
+      label: 'Pacientes en emergencia',
       checked: false,
     },
     {
       id: 'stable',
-      label: 'Pacientes Estables',
+      label: 'Pacientes estables',
       checked: false,
     },
     {
       id: 'withoutSV',
-      label: 'Pacientes sin SV',
+      label: 'Pacientes sin sv',
       checked: false,
     },
   ];
@@ -129,7 +129,7 @@ export class CardsSvComponent implements OnInit, OnChanges {
           this.pacientes = datas;
           if (this.pacientes.length == 0) {
             this.showNotification(
-              'Signos Vitales',
+              'Signos vitales',
               `No hay pacientes con signos vitales ${status} para esta fecha`,
               'error'
             );
@@ -240,7 +240,7 @@ export class CardsSvComponent implements OnInit, OnChanges {
         (data) => {
           this.showNotification(
             'Correcto!',
-            'Signos Vitales eliminada',
+            'Signos vitales eliminada',
             'success'
           );
           this.mostrarAllUser(this.fechaCards, 'todos');
@@ -257,7 +257,7 @@ export class CardsSvComponent implements OnInit, OnChanges {
     if (action === 'Eliminar') {
       this.pacienteData = paciente;
       this.showNotification(
-        'Eliminar Signos Vitales',
+        'Eliminar Signos vitales',
         `¿Estás seguro de que deseas eliminar este Signo Vital del ${paciente.nombre} ${paciente.apellido}?`,
         'delete'
       );

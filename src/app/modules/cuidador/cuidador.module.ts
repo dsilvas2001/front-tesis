@@ -18,6 +18,7 @@ import { WelcomeEjercicioComponent } from './pages/pacientes/ejercicios/welcome-
 import { EjercicioComponent } from './pages/pacientes/ejercicios/ejercicio/ejercicio.component';
 import { EjercicioMultipleComponent } from './pages/pacientes/ejercicios/ejercicio-multiple/ejercicio-multiple.component';
 import { EjercicioResultadosComponent } from './pages/pacientes/ejercicios/ejercicio-resultados/ejercicio-resultados.component';
+import { GestionCuidadorComponent } from './pages/gestion-cuidador/gestion-cuidador.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { EjercicioResultadosComponent } from './pages/pacientes/ejercicios/ejerc
     EjercicioComponent,
     EjercicioMultipleComponent,
     EjercicioResultadosComponent,
+    GestionCuidadorComponent,
   ],
   imports: [
     CommonModule,
